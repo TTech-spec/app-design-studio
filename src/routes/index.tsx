@@ -105,10 +105,11 @@ function Landing() {
               <a href="#download" className="inline-flex h-13 min-h-[52px] items-center gap-2 rounded-2xl gradient-primary px-6 text-sm font-bold text-primary-foreground shadow-glow">
                 Get the app <ArrowRight className="h-4 w-4" />
               </a>
-              <Link to="/app" className="inline-flex h-13 min-h-[52px] items-center gap-2 rounded-2xl border-2 border-forest bg-card px-6 text-sm font-bold text-forest hover:bg-secondary">
-                <Play className="h-4 w-4" /> Explore the 50-screen prototype
-              </Link>
+              <a href="#features" className="inline-flex h-13 min-h-[52px] items-center gap-2 rounded-2xl border-2 border-forest bg-card px-6 text-sm font-bold text-forest hover:bg-secondary">
+                <Play className="h-4 w-4" /> See how it works
+              </a>
             </div>
+
 
             <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4 text-xs text-muted-foreground">
               <div className="flex items-center gap-2"><ShieldCheck className="h-4 w-4 text-primary" /> KYC-verified farmers</div>
