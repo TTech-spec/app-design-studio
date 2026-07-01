@@ -66,7 +66,6 @@ function Landing() {
             ))}
           </nav>
           <div className="hidden items-center gap-3 md:flex">
-            <Link to="/app" className="text-sm font-semibold text-foreground/70 hover:text-primary">View prototype</Link>
             <a href="#download" className="inline-flex h-11 items-center gap-2 rounded-2xl gradient-primary px-5 text-sm font-bold text-primary-foreground shadow-glow">
               Download app <ArrowRight className="h-4 w-4" />
             </a>
@@ -81,11 +80,11 @@ function Landing() {
               {navLinks.map((l) => (
                 <a key={l.href} href={l.href} onClick={() => setMenuOpen(false)} className="block rounded-xl px-4 py-3 text-sm font-semibold hover:bg-secondary">{l.label}</a>
               ))}
-              <Link to="/app" className="block rounded-xl px-4 py-3 text-sm font-semibold text-primary">View prototype →</Link>
             </div>
           </div>
         )}
       </header>
+
 
       {/* HERO */}
       <section className="relative overflow-hidden">
