@@ -481,7 +481,7 @@ function Landing() {
               </div>
             </div>
             {[
-              { title: "Product", links: ["Features", "Pricing", "Prototype", "Roadmap", "Changelog"] },
+              { title: "Product", links: ["Features", "Pricing", "Roadmap", "Changelog"] },
               { title: "Company", links: ["About us", "Careers", "Press", "Partners", "Blog"] },
               { title: "Support", links: ["Help center", "Contact", "Community", "Status", "API docs"] },
             ].map((col) => (
