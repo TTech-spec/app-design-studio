@@ -2,35 +2,31 @@ import type { ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
 import { Star, CheckCircle2, MapPin, Heart } from "lucide-react";
 import { cn } from "@/lib/utils";
+import farmCassava from "@/assets/farm-cassava.jpg";
+import farmGrains from "@/assets/farm-grains.jpg";
+import farmVeg from "@/assets/farm-vegetables.jpg";
+import farmCocoa from "@/assets/farm-cocoa.jpg";
+import farmPoultry from "@/assets/farm-poultry.jpg";
+import farmYam from "@/assets/farm-yam.jpg";
 
-/* ============ FarmImage — deterministic gradient art per farm ============ */
+/* ============ FarmImage — real photography with deterministic pick ============ */
+const FARM_PHOTOS = [farmCassava, farmGrains, farmVeg, farmCocoa, farmPoultry, farmYam];
+
 export function FarmImage({ seed, className }: { seed: string; className?: string }) {
-  const palettes: [string, string, string][] = [
-    ["#2f7d3a", "#8fc861", "#f4d35e"], // lush greens + gold
-    ["#c98a1a", "#e8b85a", "#faead0"], // golden fields
-    ["#1f6b5e", "#5cb99a", "#f0e6c8"], // tropical
-    ["#a8412a", "#e0834c", "#ffd67e"], // vegetables
-    ["#8b6d2e", "#d4a94b", "#fff2c6"], // poultry
-    ["#4a3a1e", "#8b5a2b", "#d9b26a"], // cocoa
-  ];
-  const idx = seed.split("").reduce((a, c) => a + c.charCodeAt(0), 0) % palettes.length;
-  const [a, b, c] = palettes[idx];
+  const idx = seed.split("").reduce((a, c) => a + c.charCodeAt(0), 0) % FARM_PHOTOS.length;
+  const src = FARM_PHOTOS[idx];
   return (
-    <div
-      className={cn("relative overflow-hidden", className)}
-      style={{
-        background: `radial-gradient(circle at 30% 30%, ${c} 0%, transparent 40%),
-                     radial-gradient(circle at 80% 70%, ${b} 0%, transparent 45%),
-                     linear-gradient(135deg, ${a}, ${b})`,
-      }}
-    >
-      <svg className="absolute inset-0 h-full w-full opacity-40" viewBox="0 0 100 100" preserveAspectRatio="none">
-        <path d={`M0,${50 + (idx * 5)} Q25,${30 + idx * 3} 50,${45 + idx * 4} T100,${40 + idx * 5} L100,100 L0,100 Z`} fill={a} opacity="0.5" />
-        <path d={`M0,${70 + idx * 2} Q30,${55 + idx * 3} 60,${65 + idx * 2} T100,${60 + idx * 3} L100,100 L0,100 Z`} fill={a} opacity="0.7" />
-      </svg>
+    <div className={cn("relative overflow-hidden bg-secondary", className)}>
+      <img
+        src={src}
+        alt=""
+        loading="lazy"
+        className="absolute inset-0 h-full w-full object-cover"
+      />
     </div>
   );
 }
+
 
 /* ============ VerificationBadge ============ */
 export function VerificationBadge({ size = "sm" }: { size?: "sm" | "md" }) {
