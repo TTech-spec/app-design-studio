@@ -12,6 +12,7 @@ import {
 import { MobileShell, NotificationBell } from "./MobileShell";
 import { FarmCard, CropCard, SectionHeader, PrimaryButton, TextInput, EmptyState, Chip, VerificationBadge, Rating, FarmImage } from "./ui";
 import { CROP_CATEGORIES, FARMS, CROPS, MESSAGES, NOTIFICATIONS, REVIEWS, HARVEST_TIMELINE, LANGUAGES } from "@/lib/agricon-data";
+import { GoogleIcon, MicrosoftIcon, AppleIcon } from "./BrandIcons";
 
 /* ==================================================================
    A. LAUNCH & AUTHENTICATION
