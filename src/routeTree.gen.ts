@@ -9,10 +9,148 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WelcomeRouteImport } from './routes/welcome'
+import { Route as VerificationSubmittedRouteImport } from './routes/verification-submitted'
+import { Route as VerificationStatusRouteImport } from './routes/verification-status'
+import { Route as UserTypeRouteImport } from './routes/user-type'
+import { Route as SplashRouteImport } from './routes/splash'
+import { Route as SignupRouteImport } from './routes/signup'
+import { Route as SigninRouteImport } from './routes/signin'
+import { Route as ProfilePhotoRouteImport } from './routes/profile-photo'
+import { Route as PersonalInfoRouteImport } from './routes/personal-info'
+import { Route as PasswordResetSuccessRouteImport } from './routes/password-reset-success'
+import { Route as OtpRouteImport } from './routes/otp'
+import { Route as MarketplaceRouteImport } from './routes/marketplace'
+import { Route as LanguageRouteImport } from './routes/language'
+import { Route as IntroRouteImport } from './routes/intro'
+import { Route as HomeRouteImport } from './routes/home'
+import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
+import { Route as FarmInfoRouteImport } from './routes/farm-info'
+import { Route as DocumentUploadRouteImport } from './routes/document-upload'
+import { Route as CreatePasswordRouteImport } from './routes/create-password'
+import { Route as ContactInfoRouteImport } from './routes/contact-info'
+import { Route as BuyerProfileRouteImport } from './routes/buyer-profile'
+import { Route as BusinessInfoRouteImport } from './routes/business-info'
+import { Route as AddProductRouteImport } from './routes/add-product'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppIndexRouteImport } from './routes/app.index'
 import { Route as AppScreenRouteImport } from './routes/app.$screen'
 
+const WelcomeRoute = WelcomeRouteImport.update({
+  id: '/welcome',
+  path: '/welcome',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VerificationSubmittedRoute = VerificationSubmittedRouteImport.update({
+  id: '/verification-submitted',
+  path: '/verification-submitted',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VerificationStatusRoute = VerificationStatusRouteImport.update({
+  id: '/verification-status',
+  path: '/verification-status',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UserTypeRoute = UserTypeRouteImport.update({
+  id: '/user-type',
+  path: '/user-type',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SplashRoute = SplashRouteImport.update({
+  id: '/splash',
+  path: '/splash',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SignupRoute = SignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SigninRoute = SigninRouteImport.update({
+  id: '/signin',
+  path: '/signin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfilePhotoRoute = ProfilePhotoRouteImport.update({
+  id: '/profile-photo',
+  path: '/profile-photo',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PersonalInfoRoute = PersonalInfoRouteImport.update({
+  id: '/personal-info',
+  path: '/personal-info',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PasswordResetSuccessRoute = PasswordResetSuccessRouteImport.update({
+  id: '/password-reset-success',
+  path: '/password-reset-success',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OtpRoute = OtpRouteImport.update({
+  id: '/otp',
+  path: '/otp',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MarketplaceRoute = MarketplaceRouteImport.update({
+  id: '/marketplace',
+  path: '/marketplace',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LanguageRoute = LanguageRouteImport.update({
+  id: '/language',
+  path: '/language',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IntroRoute = IntroRouteImport.update({
+  id: '/intro',
+  path: '/intro',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HomeRoute = HomeRouteImport.update({
+  id: '/home',
+  path: '/home',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FarmInfoRoute = FarmInfoRouteImport.update({
+  id: '/farm-info',
+  path: '/farm-info',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DocumentUploadRoute = DocumentUploadRouteImport.update({
+  id: '/document-upload',
+  path: '/document-upload',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CreatePasswordRoute = CreatePasswordRouteImport.update({
+  id: '/create-password',
+  path: '/create-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactInfoRoute = ContactInfoRouteImport.update({
+  id: '/contact-info',
+  path: '/contact-info',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BuyerProfileRoute = BuyerProfileRouteImport.update({
+  id: '/buyer-profile',
+  path: '/buyer-profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BusinessInfoRoute = BusinessInfoRouteImport.update({
+  id: '/business-info',
+  path: '/business-info',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AddProductRoute = AddProductRouteImport.update({
+  id: '/add-product',
+  path: '/add-product',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -31,36 +169,368 @@ const AppScreenRoute = AppScreenRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/add-product': typeof AddProductRoute
+  '/business-info': typeof BusinessInfoRoute
+  '/buyer-profile': typeof BuyerProfileRoute
+  '/contact-info': typeof ContactInfoRoute
+  '/create-password': typeof CreatePasswordRoute
+  '/document-upload': typeof DocumentUploadRoute
+  '/farm-info': typeof FarmInfoRoute
+  '/forgot-password': typeof ForgotPasswordRoute
+  '/home': typeof HomeRoute
+  '/intro': typeof IntroRoute
+  '/language': typeof LanguageRoute
+  '/marketplace': typeof MarketplaceRoute
+  '/otp': typeof OtpRoute
+  '/password-reset-success': typeof PasswordResetSuccessRoute
+  '/personal-info': typeof PersonalInfoRoute
+  '/profile-photo': typeof ProfilePhotoRoute
+  '/signin': typeof SigninRoute
+  '/signup': typeof SignupRoute
+  '/splash': typeof SplashRoute
+  '/user-type': typeof UserTypeRoute
+  '/verification-status': typeof VerificationStatusRoute
+  '/verification-submitted': typeof VerificationSubmittedRoute
+  '/welcome': typeof WelcomeRoute
   '/app/$screen': typeof AppScreenRoute
   '/app/': typeof AppIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/add-product': typeof AddProductRoute
+  '/business-info': typeof BusinessInfoRoute
+  '/buyer-profile': typeof BuyerProfileRoute
+  '/contact-info': typeof ContactInfoRoute
+  '/create-password': typeof CreatePasswordRoute
+  '/document-upload': typeof DocumentUploadRoute
+  '/farm-info': typeof FarmInfoRoute
+  '/forgot-password': typeof ForgotPasswordRoute
+  '/home': typeof HomeRoute
+  '/intro': typeof IntroRoute
+  '/language': typeof LanguageRoute
+  '/marketplace': typeof MarketplaceRoute
+  '/otp': typeof OtpRoute
+  '/password-reset-success': typeof PasswordResetSuccessRoute
+  '/personal-info': typeof PersonalInfoRoute
+  '/profile-photo': typeof ProfilePhotoRoute
+  '/signin': typeof SigninRoute
+  '/signup': typeof SignupRoute
+  '/splash': typeof SplashRoute
+  '/user-type': typeof UserTypeRoute
+  '/verification-status': typeof VerificationStatusRoute
+  '/verification-submitted': typeof VerificationSubmittedRoute
+  '/welcome': typeof WelcomeRoute
   '/app/$screen': typeof AppScreenRoute
   '/app': typeof AppIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/add-product': typeof AddProductRoute
+  '/business-info': typeof BusinessInfoRoute
+  '/buyer-profile': typeof BuyerProfileRoute
+  '/contact-info': typeof ContactInfoRoute
+  '/create-password': typeof CreatePasswordRoute
+  '/document-upload': typeof DocumentUploadRoute
+  '/farm-info': typeof FarmInfoRoute
+  '/forgot-password': typeof ForgotPasswordRoute
+  '/home': typeof HomeRoute
+  '/intro': typeof IntroRoute
+  '/language': typeof LanguageRoute
+  '/marketplace': typeof MarketplaceRoute
+  '/otp': typeof OtpRoute
+  '/password-reset-success': typeof PasswordResetSuccessRoute
+  '/personal-info': typeof PersonalInfoRoute
+  '/profile-photo': typeof ProfilePhotoRoute
+  '/signin': typeof SigninRoute
+  '/signup': typeof SignupRoute
+  '/splash': typeof SplashRoute
+  '/user-type': typeof UserTypeRoute
+  '/verification-status': typeof VerificationStatusRoute
+  '/verification-submitted': typeof VerificationSubmittedRoute
+  '/welcome': typeof WelcomeRoute
   '/app/$screen': typeof AppScreenRoute
   '/app/': typeof AppIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/app/$screen' | '/app/'
+  fullPaths:
+    | '/'
+    | '/add-product'
+    | '/business-info'
+    | '/buyer-profile'
+    | '/contact-info'
+    | '/create-password'
+    | '/document-upload'
+    | '/farm-info'
+    | '/forgot-password'
+    | '/home'
+    | '/intro'
+    | '/language'
+    | '/marketplace'
+    | '/otp'
+    | '/password-reset-success'
+    | '/personal-info'
+    | '/profile-photo'
+    | '/signin'
+    | '/signup'
+    | '/splash'
+    | '/user-type'
+    | '/verification-status'
+    | '/verification-submitted'
+    | '/welcome'
+    | '/app/$screen'
+    | '/app/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/app/$screen' | '/app'
-  id: '__root__' | '/' | '/app/$screen' | '/app/'
+  to:
+    | '/'
+    | '/add-product'
+    | '/business-info'
+    | '/buyer-profile'
+    | '/contact-info'
+    | '/create-password'
+    | '/document-upload'
+    | '/farm-info'
+    | '/forgot-password'
+    | '/home'
+    | '/intro'
+    | '/language'
+    | '/marketplace'
+    | '/otp'
+    | '/password-reset-success'
+    | '/personal-info'
+    | '/profile-photo'
+    | '/signin'
+    | '/signup'
+    | '/splash'
+    | '/user-type'
+    | '/verification-status'
+    | '/verification-submitted'
+    | '/welcome'
+    | '/app/$screen'
+    | '/app'
+  id:
+    | '__root__'
+    | '/'
+    | '/add-product'
+    | '/business-info'
+    | '/buyer-profile'
+    | '/contact-info'
+    | '/create-password'
+    | '/document-upload'
+    | '/farm-info'
+    | '/forgot-password'
+    | '/home'
+    | '/intro'
+    | '/language'
+    | '/marketplace'
+    | '/otp'
+    | '/password-reset-success'
+    | '/personal-info'
+    | '/profile-photo'
+    | '/signin'
+    | '/signup'
+    | '/splash'
+    | '/user-type'
+    | '/verification-status'
+    | '/verification-submitted'
+    | '/welcome'
+    | '/app/$screen'
+    | '/app/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AddProductRoute: typeof AddProductRoute
+  BusinessInfoRoute: typeof BusinessInfoRoute
+  BuyerProfileRoute: typeof BuyerProfileRoute
+  ContactInfoRoute: typeof ContactInfoRoute
+  CreatePasswordRoute: typeof CreatePasswordRoute
+  DocumentUploadRoute: typeof DocumentUploadRoute
+  FarmInfoRoute: typeof FarmInfoRoute
+  ForgotPasswordRoute: typeof ForgotPasswordRoute
+  HomeRoute: typeof HomeRoute
+  IntroRoute: typeof IntroRoute
+  LanguageRoute: typeof LanguageRoute
+  MarketplaceRoute: typeof MarketplaceRoute
+  OtpRoute: typeof OtpRoute
+  PasswordResetSuccessRoute: typeof PasswordResetSuccessRoute
+  PersonalInfoRoute: typeof PersonalInfoRoute
+  ProfilePhotoRoute: typeof ProfilePhotoRoute
+  SigninRoute: typeof SigninRoute
+  SignupRoute: typeof SignupRoute
+  SplashRoute: typeof SplashRoute
+  UserTypeRoute: typeof UserTypeRoute
+  VerificationStatusRoute: typeof VerificationStatusRoute
+  VerificationSubmittedRoute: typeof VerificationSubmittedRoute
+  WelcomeRoute: typeof WelcomeRoute
   AppScreenRoute: typeof AppScreenRoute
   AppIndexRoute: typeof AppIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/welcome': {
+      id: '/welcome'
+      path: '/welcome'
+      fullPath: '/welcome'
+      preLoaderRoute: typeof WelcomeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/verification-submitted': {
+      id: '/verification-submitted'
+      path: '/verification-submitted'
+      fullPath: '/verification-submitted'
+      preLoaderRoute: typeof VerificationSubmittedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/verification-status': {
+      id: '/verification-status'
+      path: '/verification-status'
+      fullPath: '/verification-status'
+      preLoaderRoute: typeof VerificationStatusRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/user-type': {
+      id: '/user-type'
+      path: '/user-type'
+      fullPath: '/user-type'
+      preLoaderRoute: typeof UserTypeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/splash': {
+      id: '/splash'
+      path: '/splash'
+      fullPath: '/splash'
+      preLoaderRoute: typeof SplashRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/signin': {
+      id: '/signin'
+      path: '/signin'
+      fullPath: '/signin'
+      preLoaderRoute: typeof SigninRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile-photo': {
+      id: '/profile-photo'
+      path: '/profile-photo'
+      fullPath: '/profile-photo'
+      preLoaderRoute: typeof ProfilePhotoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/personal-info': {
+      id: '/personal-info'
+      path: '/personal-info'
+      fullPath: '/personal-info'
+      preLoaderRoute: typeof PersonalInfoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/password-reset-success': {
+      id: '/password-reset-success'
+      path: '/password-reset-success'
+      fullPath: '/password-reset-success'
+      preLoaderRoute: typeof PasswordResetSuccessRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/otp': {
+      id: '/otp'
+      path: '/otp'
+      fullPath: '/otp'
+      preLoaderRoute: typeof OtpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/marketplace': {
+      id: '/marketplace'
+      path: '/marketplace'
+      fullPath: '/marketplace'
+      preLoaderRoute: typeof MarketplaceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/language': {
+      id: '/language'
+      path: '/language'
+      fullPath: '/language'
+      preLoaderRoute: typeof LanguageRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/intro': {
+      id: '/intro'
+      path: '/intro'
+      fullPath: '/intro'
+      preLoaderRoute: typeof IntroRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/home': {
+      id: '/home'
+      path: '/home'
+      fullPath: '/home'
+      preLoaderRoute: typeof HomeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/forgot-password': {
+      id: '/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof ForgotPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/farm-info': {
+      id: '/farm-info'
+      path: '/farm-info'
+      fullPath: '/farm-info'
+      preLoaderRoute: typeof FarmInfoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/document-upload': {
+      id: '/document-upload'
+      path: '/document-upload'
+      fullPath: '/document-upload'
+      preLoaderRoute: typeof DocumentUploadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/create-password': {
+      id: '/create-password'
+      path: '/create-password'
+      fullPath: '/create-password'
+      preLoaderRoute: typeof CreatePasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact-info': {
+      id: '/contact-info'
+      path: '/contact-info'
+      fullPath: '/contact-info'
+      preLoaderRoute: typeof ContactInfoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/buyer-profile': {
+      id: '/buyer-profile'
+      path: '/buyer-profile'
+      fullPath: '/buyer-profile'
+      preLoaderRoute: typeof BuyerProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/business-info': {
+      id: '/business-info'
+      path: '/business-info'
+      fullPath: '/business-info'
+      preLoaderRoute: typeof BusinessInfoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/add-product': {
+      id: '/add-product'
+      path: '/add-product'
+      fullPath: '/add-product'
+      preLoaderRoute: typeof AddProductRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -87,6 +557,29 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AddProductRoute: AddProductRoute,
+  BusinessInfoRoute: BusinessInfoRoute,
+  BuyerProfileRoute: BuyerProfileRoute,
+  ContactInfoRoute: ContactInfoRoute,
+  CreatePasswordRoute: CreatePasswordRoute,
+  DocumentUploadRoute: DocumentUploadRoute,
+  FarmInfoRoute: FarmInfoRoute,
+  ForgotPasswordRoute: ForgotPasswordRoute,
+  HomeRoute: HomeRoute,
+  IntroRoute: IntroRoute,
+  LanguageRoute: LanguageRoute,
+  MarketplaceRoute: MarketplaceRoute,
+  OtpRoute: OtpRoute,
+  PasswordResetSuccessRoute: PasswordResetSuccessRoute,
+  PersonalInfoRoute: PersonalInfoRoute,
+  ProfilePhotoRoute: ProfilePhotoRoute,
+  SigninRoute: SigninRoute,
+  SignupRoute: SignupRoute,
+  SplashRoute: SplashRoute,
+  UserTypeRoute: UserTypeRoute,
+  VerificationStatusRoute: VerificationStatusRoute,
+  VerificationSubmittedRoute: VerificationSubmittedRoute,
+  WelcomeRoute: WelcomeRoute,
   AppScreenRoute: AppScreenRoute,
   AppIndexRoute: AppIndexRoute,
 }

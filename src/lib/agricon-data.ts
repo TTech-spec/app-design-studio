@@ -59,6 +59,16 @@ export const HARVEST_TIMELINE = [
   { month: "Oct", crop: "Yam harvest", status: "harvesting" },
 ];
 
+export const NIGERIA_STATES = [
+  "Abia", "Adamawa", "Akwa Ibom", "Anambra", "Bauchi", "Bayelsa", "Benue", "Borno",
+  "Cross River", "Delta", "Ebonyi", "Edo", "Ekiti", "Enugu", "FCT (Abuja)", "Gombe",
+  "Imo", "Jigawa", "Kaduna", "Kano", "Katsina", "Kebbi", "Kogi", "Kwara", "Lagos",
+  "Nasarawa", "Niger", "Ogun", "Ondo", "Osun", "Oyo", "Plateau", "Rivers", "Sokoto",
+  "Taraba", "Yobe", "Zamfara",
+];
+
+export const PRIMARY_CROPS = ["Cassava", "Yam", "Maize", "Rice", "Plantain", "Tomato", "Pepper", "Onion"];
+
 export const LANGUAGES = [
   { code: "en", name: "English", native: "English", flag: "🇬🇧" },
   { code: "ha", name: "Hausa", native: "Hausa", flag: "🇳🇬" },

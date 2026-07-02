@@ -1,17 +1,21 @@
-import { Link } from "@tanstack/react-router";
+import { useEffect, useRef, useState } from "react";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { motion } from "framer-motion";
+import { toast } from "sonner";
 import {
-  Sprout, Mail, Lock, Eye, Phone, ChevronRight, Search, MapPin, TrendingUp, Filter,
+  Sprout, Mail, Lock, Phone, ChevronRight, Search, MapPin, TrendingUp, Filter,
   ArrowRight, Camera, Upload, FileCheck2, ShieldCheck, Building2, User as UserIcon,
   Star, Heart, MessageCircle, MoreVertical, Send, Paperclip, Mic, Image as ImageIcon,
   Bell, CheckCircle2, XCircle, Clock, TrendingDown, Eye as EyeIcon, ChevronRight as Chev,
   Settings, HelpCircle, LogOut, Globe, ShieldAlert, Info, ExternalLink, Package,
   Users, DollarSign, ArrowUpRight, Calendar, Layers, X, Check, PlusCircle,
   ChevronDown, Sliders, BarChart3, MessageSquare, FileText, Headphones, Truck,
-  ArrowLeft, Share2, Flag, Play,
+  ArrowLeft, Share2, Flag, Play, Loader2,
 } from "lucide-react";
 import { MobileShell, NotificationBell } from "./MobileShell";
 import { FarmCard, CropCard, SectionHeader, PrimaryButton, TextInput, EmptyState, Chip, VerificationBadge, Rating, FarmImage } from "./ui";
-import { CROP_CATEGORIES, FARMS, CROPS, MESSAGES, NOTIFICATIONS, REVIEWS, HARVEST_TIMELINE, LANGUAGES } from "@/lib/agricon-data";
+import { CROP_CATEGORIES, FARMS, CROPS, MESSAGES, NOTIFICATIONS, REVIEWS, HARVEST_TIMELINE, LANGUAGES, NIGERIA_STATES, PRIMARY_CROPS } from "@/lib/agricon-data";
+import { useAuth, authErrorMessage } from "@/lib/auth-context";
 
 /* ==================================================================
    A. LAUNCH & AUTHENTICATION
@@ -140,6 +144,31 @@ export function Language() {
 }
 
 export function Login() {
+  const navigate = useNavigate();
+  const { signInWithPassword } = useAuth();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  async function handleSignIn() {
+    if (!email || !password) {
+      setError("Enter your email and password to continue.");
+      return;
+    }
+    setError(null);
+    setLoading(true);
+    try {
+      await signInWithPassword(email, password);
+      toast.success("Welcome back!");
+      navigate({ to: "/app/$screen", params: { screen: "home" } });
+    } catch (err) {
+      setError(authErrorMessage(err));
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <MobileShell showBack={false} showBottomNav={false} fullBleed>
       <div className="flex h-full flex-col p-6">
@@ -150,9 +179,31 @@ export function Login() {
           <h1 className="text-3xl font-black tracking-tight text-forest">Welcome back</h1>
           <p className="mt-2 text-[15px] text-muted-foreground">Sign in to your Agricon account</p>
         </div>
-        <div className="mt-8 space-y-4">
-          <TextInput label="Phone or email" placeholder="+234 800 000 0000" icon={<Phone className="h-4 w-4" />} />
-          <TextInput label="Password" placeholder="Enter your password" type="password" icon={<Lock className="h-4 w-4" />} suffix={<Eye className="h-4 w-4 text-muted-foreground" />} />
+        <form
+          className="mt-8 space-y-4"
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSignIn();
+          }}
+        >
+          <TextInput
+            label="Email"
+            placeholder="you@example.com"
+            icon={<Mail className="h-4 w-4" />}
+            value={email}
+            onChange={setEmail}
+            autoComplete="email"
+          />
+          <TextInput
+            label="Password"
+            placeholder="Enter your password"
+            type="password"
+            icon={<Lock className="h-4 w-4" />}
+            value={password}
+            onChange={setPassword}
+            autoComplete="current-password"
+            error={error ?? undefined}
+          />
           <div className="flex items-center justify-between">
             <label className="flex items-center gap-2 text-sm text-foreground">
               <input type="checkbox" className="h-4 w-4 rounded border-2 border-border text-primary" defaultChecked />
@@ -160,18 +211,18 @@ export function Login() {
             </label>
             <Link to="/app/$screen" params={{ screen: "forgot-password" }} className="text-sm font-semibold text-primary">Forgot password?</Link>
           </div>
-        </div>
-        <div className="mt-8 space-y-3">
-          <PrimaryButton href="home">Sign in</PrimaryButton>
-          <div className="relative py-1">
-            <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-border" /></div>
-            <div className="relative flex justify-center"><span className="bg-surface px-3 text-xs text-muted-foreground">or continue with</span></div>
+          <div className="space-y-3 pt-4">
+            <PrimaryButton type="submit" loading={loading}>Sign in</PrimaryButton>
+            <div className="relative py-1">
+              <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-border" /></div>
+              <div className="relative flex justify-center"><span className="bg-surface px-3 text-xs text-muted-foreground">or continue with</span></div>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <button type="button" className="h-12 rounded-2xl border-2 border-border bg-card text-sm font-semibold hover:border-primary/40">Google</button>
+              <button type="button" className="h-12 rounded-2xl border-2 border-border bg-card text-sm font-semibold hover:border-primary/40">Apple</button>
+            </div>
           </div>
-          <div className="grid grid-cols-2 gap-3">
-            <button className="h-12 rounded-2xl border-2 border-border bg-card text-sm font-semibold hover:border-primary/40">Google</button>
-            <button className="h-12 rounded-2xl border-2 border-border bg-card text-sm font-semibold hover:border-primary/40">Apple</button>
-          </div>
-        </div>
+        </form>
         <p className="mt-auto pt-6 text-center text-sm text-muted-foreground">
           New to Agricon?{" "}
           <Link to="/app/$screen" params={{ screen: "signup" }} className="font-semibold text-primary">Create an account</Link>
@@ -182,101 +233,345 @@ export function Login() {
 }
 
 export function Signup() {
+  const navigate = useNavigate();
+  const { signUpWithOtp } = useAuth();
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [agreed, setAgreed] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  async function handleSubmit() {
+    if (!firstName || !lastName || !email || !phone) {
+      setError("Please fill in every field to continue.");
+      return;
+    }
+    if (!agreed) {
+      setError("Please accept the Terms of Service and Privacy Policy.");
+      return;
+    }
+    setError(null);
+    setLoading(true);
+    try {
+      await signUpWithOtp({ email, firstName, lastName, phone });
+      toast.success("Verification code sent to " + email);
+      navigate({ to: "/app/$screen", params: { screen: "otp" } });
+    } catch (err) {
+      setError(authErrorMessage(err));
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <MobileShell title="Create your account" showBottomNav={false}>
       <p className="text-sm text-muted-foreground mb-6">Join thousands of verified farmers and distributors.</p>
-      <div className="space-y-4">
+      <form
+        className="space-y-4"
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSubmit();
+        }}
+      >
         <div className="grid grid-cols-2 gap-3">
-          <TextInput label="First name" placeholder="Adekunle" />
-          <TextInput label="Last name" placeholder="Kolawole" />
+          <TextInput label="First name" placeholder="Adekunle" value={firstName} onChange={setFirstName} />
+          <TextInput label="Last name" placeholder="Kolawole" value={lastName} onChange={setLastName} />
         </div>
-        <TextInput label="Email" placeholder="you@example.com" icon={<Mail className="h-4 w-4" />} />
-        <TextInput label="Phone" placeholder="+234 800 000 0000" icon={<Phone className="h-4 w-4" />} />
+        <TextInput label="Email" placeholder="you@example.com" icon={<Mail className="h-4 w-4" />} value={email} onChange={setEmail} autoComplete="email" />
+        <TextInput label="Phone" placeholder="+234 800 000 0000" icon={<Phone className="h-4 w-4" />} value={phone} onChange={setPhone} error={error ?? undefined} />
         <label className="flex items-start gap-3 text-sm text-foreground">
-          <input type="checkbox" className="mt-0.5 h-4 w-4 rounded border-2 border-border text-primary" />
+          <input
+            type="checkbox"
+            checked={agreed}
+            onChange={(e) => setAgreed(e.target.checked)}
+            className="mt-0.5 h-4 w-4 rounded border-2 border-border text-primary"
+          />
           <span>I agree to the <span className="font-semibold text-primary">Terms of Service</span> and <span className="font-semibold text-primary">Privacy Policy</span></span>
         </label>
-      </div>
-      <div className="mt-8 space-y-3">
-        <PrimaryButton href="otp">Continue</PrimaryButton>
-        <p className="text-center text-sm text-muted-foreground">
-          Already have an account?{" "}
-          <Link to="/app/$screen" params={{ screen: "login" }} className="font-semibold text-primary">Sign in</Link>
-        </p>
-      </div>
+        <div className="mt-4 space-y-3">
+          <PrimaryButton type="submit" loading={loading}>Continue</PrimaryButton>
+          <p className="text-center text-sm text-muted-foreground">
+            Already have an account?{" "}
+            <Link to="/app/$screen" params={{ screen: "login" }} className="font-semibold text-primary">Sign in</Link>
+          </p>
+        </div>
+      </form>
     </MobileShell>
   );
 }
 
 export function Otp() {
+  const navigate = useNavigate();
+  const { pendingEmail, pendingFlow, verifyOtp, resendOtp } = useAuth();
+  const [digits, setDigits] = useState<string[]>(["", "", "", "", "", ""]);
+  const [error, setError] = useState<string | null>(null);
+  const [shake, setShake] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [resending, setResending] = useState(false);
+  const [seconds, setSeconds] = useState(60);
+  const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+
+  useEffect(() => {
+    if (seconds <= 0) return;
+    const t = setInterval(() => setSeconds((s) => Math.max(0, s - 1)), 1000);
+    return () => clearInterval(t);
+  }, [seconds]);
+
+  function updateDigit(i: number, val: string) {
+    const clean = val.replace(/[^0-9]/g, "").slice(-1);
+    const next = [...digits];
+    next[i] = clean;
+    setDigits(next);
+    if (clean && i < 5) inputRefs.current[i + 1]?.focus();
+  }
+
+  function handleKeyDown(i: number, e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === "Backspace" && !digits[i] && i > 0) {
+      inputRefs.current[i - 1]?.focus();
+    }
+  }
+
+  function handlePaste(e: React.ClipboardEvent<HTMLInputElement>) {
+    const pasted = e.clipboardData.getData("text").replace(/[^0-9]/g, "").slice(0, 6);
+    if (!pasted) return;
+    e.preventDefault();
+    setDigits(Array.from({ length: 6 }, (_, i) => pasted[i] ?? ""));
+    inputRefs.current[Math.min(pasted.length, 5)]?.focus();
+  }
+
+  async function handleVerify() {
+    const code = digits.join("");
+    if (code.length !== 6) {
+      setError("Enter the full 6-digit code.");
+      setShake(true);
+      setTimeout(() => setShake(false), 400);
+      return;
+    }
+    setError(null);
+    setLoading(true);
+    try {
+      await verifyOtp(code);
+      toast.success("Verified!");
+      navigate({ to: "/app/$screen", params: { screen: "create-password" } });
+    } catch (err) {
+      setError(authErrorMessage(err));
+      setShake(true);
+      setTimeout(() => setShake(false), 400);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleResend() {
+    setResending(true);
+    try {
+      await resendOtp();
+      toast.success("Code resent to " + pendingEmail);
+      setSeconds(60);
+      setDigits(["", "", "", "", "", ""]);
+      inputRefs.current[0]?.focus();
+    } catch (err) {
+      toast.error(authErrorMessage(err));
+    } finally {
+      setResending(false);
+    }
+  }
+
   return (
-    <MobileShell title="Verify your phone" showBottomNav={false}>
+    <MobileShell title={pendingFlow === "recovery" ? "Verify it's you" : "Verify your email"} showBottomNav={false}>
       <div className="grid h-16 w-16 place-items-center rounded-2xl bg-primary-soft text-primary mb-6">
-        <Phone className="h-8 w-8" strokeWidth={2.2} />
+        <Mail className="h-8 w-8" strokeWidth={2.2} />
       </div>
       <h2 className="text-2xl font-black text-forest">Enter the 6-digit code</h2>
-      <p className="mt-2 text-sm text-muted-foreground">We sent a code to <span className="font-semibold text-foreground">+234 806 •••• 4823</span></p>
-      <div className="mt-8 flex justify-between gap-2">
-        {["4", "8", "2", "1", "", ""].map((v, i) => (
-          <div key={i} className={`grid h-14 flex-1 place-items-center rounded-2xl border-2 text-2xl font-bold ${v ? "border-primary bg-primary-soft text-forest" : "border-border bg-card text-muted-foreground"}`}>
-            {v || "·"}
-          </div>
+      <p className="mt-2 text-sm text-muted-foreground">
+        We sent a code to <span className="font-semibold text-foreground">{pendingEmail ?? "your email"}</span>
+      </p>
+      <motion.div
+        animate={shake ? { x: [0, -8, 8, -8, 8, 0] } : { x: 0 }}
+        transition={{ duration: 0.4 }}
+        className="mt-8 flex justify-between gap-2"
+      >
+        {digits.map((v, i) => (
+          <input
+            key={i}
+            ref={(el) => { inputRefs.current[i] = el; }}
+            value={v}
+            onChange={(e) => updateDigit(i, e.target.value)}
+            onKeyDown={(e) => handleKeyDown(i, e)}
+            onPaste={handlePaste}
+            inputMode="numeric"
+            maxLength={1}
+            className={`grid h-14 flex-1 place-items-center rounded-2xl border-2 bg-card text-center text-2xl font-bold outline-none transition ${v ? "border-primary bg-primary-soft text-forest" : "border-border text-muted-foreground"}`}
+          />
         ))}
-      </div>
+      </motion.div>
+      {error && <p className="mt-3 text-sm text-destructive">{error}</p>}
       <div className="mt-6 flex items-center justify-between text-sm">
         <span className="text-muted-foreground">Didn't receive it?</span>
-        <button className="font-semibold text-primary">Resend in 0:24</button>
+        <button
+          type="button"
+          disabled={seconds > 0 || resending}
+          onClick={handleResend}
+          className="font-semibold text-primary disabled:text-muted-foreground"
+        >
+          {resending ? "Sending..." : seconds > 0 ? `Resend in 0:${seconds.toString().padStart(2, "0")}` : "Resend code"}
+        </button>
       </div>
       <div className="mt-8">
-        <PrimaryButton href="create-password">Verify</PrimaryButton>
+        <PrimaryButton onClick={handleVerify} loading={loading}>Verify</PrimaryButton>
       </div>
     </MobileShell>
   );
 }
 
+function passwordStrength(pw: string) {
+  let score = 0;
+  if (pw.length >= 8) score++;
+  if (/[a-z]/.test(pw) && /[A-Z]/.test(pw)) score++;
+  if (/[0-9]/.test(pw)) score++;
+  if (/[^a-zA-Z0-9]/.test(pw)) score++;
+  return score;
+}
+
 export function CreatePassword() {
+  const navigate = useNavigate();
+  const { pendingFlow, setNewPassword } = useAuth();
+  const [password, setPassword] = useState("");
+  const [confirm, setConfirm] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  const score = passwordStrength(password);
+  const strengthLabel = ["Too weak", "Weak", "Fair", "Strong", "Very strong"][score];
+  const hasMinLength = password.length >= 8;
+  const hasCase = /[a-z]/.test(password) && /[A-Z]/.test(password);
+  const hasNumber = /[0-9]/.test(password);
+
+  async function handleSubmit() {
+    if (!hasMinLength) {
+      setError("Password must be at least 8 characters.");
+      return;
+    }
+    if (password !== confirm) {
+      setError("Passwords do not match.");
+      return;
+    }
+    setError(null);
+    setLoading(true);
+    const flow = pendingFlow;
+    try {
+      await setNewPassword(password);
+      toast.success(flow === "recovery" ? "Password updated!" : "Account created!");
+      navigate({
+        to: "/app/$screen",
+        params: { screen: flow === "recovery" ? "password-reset-success" : "user-type" },
+      });
+    } catch (err) {
+      setError(authErrorMessage(err));
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <MobileShell title="Create password" showBottomNav={false}>
       <p className="text-sm text-muted-foreground mb-6">Choose a strong password to secure your account.</p>
-      <div className="space-y-4">
-        <TextInput label="New password" placeholder="At least 8 characters" type="password" icon={<Lock className="h-4 w-4" />} suffix={<Eye className="h-4 w-4 text-muted-foreground" />} />
-        <TextInput label="Confirm password" placeholder="Re-enter password" type="password" icon={<Lock className="h-4 w-4" />} suffix={<Eye className="h-4 w-4 text-muted-foreground" />} />
-      </div>
-      <div className="mt-6 rounded-2xl bg-secondary p-4">
-        <p className="text-xs font-semibold text-foreground mb-2">Password strength: <span className="text-primary">Strong</span></p>
-        <div className="flex gap-1">
-          {[1, 2, 3, 4].map((i) => (
-            <div key={i} className={`h-1.5 flex-1 rounded-full ${i <= 4 ? "bg-primary" : "bg-border"}`} />
-          ))}
+      <form
+        className="space-y-4"
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSubmit();
+        }}
+      >
+        <TextInput
+          label="New password"
+          placeholder="At least 8 characters"
+          type="password"
+          icon={<Lock className="h-4 w-4" />}
+          value={password}
+          onChange={setPassword}
+          autoComplete="new-password"
+        />
+        <TextInput
+          label="Confirm password"
+          placeholder="Re-enter password"
+          type="password"
+          icon={<Lock className="h-4 w-4" />}
+          value={confirm}
+          onChange={setConfirm}
+          autoComplete="new-password"
+          error={error ?? undefined}
+        />
+        <div className="rounded-2xl bg-secondary p-4">
+          <p className="text-xs font-semibold text-foreground mb-2">Password strength: <span className="text-primary">{password ? strengthLabel : "—"}</span></p>
+          <div className="flex gap-1">
+            {[1, 2, 3, 4].map((i) => (
+              <div key={i} className={`h-1.5 flex-1 rounded-full transition-colors ${i <= score ? "bg-primary" : "bg-border"}`} />
+            ))}
+          </div>
+          <ul className="mt-3 space-y-1 text-xs text-muted-foreground">
+            <li className="flex items-center gap-1.5"><CheckCircle2 className={`h-3 w-3 ${hasMinLength ? "text-primary" : "text-border"}`} /> At least 8 characters</li>
+            <li className="flex items-center gap-1.5"><CheckCircle2 className={`h-3 w-3 ${hasCase ? "text-primary" : "text-border"}`} /> Contains uppercase & lowercase</li>
+            <li className="flex items-center gap-1.5"><CheckCircle2 className={`h-3 w-3 ${hasNumber ? "text-primary" : "text-border"}`} /> Contains a number</li>
+          </ul>
         </div>
-        <ul className="mt-3 space-y-1 text-xs text-muted-foreground">
-          <li className="flex items-center gap-1.5"><CheckCircle2 className="h-3 w-3 text-primary" /> At least 8 characters</li>
-          <li className="flex items-center gap-1.5"><CheckCircle2 className="h-3 w-3 text-primary" /> Contains uppercase & lowercase</li>
-          <li className="flex items-center gap-1.5"><CheckCircle2 className="h-3 w-3 text-primary" /> Contains a number</li>
-        </ul>
-      </div>
-      <div className="mt-8">
-        <PrimaryButton href="user-type">Create account</PrimaryButton>
-      </div>
+        <div className="mt-4">
+          <PrimaryButton type="submit" loading={loading}>
+            {pendingFlow === "recovery" ? "Reset password" : "Create account"}
+          </PrimaryButton>
+        </div>
+      </form>
     </MobileShell>
   );
 }
 
 export function ForgotPassword() {
+  const navigate = useNavigate();
+  const { requestPasswordReset } = useAuth();
+  const [email, setEmail] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  async function handleSubmit() {
+    if (!email) {
+      setError("Enter the email associated with your account.");
+      return;
+    }
+    setError(null);
+    setLoading(true);
+    try {
+      await requestPasswordReset(email);
+      toast.success("Reset code sent to " + email);
+      navigate({ to: "/app/$screen", params: { screen: "otp" } });
+    } catch (err) {
+      setError(authErrorMessage(err));
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <MobileShell title="Reset your password" showBottomNav={false}>
       <div className="grid h-16 w-16 place-items-center rounded-2xl bg-primary-soft text-primary mb-6">
         <Lock className="h-8 w-8" strokeWidth={2.2} />
       </div>
       <h2 className="text-2xl font-black text-forest">Forgot password?</h2>
-      <p className="mt-2 text-sm text-muted-foreground">Enter the phone number or email associated with your account and we'll send you a reset code.</p>
-      <div className="mt-6 space-y-4">
-        <TextInput label="Phone or email" placeholder="+234 800 000 0000" icon={<Phone className="h-4 w-4" />} />
-      </div>
-      <div className="mt-8 space-y-3">
-        <PrimaryButton href="password-reset-success">Send reset code</PrimaryButton>
-        <Link to="/app/$screen" params={{ screen: "login" }} className="block text-center text-sm font-semibold text-primary py-2">Back to sign in</Link>
-      </div>
+      <p className="mt-2 text-sm text-muted-foreground">Enter the email associated with your account and we'll send you a reset code.</p>
+      <form
+        className="mt-6 space-y-4"
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSubmit();
+        }}
+      >
+        <TextInput label="Email" placeholder="you@example.com" icon={<Mail className="h-4 w-4" />} value={email} onChange={setEmail} error={error ?? undefined} autoComplete="email" />
+        <div className="mt-4 space-y-3">
+          <PrimaryButton type="submit" loading={loading}>Send reset code</PrimaryButton>
+          <Link to="/app/$screen" params={{ screen: "login" }} className="block text-center text-sm font-semibold text-primary py-2">Back to sign in</Link>
+        </div>
+      </form>
     </MobileShell>
   );
 }
@@ -322,29 +617,55 @@ function OnboardingProgress({ step }: { step: number }) {
 }
 
 export function UserType() {
+  const navigate = useNavigate();
+  const { profile, updateProfile } = useAuth();
+  const [selected, setSelected] = useState<"farmer" | "distributor">(profile?.user_type ?? "farmer");
+  const [loading, setLoading] = useState(false);
+
   const types = [
-    { id: "farmer", title: "I'm a Farmer", body: "List your crops, receive inquiries, and grow your business.", icon: <Sprout className="h-7 w-7" />, active: true },
-    { id: "distributor", title: "I'm a Distributor", body: "Discover verified farms, source produce, and manage inquiries.", icon: <Truck className="h-7 w-7" /> },
+    { id: "farmer" as const, title: "I'm a Farmer", body: "List your crops, receive inquiries, and grow your business.", icon: <Sprout className="h-7 w-7" /> },
+    { id: "distributor" as const, title: "I'm a Distributor", body: "Discover verified farms, source produce, and manage inquiries.", icon: <Truck className="h-7 w-7" /> },
   ];
+
+  async function handleContinue() {
+    setLoading(true);
+    try {
+      await updateProfile({ user_type: selected });
+      navigate({ to: "/app/$screen", params: { screen: "personal-info" } });
+    } catch (err) {
+      toast.error(authErrorMessage(err));
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <MobileShell title="Who are you?" showBottomNav={false}>
       <OnboardingProgress step={1} />
       <p className="text-sm text-muted-foreground mb-6">Choose your role to personalise your experience. You can add more later.</p>
       <div className="space-y-3">
-        {types.map((t) => (
-          <button key={t.id} className={`w-full rounded-2xl border-2 p-5 text-left transition ${t.active ? "border-primary bg-primary-soft" : "border-border bg-card hover:border-primary/40"}`}>
-            <div className="flex items-start gap-4">
-              <div className={`grid h-14 w-14 place-items-center rounded-2xl ${t.active ? "bg-primary text-primary-foreground" : "bg-secondary text-forest"}`}>
-                {t.icon}
+        {types.map((t) => {
+          const active = selected === t.id;
+          return (
+            <button
+              key={t.id}
+              type="button"
+              onClick={() => setSelected(t.id)}
+              className={`w-full rounded-2xl border-2 p-5 text-left transition ${active ? "border-primary bg-primary-soft" : "border-border bg-card hover:border-primary/40"}`}
+            >
+              <div className="flex items-start gap-4">
+                <div className={`grid h-14 w-14 place-items-center rounded-2xl ${active ? "bg-primary text-primary-foreground" : "bg-secondary text-forest"}`}>
+                  {t.icon}
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-bold text-foreground">{t.title}</h3>
+                  <p className="mt-1 text-sm text-muted-foreground">{t.body}</p>
+                </div>
+                {active && <div className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-primary text-primary-foreground"><Check className="h-4 w-4" strokeWidth={3} /></div>}
               </div>
-              <div className="flex-1">
-                <h3 className="font-bold text-foreground">{t.title}</h3>
-                <p className="mt-1 text-sm text-muted-foreground">{t.body}</p>
-              </div>
-              {t.active && <div className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-primary text-primary-foreground"><Check className="h-4 w-4" strokeWidth={3} /></div>}
-            </div>
-          </button>
-        ))}
+            </button>
+          );
+        })}
       </div>
       <div className="mt-4 rounded-2xl border border-gold bg-gold-soft p-4">
         <div className="flex gap-2">
@@ -353,124 +674,256 @@ export function UserType() {
         </div>
       </div>
       <div className="mt-8">
-        <PrimaryButton href="personal-info">Continue as Farmer</PrimaryButton>
+        <PrimaryButton onClick={handleContinue} loading={loading}>
+          Continue as {selected === "farmer" ? "Farmer" : "Distributor"}
+        </PrimaryButton>
       </div>
     </MobileShell>
   );
 }
 
 export function PersonalInfo() {
+  const navigate = useNavigate();
+  const { profile, updateProfile } = useAuth();
+  const [firstName, setFirstName] = useState(profile?.first_name ?? "");
+  const [lastName, setLastName] = useState(profile?.last_name ?? "");
+  const [dob, setDob] = useState(profile?.date_of_birth ?? "");
+  const [gender, setGender] = useState(profile?.gender ?? "Male");
+  const [state, setState] = useState(profile?.state ?? "Oyo");
+  const [loading, setLoading] = useState(false);
+
+  async function handleContinue() {
+    setLoading(true);
+    try {
+      await updateProfile({ first_name: firstName, last_name: lastName, date_of_birth: dob || null, gender, state });
+      navigate({ to: "/app/$screen", params: { screen: "contact-info" } });
+    } catch (err) {
+      toast.error(authErrorMessage(err));
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <MobileShell title="Personal information" showBottomNav={false}>
       <OnboardingProgress step={2} />
       <div className="space-y-4">
         <div className="grid grid-cols-2 gap-3">
-          <TextInput label="First name" placeholder="Adekunle" value="Adekunle" />
-          <TextInput label="Last name" placeholder="Kolawole" value="Kolawole" />
+          <TextInput label="First name" placeholder="Adekunle" value={firstName} onChange={setFirstName} />
+          <TextInput label="Last name" placeholder="Kolawole" value={lastName} onChange={setLastName} />
         </div>
-        <TextInput label="Date of birth" placeholder="DD / MM / YYYY" icon={<Calendar className="h-4 w-4" />} />
+        <TextInput label="Date of birth" placeholder="DD / MM / YYYY" type="date" icon={<Calendar className="h-4 w-4" />} value={dob} onChange={setDob} />
         <div>
           <label className="mb-1.5 block text-sm font-medium text-foreground">Gender</label>
           <div className="grid grid-cols-3 gap-2">
-            {["Male", "Female", "Prefer not to say"].map((g, i) => (
-              <button key={g} className={`h-12 rounded-2xl border-2 text-sm font-semibold transition ${i === 0 ? "border-primary bg-primary-soft text-forest" : "border-border bg-card"}`}>{g}</button>
+            {["Male", "Female", "Prefer not to say"].map((g) => (
+              <button
+                key={g}
+                type="button"
+                onClick={() => setGender(g)}
+                className={`h-12 rounded-2xl border-2 text-sm font-semibold transition ${gender === g ? "border-primary bg-primary-soft text-forest" : "border-border bg-card"}`}
+              >
+                {g}
+              </button>
             ))}
           </div>
         </div>
         <div>
           <label className="mb-1.5 block text-sm font-medium text-foreground">State of residence</label>
-          <button className="flex h-13 min-h-[52px] w-full items-center justify-between rounded-2xl border-2 border-border bg-card px-4 text-left text-[15px]">
-            <span className="text-foreground">Oyo State</span>
-            <ChevronDown className="h-4 w-4 text-muted-foreground" />
-          </button>
+          <div className="relative">
+            <select
+              value={state}
+              onChange={(e) => setState(e.target.value)}
+              className="flex h-13 min-h-[52px] w-full appearance-none items-center rounded-2xl border-2 border-border bg-card px-4 text-left text-[15px] text-foreground outline-none focus:border-primary"
+            >
+              {NIGERIA_STATES.map((s) => (
+                <option key={s} value={s}>{s} State</option>
+              ))}
+            </select>
+            <ChevronDown className="pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          </div>
         </div>
       </div>
       <div className="mt-8">
-        <PrimaryButton href="contact-info">Continue</PrimaryButton>
+        <PrimaryButton onClick={handleContinue} loading={loading}>Continue</PrimaryButton>
       </div>
     </MobileShell>
   );
 }
 
 export function ContactInfo() {
+  const navigate = useNavigate();
+  const { user, profile, updateProfile } = useAuth();
+  const [phone, setPhone] = useState(profile?.phone ?? "");
+  const [whatsapp, setWhatsapp] = useState(profile?.whatsapp ?? "");
+  const [email, setEmail] = useState(profile?.email ?? user?.email ?? "");
+  const [address, setAddress] = useState(profile?.address ?? "");
+  const [loading, setLoading] = useState(false);
+
+  async function handleContinue() {
+    setLoading(true);
+    try {
+      await updateProfile({ phone, whatsapp: whatsapp || phone, address });
+      navigate({ to: "/app/$screen", params: { screen: "profile-photo" } });
+    } catch (err) {
+      toast.error(authErrorMessage(err));
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <MobileShell title="Contact information" showBottomNav={false}>
       <OnboardingProgress step={2} />
       <p className="text-sm text-muted-foreground mb-6">How can we and other Agricon users reach you?</p>
       <div className="space-y-4">
-        <TextInput label="Primary phone" placeholder="+234 806 •••• 4823" icon={<Phone className="h-4 w-4" />} value="+234 806 234 4823" />
-        <TextInput label="WhatsApp number" placeholder="Same as phone" icon={<MessageCircle className="h-4 w-4" />} hint="Buyers often prefer WhatsApp — highly recommended." />
-        <TextInput label="Email address" placeholder="you@example.com" icon={<Mail className="h-4 w-4" />} value="adekunle@kolawolefarms.ng" />
-        <TextInput label="Home address" placeholder="Street, city" icon={<MapPin className="h-4 w-4" />} />
+        <TextInput label="Primary phone" placeholder="+234 806 •••• 4823" icon={<Phone className="h-4 w-4" />} value={phone} onChange={setPhone} />
+        <TextInput label="WhatsApp number" placeholder="Same as phone" icon={<MessageCircle className="h-4 w-4" />} hint="Buyers often prefer WhatsApp — highly recommended." value={whatsapp} onChange={setWhatsapp} />
+        <TextInput label="Email address" placeholder="you@example.com" icon={<Mail className="h-4 w-4" />} value={email} disabled />
+        <TextInput label="Home address" placeholder="Street, city" icon={<MapPin className="h-4 w-4" />} value={address} onChange={setAddress} />
       </div>
       <div className="mt-8">
-        <PrimaryButton href="profile-photo">Continue</PrimaryButton>
+        <PrimaryButton onClick={handleContinue} loading={loading}>Continue</PrimaryButton>
       </div>
     </MobileShell>
   );
 }
 
 export function ProfilePhoto() {
+  const navigate = useNavigate();
+  const { profile } = useAuth();
+  const [preview, setPreview] = useState<string | null>(null);
+  const cameraInputRef = useRef<HTMLInputElement | null>(null);
+  const uploadInputRef = useRef<HTMLInputElement | null>(null);
+
+  const fullName = [profile?.first_name, profile?.last_name].filter(Boolean).join(" ") || "Your name";
+  const initials = [profile?.first_name?.[0], profile?.last_name?.[0]].filter(Boolean).join("").toUpperCase() || "AK";
+
+  function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setPreview(URL.createObjectURL(file));
+  }
+
+  const nextScreen = profile?.user_type === "distributor" ? "business-info" : "farm-info";
+
   return (
     <MobileShell title="Profile photo" showBottomNav={false}>
       <OnboardingProgress step={3} />
       <p className="text-sm text-muted-foreground mb-6">A clear headshot builds trust. Verified farms with photos get 3× more inquiries.</p>
       <div className="flex flex-col items-center py-4">
         <div className="relative">
-          <div className="grid h-40 w-40 place-items-center rounded-full gradient-primary text-white text-5xl font-black shadow-glow">
-            AK
-          </div>
-          <button className="absolute bottom-2 right-2 grid h-12 w-12 place-items-center rounded-full bg-gold text-gold-foreground shadow-card">
+          {preview ? (
+            <img src={preview} alt="Profile preview" className="h-40 w-40 rounded-full object-cover shadow-glow" />
+          ) : (
+            <div className="grid h-40 w-40 place-items-center rounded-full gradient-primary text-white text-5xl font-black shadow-glow">
+              {initials}
+            </div>
+          )}
+          <button
+            type="button"
+            onClick={() => uploadInputRef.current?.click()}
+            className="absolute bottom-2 right-2 grid h-12 w-12 place-items-center rounded-full bg-gold text-gold-foreground shadow-card"
+          >
             <Camera className="h-5 w-5" />
           </button>
         </div>
-        <p className="mt-4 text-sm font-semibold text-foreground">Adekunle Kolawole</p>
+        <p className="mt-4 text-sm font-semibold text-foreground">{fullName}</p>
       </div>
       <div className="mt-6 grid grid-cols-2 gap-3">
-        <button className="flex flex-col items-center gap-2 rounded-2xl border-2 border-dashed border-border bg-card p-5 hover:border-primary">
+        <button
+          type="button"
+          onClick={() => cameraInputRef.current?.click()}
+          className="flex flex-col items-center gap-2 rounded-2xl border-2 border-dashed border-border bg-card p-5 hover:border-primary"
+        >
           <Camera className="h-6 w-6 text-primary" />
           <span className="text-sm font-semibold text-foreground">Take photo</span>
         </button>
-        <button className="flex flex-col items-center gap-2 rounded-2xl border-2 border-dashed border-border bg-card p-5 hover:border-primary">
+        <button
+          type="button"
+          onClick={() => uploadInputRef.current?.click()}
+          className="flex flex-col items-center gap-2 rounded-2xl border-2 border-dashed border-border bg-card p-5 hover:border-primary"
+        >
           <Upload className="h-6 w-6 text-primary" />
           <span className="text-sm font-semibold text-foreground">Upload</span>
         </button>
+        <input ref={cameraInputRef} type="file" accept="image/*" capture="user" className="hidden" onChange={handleFile} />
+        <input ref={uploadInputRef} type="file" accept="image/*" className="hidden" onChange={handleFile} />
       </div>
       <div className="mt-8 space-y-3">
-        <PrimaryButton href="farm-info">Save & continue</PrimaryButton>
-        <Link to="/app/$screen" params={{ screen: "farm-info" }} className="block text-center text-sm font-semibold text-muted-foreground py-2">Skip for now</Link>
+        <PrimaryButton onClick={() => navigate({ to: "/app/$screen", params: { screen: nextScreen } })}>Save & continue</PrimaryButton>
+        <Link to="/app/$screen" params={{ screen: nextScreen }} className="block text-center text-sm font-semibold text-muted-foreground py-2">Skip for now</Link>
       </div>
     </MobileShell>
   );
 }
 
 export function FarmInfo() {
+  const navigate = useNavigate();
+  const { profile, updateProfile } = useAuth();
+  const [farmName, setFarmName] = useState(profile?.farm_name ?? "");
+  const [farmSize, setFarmSize] = useState(profile?.farm_size_hectares?.toString() ?? "");
+  const [farmState, setFarmState] = useState(profile?.farm_state ?? "Oyo");
+  const [farmLga, setFarmLga] = useState(profile?.farm_lga ?? "");
+  const [crops, setCrops] = useState<string[]>(profile?.primary_crops ?? PRIMARY_CROPS.slice(0, 3));
+  const [loading, setLoading] = useState(false);
+
+  function toggleCrop(c: string) {
+    setCrops((prev) => (prev.includes(c) ? prev.filter((x) => x !== c) : [...prev, c]));
+  }
+
+  async function handleContinue() {
+    setLoading(true);
+    try {
+      await updateProfile({
+        farm_name: farmName,
+        farm_size_hectares: farmSize ? Number(farmSize) : null,
+        farm_state: farmState,
+        farm_lga: farmLga,
+        primary_crops: crops,
+      });
+      navigate({ to: "/app/$screen", params: { screen: "document-upload" } });
+    } catch (err) {
+      toast.error(authErrorMessage(err));
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <MobileShell title="Farm information" showBottomNav={false}>
       <OnboardingProgress step={4} />
       <p className="text-sm text-muted-foreground mb-6">Tell us about your farm. This appears on your public profile.</p>
       <div className="space-y-4">
-        <TextInput label="Farm name" placeholder="e.g. Kolawole Family Farms" value="Kolawole Family Farms" />
-        <TextInput label="Farm size (hectares)" placeholder="e.g. 42" type="number" />
+        <TextInput label="Farm name" placeholder="e.g. Kolawole Family Farms" value={farmName} onChange={setFarmName} />
+        <TextInput label="Farm size (hectares)" placeholder="e.g. 42" type="number" value={farmSize} onChange={setFarmSize} />
         <div>
           <label className="mb-1.5 block text-sm font-medium text-foreground">Farm state</label>
-          <button className="flex h-13 min-h-[52px] w-full items-center justify-between rounded-2xl border-2 border-border bg-card px-4 text-left text-[15px]">
-            <span className="text-foreground">Oyo State</span>
-            <ChevronDown className="h-4 w-4 text-muted-foreground" />
-          </button>
+          <div className="relative">
+            <select
+              value={farmState}
+              onChange={(e) => setFarmState(e.target.value)}
+              className="flex h-13 min-h-[52px] w-full appearance-none items-center rounded-2xl border-2 border-border bg-card px-4 text-left text-[15px] text-foreground outline-none focus:border-primary"
+            >
+              {NIGERIA_STATES.map((s) => (
+                <option key={s} value={s}>{s} State</option>
+              ))}
+            </select>
+            <ChevronDown className="pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          </div>
         </div>
-        <TextInput label="LGA / Nearest town" placeholder="e.g. Ibarapa Central" icon={<MapPin className="h-4 w-4" />} />
+        <TextInput label="LGA / Nearest town" placeholder="e.g. Ibarapa Central" icon={<MapPin className="h-4 w-4" />} value={farmLga} onChange={setFarmLga} />
         <div>
           <label className="mb-1.5 block text-sm font-medium text-foreground">Primary crops (select all that apply)</label>
           <div className="flex flex-wrap gap-2">
-            {["Cassava", "Yam", "Maize", "Rice", "Plantain", "Tomato", "Pepper", "Onion"].map((c, i) => (
-              <Chip key={c} active={i < 3}>{c}</Chip>
+            {PRIMARY_CROPS.map((c) => (
+              <Chip key={c} active={crops.includes(c)} onClick={() => toggleCrop(c)}>{c}</Chip>
             ))}
           </div>
         </div>
       </div>
       <div className="mt-8">
-        <PrimaryButton href="document-upload">Continue</PrimaryButton>
+        <PrimaryButton onClick={handleContinue} loading={loading}>Continue</PrimaryButton>
       </div>
     </MobileShell>
   );

@@ -1,11 +1,25 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   Sprout, ShieldCheck, MessageCircle, TrendingUp, MapPin, Sparkles, Search, Users,
-  BarChart3, ArrowRight, Check, Star, Phone, Mail, ChevronDown, Play, Menu, X,
+  BarChart3, ArrowRight, Check, Star, Phone, Mail, ChevronDown, Menu, X,
   Facebook, Twitter, Instagram, Linkedin, Youtube,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import type { ReactNode } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import type { Variants } from "framer-motion";
+import gsap from "gsap";
 import { SCREEN_COMPONENTS } from "@/components/mobile/screens";
+import { PhoneFrame } from "@/components/landing/PhoneFrame";
+import { SplashVisual } from "@/components/landing/SplashVisual";
+import { AppStoreBadge, GooglePlayBadge } from "@/components/landing/StoreBadges";
+import { cn } from "@/lib/utils";
+
+/** Reveal-on-scroll variant shared across sections below. */
+const fadeUp: Variants = {
+  hidden: { opacity: 0, y: 26 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.55, ease: "easeOut" } },
+};
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -23,12 +37,109 @@ export const Route = createFileRoute("/")({
 
 function PhonePreview({ slug, scale = 0.55, height = 460 }: { slug: string; scale?: number; height?: number }) {
   const Component = SCREEN_COMPONENTS[slug];
+  const width = 375 * scale;
   return (
-    <div className="rounded-[44px] bg-forest p-[8px] shadow-pop">
-      <div className="overflow-hidden rounded-[36px] bg-surface" style={{ width: 375 * scale, height }}>
-        <div className="origin-top-left" style={{ transform: `scale(${scale})`, width: "375px", height: `${height / scale}px` }}>
-          {Component && <Component />}
-        </div>
+    <PhoneFrame width={width} height={height}>
+      <div className="origin-top-left" style={{ transform: `scale(${scale})`, width: "375px", height: `${height / scale}px` }}>
+        {Component && <Component />}
+      </div>
+    </PhoneFrame>
+  );
+}
+
+const SCREENSHOT_SLUGS = ["home", "farm-profile", "crop-details", "chat", "farmer-dashboard", "messages", "marketplace", "notifications"];
+
+function ScreenshotMarquee() {
+  const trackRef = useRef<HTMLDivElement | null>(null);
+  const tweenRef = useRef<gsap.core.Tween | null>(null);
+
+  useEffect(() => {
+    if (!trackRef.current) return;
+    const tween = gsap.to(trackRef.current, {
+      xPercent: -50,
+      duration: 32,
+      ease: "none",
+      repeat: -1,
+    });
+    tweenRef.current = tween;
+    return () => {
+      tween.kill();
+    };
+  }, []);
+
+  const slides = [...SCREENSHOT_SLUGS, ...SCREENSHOT_SLUGS];
+
+  return (
+    <div
+      className="mt-12 -mx-6 overflow-hidden px-6 pb-4"
+      onMouseEnter={() => tweenRef.current?.pause()}
+      onMouseLeave={() => tweenRef.current?.play()}
+    >
+      <div ref={trackRef} className="flex w-max gap-8">
+        {slides.map((s, i) => (
+          <motion.div
+            key={`${s}-${i}`}
+            className="shrink-0"
+            animate={{ y: [0, -10, 0] }}
+            transition={{ duration: 3.4 + (i % 3) * 0.4, repeat: Infinity, ease: "easeInOut", delay: (i % 4) * 0.25 }}
+          >
+            <PhonePreview slug={s} scale={0.72} height={620} />
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/** Generic gsap-driven infinite scroller — duplicates `items` once so the loop is seamless. */
+function Marquee<T>({
+  items,
+  renderItem,
+  direction = "left",
+  speed = 34,
+  gapClassName = "gap-6",
+  className,
+}: {
+  items: T[];
+  renderItem: (item: T, index: number) => ReactNode;
+  direction?: "left" | "right";
+  speed?: number;
+  gapClassName?: string;
+  className?: string;
+}) {
+  const trackRef = useRef<HTMLDivElement | null>(null);
+  const tweenRef = useRef<gsap.core.Tween | null>(null);
+
+  useEffect(() => {
+    if (!trackRef.current) return;
+    if (direction === "right") {
+      gsap.set(trackRef.current, { xPercent: -50 });
+      tweenRef.current = gsap.to(trackRef.current, { xPercent: 0, duration: speed, ease: "none", repeat: -1 });
+    } else {
+      tweenRef.current = gsap.to(trackRef.current, { xPercent: -50, duration: speed, ease: "none", repeat: -1 });
+    }
+    return () => {
+      tweenRef.current?.kill();
+    };
+  }, [direction, speed]);
+
+  const doubled = [...items, ...items];
+
+  return (
+    <div
+      className={cn(
+        "overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_6%,black_94%,transparent)]",
+        className
+      )}
+      onMouseEnter={() => tweenRef.current?.pause()}
+      onMouseLeave={() => tweenRef.current?.play()}
+    >
+      <div ref={trackRef} className={cn("flex w-max", gapClassName)}>
+        {doubled.map((item, i) => (
+          <div key={i} className="shrink-0">
+            {renderItem(item, i % items.length)}
+          </div>
+        ))}
       </div>
     </div>
   );
@@ -37,6 +148,13 @@ function PhonePreview({ slug, scale = 0.55, height = 460 }: { slug: string; scal
 function Landing() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const [showSplash, setShowSplash] = useState(true);
+
+  useEffect(() => {
+    if (!showSplash) return;
+    const t = setTimeout(() => setShowSplash(false), 2200);
+    return () => clearTimeout(t);
+  }, [showSplash]);
 
   const navLinks = [
     { label: "Features", href: "#features" },
@@ -47,6 +165,19 @@ function Landing() {
   ];
 
   return (
+    <>
+      <AnimatePresence>
+        {showSplash && (
+          <motion.div
+            key="splash"
+            exit={{ opacity: 0, scale: 1.06 }}
+            transition={{ duration: 0.6, ease: "easeInOut" }}
+            className="fixed inset-0 z-[100]"
+          >
+            <SplashVisual onSkip={() => setShowSplash(false)} />
+          </motion.div>
+        )}
+      </AnimatePresence>
     <div className="min-h-screen bg-surface">
       {/* NAV */}
       <header className="sticky top-0 z-40 border-b border-border/70 bg-surface/85 backdrop-blur-xl">
@@ -67,6 +198,7 @@ function Landing() {
           </nav>
           <div className="hidden items-center gap-3 md:flex">
             <Link to="/app" className="text-sm font-semibold text-foreground/70 hover:text-primary">View prototype</Link>
+            <Link to="/signin" className="text-sm font-semibold text-foreground/70 hover:text-primary">Sign in</Link>
             <a href="#download" className="inline-flex h-11 items-center gap-2 rounded-2xl gradient-primary px-5 text-sm font-bold text-primary-foreground shadow-glow">
               Download app <ArrowRight className="h-4 w-4" />
             </a>
@@ -81,6 +213,7 @@ function Landing() {
               {navLinks.map((l) => (
                 <a key={l.href} href={l.href} onClick={() => setMenuOpen(false)} className="block rounded-xl px-4 py-3 text-sm font-semibold hover:bg-secondary">{l.label}</a>
               ))}
+              <Link to="/signin" className="block rounded-xl px-4 py-3 text-sm font-semibold text-primary">Sign in →</Link>
               <Link to="/app" className="block rounded-xl px-4 py-3 text-sm font-semibold text-primary">View prototype →</Link>
             </div>
           </div>
@@ -91,7 +224,11 @@ function Landing() {
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 gradient-mesh" />
         <div className="relative mx-auto grid max-w-7xl gap-12 px-6 pb-20 pt-14 lg:grid-cols-[1.1fr_1fr] lg:gap-16 lg:pt-24 lg:pb-32">
-          <div>
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, ease: "easeOut" }}
+          >
             <span className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary-soft px-3 py-1.5 text-xs font-bold text-primary">
               <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
               Now live · 12,000+ verified farmers 🇳🇬
@@ -106,8 +243,8 @@ function Landing() {
               <a href="#download" className="inline-flex h-13 min-h-[52px] items-center gap-2 rounded-2xl gradient-primary px-6 text-sm font-bold text-primary-foreground shadow-glow">
                 Get the app <ArrowRight className="h-4 w-4" />
               </a>
-              <Link to="/app" className="inline-flex h-13 min-h-[52px] items-center gap-2 rounded-2xl border-2 border-forest bg-card px-6 text-sm font-bold text-forest hover:bg-secondary">
-                <Play className="h-4 w-4" /> Explore the 50-screen prototype
+              <Link to="/splash" className="inline-flex h-13 min-h-[52px] items-center gap-2 rounded-2xl border-2 border-forest bg-card px-6 text-sm font-bold text-forest hover:bg-secondary">
+                Get started <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
 
@@ -133,18 +270,25 @@ function Landing() {
                 <p className="text-xs text-muted-foreground">from 2,400+ reviews across NG</p>
               </div>
             </div>
-          </div>
+          </motion.div>
 
-          <div className="relative flex items-center justify-center">
-            <div className="absolute -left-8 top-16 hidden lg:block">
-              <PhonePreview slug="crop-details" scale={0.42} height={340} />
-            </div>
-            <div className="relative z-10">
-              <PhonePreview slug="home" scale={0.62} height={520} />
-            </div>
-            <div className="absolute -right-4 top-40 hidden lg:block">
-              <PhonePreview slug="farm-profile" scale={0.42} height={340} />
-            </div>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.94 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, ease: "easeOut", delay: 0.15 }}
+            className="relative flex items-center justify-center"
+          >
+            <motion.div
+              className="relative z-10"
+              animate={{ y: [0, -10, 0] }}
+              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 0.4 }}
+            >
+              <img 
+                src="/phone_hand_with_screen-removebg-preview.png" 
+                alt="Agricon app in hand"
+                className="h-auto max-h-[700px] w-full max-w-2xl object-contain drop-shadow-2xl"
+              />
+            </motion.div>
 
             {/* Floating stat cards */}
             <div className="absolute -left-2 top-4 rounded-2xl bg-card p-3 shadow-pop lg:left-16">
@@ -165,19 +309,22 @@ function Landing() {
                 </div>
               </div>
             </div>
-          </div>
+          </motion.div>
         </div>
       </section>
 
-      {/* Trust / logo strip */}
-      <section className="border-y border-border bg-card">
-        <div className="mx-auto max-w-7xl px-6 py-8">
-          <p className="text-center text-xs font-bold uppercase tracking-widest text-muted-foreground">Trusted by farms and distributors across all 36 states</p>
-          <div className="mt-6 grid grid-cols-2 items-center gap-6 opacity-70 md:grid-cols-6">
-            {["Sahel Grains", "Green Delta", "Kolawole Farms", "Northern Harvest", "Cross River Cocoa", "Ogun Estates"].map((n) => (
-              <div key={n} className="text-center text-sm font-black tracking-tight text-forest">{n}</div>
-            ))}
-          </div>
+      {/* Trust / logo strip — auto-scrolling marquee */}
+      <section className="border-y border-border bg-card py-8">
+        <p className="text-center text-xs font-bold uppercase tracking-widest text-muted-foreground">Trusted by farms and distributors across all 36 states</p>
+        <div className="mt-6">
+          <Marquee
+            items={["Sahel Grains", "Green Delta", "Kolawole Farms", "Northern Harvest", "Cross River Cocoa", "Ogun Estates", "Ogun Poultry Estate", "Kaduna Tomato Union", "Enugu Cassava Growers", "Jos Plateau Produce"]}
+            direction="left"
+            speed={32}
+            renderItem={(n) => (
+              <span className="rounded-2xl border border-border bg-surface px-6 py-3 text-sm font-black tracking-tight text-forest shadow-soft">{n}</span>
+            )}
+          />
         </div>
       </section>
 
@@ -196,12 +343,21 @@ function Landing() {
             { icon: <TrendingUp className="h-6 w-6" />, title: "Seasonal insights", body: "Real harvest timelines help you plan sourcing months ahead and lock in the best pricing." },
             { icon: <MapPin className="h-6 w-6" />, title: "Farm location maps", body: "See every farm on a map with GPS coordinates, size, and directions." },
             { icon: <BarChart3 className="h-6 w-6" />, title: "Analytics dashboards", body: "Track listings, inquiries, response rates, and top-performing crops with beautiful charts." },
-          ].map((f) => (
-            <div key={f.title} className="rounded-3xl border border-border bg-card p-6 shadow-soft transition hover:shadow-card">
+          ].map((f, i) => (
+            <motion.div
+              key={f.title}
+              variants={fadeUp}
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ delay: (i % 3) * 0.08 }}
+              whileHover={{ y: -4 }}
+              className="rounded-3xl border border-border bg-card p-6 shadow-soft transition hover:shadow-card"
+            >
               <div className="grid h-12 w-12 place-items-center rounded-2xl gradient-primary text-primary-foreground shadow-glow">{f.icon}</div>
               <h3 className="mt-5 text-lg font-black text-forest">{f.title}</h3>
               <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{f.body}</p>
-            </div>
+            </motion.div>
           ))}
         </div>
       </section>
@@ -219,24 +375,39 @@ function Landing() {
                   { n: "01", title: "Verify your identity", body: "Upload your ID and farm documents. Our team reviews and approves within 24-48 hours." },
                   { n: "02", title: "Set up your profile", body: "Add photos, describe your farm or business, and select the crops you produce or source." },
                   { n: "03", title: "Discover and connect", body: "Browse verified partners, message directly, request quotes, and close deals — all in the app." },
-                ].map((s) => (
-                  <div key={s.n} className="flex gap-5">
+                ].map((s, i) => (
+                  <motion.div
+                    key={s.n}
+                    variants={fadeUp}
+                    initial="hidden"
+                    whileInView="show"
+                    viewport={{ once: true, margin: "-60px" }}
+                    transition={{ delay: i * 0.12 }}
+                    className="flex gap-5"
+                  >
                     <div className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-gold text-gold-foreground text-lg font-black shadow-glow">{s.n}</div>
                     <div>
                       <h3 className="text-xl font-black">{s.title}</h3>
                       <p className="mt-1 text-forest-foreground/70">{s.body}</p>
                     </div>
-                  </div>
+                  </motion.div>
                 ))}
               </div>
             </div>
-            <div className="relative flex items-center justify-center gap-4">
-              <div className="translate-y-8">
-                <PhonePreview slug="user-type" scale={0.48} height={400} />
-              </div>
-              <div className="-translate-y-8">
-                <PhonePreview slug="verification-status" scale={0.48} height={400} />
-              </div>
+            <div className="relative flex items-center justify-center">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
+                className="relative z-10"
+              >
+                <img 
+                  src="/iphone_mockup_with_screens__1_-removebg-preview.png" 
+                  alt="Agricon app interface showing user verification and profile setup"
+                  className="h-auto max-h-[1200px] w-full max-w-full object-contain drop-shadow-2xl"
+                />
+              </motion.div>
             </div>
           </div>
         </div>
@@ -249,13 +420,7 @@ function Landing() {
           <h2 className="mt-3 text-4xl font-black tracking-tight text-forest md:text-5xl">A closer look at every screen</h2>
           <p className="mt-4 text-lg text-muted-foreground">Every screen is designed with the same attention to spacing, color, and hierarchy. Explore 50 pixel-perfect designs.</p>
         </div>
-        <div className="mt-12 -mx-6 flex gap-6 overflow-x-auto scrollbar-hide px-6 pb-4">
-          {["home", "farm-profile", "crop-details", "chat", "farmer-dashboard", "messages", "marketplace", "notifications"].map((s) => (
-            <div key={s} className="shrink-0">
-              <PhonePreview slug={s} scale={0.55} height={470} />
-            </div>
-          ))}
-        </div>
+        <ScreenshotMarquee />
         <div className="mt-10 text-center">
           <Link to="/app" className="inline-flex items-center gap-2 rounded-2xl border-2 border-forest bg-card px-6 py-3 text-sm font-bold text-forest hover:bg-secondary">
             View all 50 screens <ArrowRight className="h-4 w-4" />
@@ -275,8 +440,17 @@ function Landing() {
               { name: "Adekunle Kolawole", role: "Cassava farmer · Oyo State", text: "Since joining Agricon, we've tripled our distributor network. The verification badge alone changed how buyers see us.", init: "AK", color: "#2f7d3a" },
               { name: "Fatima Bello", role: "Grains farmer · Kano State", text: "The chat feature makes negotiations painless. I close deals with distributors in Lagos without ever leaving my farm.", init: "FB", color: "#c98a1a" },
               { name: "Emeka Nwosu", role: "Distributor · Lagos", text: "Sourcing used to take weeks of calls. Now I find verified farms, chat, and get quotes in under an hour. Game-changing.", init: "EN", color: "#1f6b5e" },
-            ].map((t) => (
-              <div key={t.name} className="rounded-3xl border border-border bg-card p-6 shadow-soft">
+            ].map((t, i) => (
+              <motion.div
+                key={t.name}
+                variants={fadeUp}
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true, margin: "-60px" }}
+                transition={{ delay: i * 0.1 }}
+                whileHover={{ y: -4 }}
+                className="rounded-3xl border border-border bg-card p-6 shadow-soft transition hover:shadow-card"
+              >
                 <div className="flex items-center gap-1">
                   {[1,2,3,4,5].map((i) => <Star key={i} className="h-4 w-4 fill-gold text-gold" />)}
                 </div>
@@ -288,7 +462,7 @@ function Landing() {
                     <p className="text-xs text-muted-foreground">{t.role}</p>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -306,8 +480,16 @@ function Landing() {
             { name: "Starter", price: "Free", body: "Perfect for new farmers just getting started.", features: ["Up to 3 crop listings", "Verified farm badge", "In-app chat", "Basic analytics"], cta: "Get started free", highlight: false },
             { name: "Grower", price: "₦4,500", period: "/month", body: "For active farmers building a real business.", features: ["Unlimited listings", "Priority in search", "Advanced analytics", "Harvest timeline tools", "Featured farm badge"], cta: "Start free trial", highlight: true },
             { name: "Enterprise", price: "Custom", body: "For distributors, co-ops, and processors.", features: ["Everything in Grower", "Multi-farm management", "Team accounts", "Dedicated account manager", "API access"], cta: "Contact sales", highlight: false },
-          ].map((p) => (
-            <div key={p.name} className={`relative rounded-3xl border-2 p-8 ${p.highlight ? "border-primary bg-card shadow-pop" : "border-border bg-card shadow-soft"}`}>
+          ].map((p, i) => (
+            <motion.div
+              key={p.name}
+              variants={fadeUp}
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ delay: i * 0.1 }}
+              className={`relative rounded-3xl border-2 p-8 ${p.highlight ? "border-primary bg-card shadow-pop" : "border-border bg-card shadow-soft"}`}
+            >
               {p.highlight && <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full gradient-primary px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-primary-foreground shadow-glow">Most popular</span>}
               <h3 className="text-xl font-black text-forest">{p.name}</h3>
               <p className="mt-2 text-sm text-muted-foreground">{p.body}</p>
@@ -326,7 +508,7 @@ function Landing() {
               <button className={`mt-8 h-12 w-full rounded-2xl text-sm font-bold ${p.highlight ? "gradient-primary text-primary-foreground shadow-glow" : "border-2 border-forest text-forest hover:bg-secondary"}`}>
                 {p.cta}
               </button>
-            </div>
+            </motion.div>
           ))}
         </div>
       </section>
@@ -415,20 +597,8 @@ function Landing() {
               <h2 className="text-3xl font-black tracking-tight md:text-4xl">Get the app. Grow with Agricon.</h2>
               <p className="mt-3 opacity-90">Download Agricon NG on iOS and Android. Join 12,000+ verified farmers and distributors trading with confidence.</p>
               <div className="mt-6 flex flex-wrap gap-3">
-                <a href="#" className="flex items-center gap-3 rounded-2xl bg-forest px-5 py-3 hover:bg-forest/90">
-                  <div className="text-2xl">🍎</div>
-                  <div className="text-left">
-                    <p className="text-[10px] opacity-80">Download on the</p>
-                    <p className="text-sm font-bold">App Store</p>
-                  </div>
-                </a>
-                <a href="#" className="flex items-center gap-3 rounded-2xl bg-forest px-5 py-3 hover:bg-forest/90">
-                  <div className="text-2xl">▶</div>
-                  <div className="text-left">
-                    <p className="text-[10px] opacity-80">GET IT ON</p>
-                    <p className="text-sm font-bold">Google Play</p>
-                  </div>
-                </a>
+                <AppStoreBadge />
+                <GooglePlayBadge />
               </div>
             </div>
             <div className="rounded-3xl bg-white/10 p-6 backdrop-blur-xl">
@@ -467,20 +637,8 @@ function Landing() {
                 ))}
               </div>
               <div className="mt-6 flex flex-wrap gap-3">
-                <a href="#" className="flex items-center gap-2 rounded-xl bg-white/10 px-4 py-2 hover:bg-white/20">
-                  <span className="text-lg">🍎</span>
-                  <div className="text-left">
-                    <p className="text-[9px] opacity-80">Download on</p>
-                    <p className="text-xs font-bold">App Store</p>
-                  </div>
-                </a>
-                <a href="#" className="flex items-center gap-2 rounded-xl bg-white/10 px-4 py-2 hover:bg-white/20">
-                  <span className="text-lg">▶</span>
-                  <div className="text-left">
-                    <p className="text-[9px] opacity-80">GET IT ON</p>
-                    <p className="text-xs font-bold">Google Play</p>
-                  </div>
-                </a>
+                <AppStoreBadge className="px-4 py-2" />
+                <GooglePlayBadge className="px-4 py-2" />
               </div>
             </div>
             {[
@@ -510,5 +668,6 @@ function Landing() {
         </div>
       </footer>
     </div>
+    </>
   );
 }

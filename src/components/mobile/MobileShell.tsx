@@ -1,4 +1,5 @@
-import { Link, useParams } from "@tanstack/react-router";
+import { Link, useParams, useRouter } from "@tanstack/react-router";
+import { AnimatePresence, motion } from "framer-motion";
 import { Home, Search, PlusCircle, MessageCircle, User, ChevronLeft, Bell } from "lucide-react";
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
@@ -12,6 +13,10 @@ type Props = {
   headerVariant?: "default" | "forest" | "transparent";
   contentClassName?: string;
   fullBleed?: boolean;
+  /** Renders as a real full-viewport page (min-h-screen, no phone-frame assumptions) instead of the prototype gallery's fixed-size frame. */
+  standalone?: boolean;
+  /** Real route the back button should link to. When omitted on a standalone page, the back button uses browser history instead. */
+  backTo?: string;
 };
 
 export function MobileShell({
@@ -23,7 +28,10 @@ export function MobileShell({
   headerVariant = "default",
   contentClassName,
   fullBleed = false,
+  standalone = false,
+  backTo,
 }: Props) {
+  const router = useRouter();
   const params = useParams({ strict: false }) as { screen?: string };
   const active = params.screen ?? "home";
 
@@ -34,21 +42,34 @@ export function MobileShell({
       ? "bg-transparent"
       : "bg-card border-b border-border";
 
+  const backButtonCls = cn(
+    "grid h-10 w-10 place-items-center rounded-full transition",
+    headerVariant === "forest" ? "hover:bg-white/10" : "hover:bg-muted"
+  );
+
   return (
-    <div className="relative flex h-full w-full flex-col overflow-hidden bg-surface">
+    <div
+      className={cn(
+        "relative flex w-full flex-col bg-surface",
+        standalone ? "min-h-screen mx-auto max-w-md" : "h-full overflow-hidden"
+      )}
+    >
       {(title || showBack) && (
         <header className={cn("flex items-center gap-3 px-4 pt-3 pb-3 shrink-0", headerCls)}>
           {showBack && (
-            <Link
-              to="/app"
-              className={cn(
-                "grid h-10 w-10 place-items-center rounded-full transition",
-                headerVariant === "forest" ? "hover:bg-white/10" : "hover:bg-muted"
-              )}
-              aria-label="Back to screen index"
-            >
-              <ChevronLeft className="h-5 w-5" />
-            </Link>
+            backTo ? (
+              <Link to={backTo as never} className={backButtonCls} aria-label="Go back">
+                <ChevronLeft className="h-5 w-5" />
+              </Link>
+            ) : standalone ? (
+              <button type="button" onClick={() => router.history.back()} className={backButtonCls} aria-label="Go back">
+                <ChevronLeft className="h-5 w-5" />
+              </button>
+            ) : (
+              <Link to="/app" className={backButtonCls} aria-label="Back to screen index">
+                <ChevronLeft className="h-5 w-5" />
+              </Link>
+            )
           )}
           <h1 className="text-lg font-semibold tracking-tight truncate flex-1">{title}</h1>
           {headerRight}
@@ -62,7 +83,17 @@ export function MobileShell({
           contentClassName
         )}
       >
-        {children}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={active}
+            initial={{ opacity: 0, x: 12 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -12 }}
+            transition={{ duration: 0.22, ease: "easeOut" }}
+          >
+            {children}
+          </motion.div>
+        </AnimatePresence>
       </main>
       {showBottomNav && <BottomNav active={active} />}
     </div>
@@ -103,8 +134,15 @@ function BottomNav({ active }: { active: string }) {
               key={it.slug}
               to="/app/$screen"
               params={{ screen: it.slug }}
-              className="flex flex-col items-center justify-center gap-1"
+              className="relative flex flex-col items-center justify-center gap-1"
             >
+              {isActive && (
+                <motion.span
+                  layoutId="bottom-nav-active"
+                  className="absolute -top-1 h-1 w-6 rounded-full bg-primary"
+                  transition={{ type: "spring", stiffness: 500, damping: 35 }}
+                />
+              )}
               <Icon
                 className={cn("h-5 w-5", isActive ? "text-primary" : "text-muted-foreground")}
                 strokeWidth={isActive ? 2.5 : 2}
