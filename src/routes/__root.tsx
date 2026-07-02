@@ -82,6 +82,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "author", content: "Agricon NG" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { property: "og:title", content: "Agricon NG — Nigeria's Trusted Agricultural Marketplace" },
+      { name: "twitter:title", content: "Agricon NG — Nigeria's Trusted Agricultural Marketplace" },
+      { property: "og:description", content: "Agricon NG connects verified farmers and distributors across Nigeria. Discover premium produce, chat directly, and transact with confidence." },
+      { name: "twitter:description", content: "Agricon NG connects verified farmers and distributors across Nigeria. Discover premium produce, chat directly, and transact with confidence." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/266a8117-6349-483c-9b4e-ce09140365ec/id-preview-8ef90f75--e9b1ec6c-1784-4da8-b387-e2aa04ec2b61.lovable.app-1782971754704.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/266a8117-6349-483c-9b4e-ce09140365ec/id-preview-8ef90f75--e9b1ec6c-1784-4da8-b387-e2aa04ec2b61.lovable.app-1782971754704.png" },
     ],
     links: [
       {
