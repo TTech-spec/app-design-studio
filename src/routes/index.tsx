@@ -66,9 +66,9 @@ function Landing() {
             ))}
           </nav>
           <div className="hidden items-center gap-3 md:flex">
-            <a href="#download" className="inline-flex h-11 items-center gap-2 rounded-2xl gradient-primary px-5 text-sm font-bold text-primary-foreground shadow-glow">
-              Download app <ArrowRight className="h-4 w-4" />
-            </a>
+            <Link to="/app/$screen" params={{ screen: "welcome" }} className="inline-flex h-11 items-center gap-2 rounded-2xl gradient-primary px-5 text-sm font-bold text-primary-foreground shadow-glow">
+              Get started <ArrowRight className="h-4 w-4" />
+            </Link>
           </div>
           <button className="md:hidden" onClick={() => setMenuOpen(!menuOpen)}>
             {menuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
