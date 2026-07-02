@@ -12,6 +12,7 @@ import {
 import { MobileShell, NotificationBell } from "./MobileShell";
 import { FarmCard, CropCard, SectionHeader, PrimaryButton, TextInput, EmptyState, Chip, VerificationBadge, Rating, FarmImage } from "./ui";
 import { CROP_CATEGORIES, FARMS, CROPS, MESSAGES, NOTIFICATIONS, REVIEWS, HARVEST_TIMELINE, LANGUAGES } from "@/lib/agricon-data";
+import { GoogleIcon, MicrosoftIcon, AppleIcon } from "./BrandIcons";
 
 /* ==================================================================
    A. LAUNCH & AUTHENTICATION
@@ -182,26 +183,50 @@ export function Login() {
 }
 
 export function Signup() {
+  const socialBtn = "flex h-13 min-h-[52px] w-full items-center justify-center gap-3 rounded-2xl border-2 border-border bg-card px-4 text-[15px] font-semibold text-foreground shadow-soft transition hover:border-primary/40 hover:shadow-card";
   return (
     <MobileShell title="Create your account" showBottomNav={false}>
       <p className="text-sm text-muted-foreground mb-6">Join thousands of verified farmers and distributors.</p>
-      <div className="space-y-4">
-        <div className="grid grid-cols-2 gap-3">
-          <TextInput label="First name" placeholder="Adekunle" />
-          <TextInput label="Last name" placeholder="Kolawole" />
+
+      {/* Social auth — order: Google, Microsoft, Apple */}
+      <div className="space-y-3">
+        <button type="button" className={socialBtn} aria-label="Continue with Google">
+          <GoogleIcon className="h-5 w-5" />
+          <span>Continue with Google</span>
+        </button>
+        <button type="button" className={socialBtn} aria-label="Continue with Microsoft">
+          <MicrosoftIcon className="h-5 w-5" />
+          <span>Continue with Microsoft</span>
+        </button>
+        <button type="button" className={`${socialBtn} bg-foreground text-background border-foreground hover:bg-foreground/90`} aria-label="Continue with Apple">
+          <AppleIcon className="h-5 w-5" />
+          <span>Continue with Apple</span>
+        </button>
+      </div>
+
+      {/* OR divider */}
+      <div className="relative my-6">
+        <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-border" /></div>
+        <div className="relative flex justify-center">
+          <span className="bg-surface px-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">or</span>
         </div>
-        <TextInput label="Email" placeholder="you@example.com" icon={<Mail className="h-4 w-4" />} />
-        <TextInput label="Phone" placeholder="+234 800 000 0000" icon={<Phone className="h-4 w-4" />} />
+      </div>
+
+      {/* Email + Password */}
+      <div className="space-y-4">
+        <TextInput label="Email address" placeholder="you@example.com" type="email" icon={<Mail className="h-4 w-4" />} />
+        <TextInput label="Password" placeholder="At least 8 characters" type="password" icon={<Lock className="h-4 w-4" />} suffix={<Eye className="h-4 w-4 text-muted-foreground" />} hint="Use 8+ characters with a mix of letters and numbers." />
         <label className="flex items-start gap-3 text-sm text-foreground">
           <input type="checkbox" className="mt-0.5 h-4 w-4 rounded border-2 border-border text-primary" />
           <span>I agree to the <span className="font-semibold text-primary">Terms of Service</span> and <span className="font-semibold text-primary">Privacy Policy</span></span>
         </label>
       </div>
-      <div className="mt-8 space-y-3">
-        <PrimaryButton href="otp">Continue</PrimaryButton>
+
+      <div className="mt-6 space-y-4">
+        <PrimaryButton href="otp">Create Account</PrimaryButton>
         <p className="text-center text-sm text-muted-foreground">
           Already have an account?{" "}
-          <Link to="/app/$screen" params={{ screen: "login" }} className="font-semibold text-primary">Sign in</Link>
+          <Link to="/app/$screen" params={{ screen: "login" }} className="font-semibold text-primary">Sign In</Link>
         </p>
       </div>
     </MobileShell>
