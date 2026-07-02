@@ -66,9 +66,9 @@ function Landing() {
             ))}
           </nav>
           <div className="hidden items-center gap-3 md:flex">
-            <a href="#download" className="inline-flex h-11 items-center gap-2 rounded-2xl gradient-primary px-5 text-sm font-bold text-primary-foreground shadow-glow">
-              Download app <ArrowRight className="h-4 w-4" />
-            </a>
+            <Link to="/app/$screen" params={{ screen: "welcome" }} className="inline-flex h-11 items-center gap-2 rounded-2xl gradient-primary px-5 text-sm font-bold text-primary-foreground shadow-glow">
+              Get started <ArrowRight className="h-4 w-4" />
+            </Link>
           </div>
           <button className="md:hidden" onClick={() => setMenuOpen(!menuOpen)}>
             {menuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -102,9 +102,9 @@ function Landing() {
               Agricon connects verified farmers and distributors across Nigeria. Discover premium produce, chat directly, and transact with total confidence — all from one beautiful app.
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <a href="#download" className="inline-flex h-13 min-h-[52px] items-center gap-2 rounded-2xl gradient-primary px-6 text-sm font-bold text-primary-foreground shadow-glow">
-                Get the app <ArrowRight className="h-4 w-4" />
-              </a>
+              <Link to="/app/$screen" params={{ screen: "welcome" }} className="inline-flex h-13 min-h-[52px] items-center gap-2 rounded-2xl gradient-primary px-6 text-sm font-bold text-primary-foreground shadow-glow">
+                Get started <ArrowRight className="h-4 w-4" />
+              </Link>
               <a href="#features" className="inline-flex h-13 min-h-[52px] items-center gap-2 rounded-2xl border-2 border-forest bg-card px-6 text-sm font-bold text-forest hover:bg-secondary">
                 <Play className="h-4 w-4" /> See how it works
               </a>
