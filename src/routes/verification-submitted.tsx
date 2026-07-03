@@ -33,7 +33,7 @@ function VerificationSubmittedPage() {
           </div>
         </div>
         <div className="mt-8 w-full space-y-3">
-          <PrimaryButton to="/home">Continue to marketplace</PrimaryButton>
+          <PrimaryButton to="/onboarding-1">Continue</PrimaryButton>
           <Link to="/verification-status" className="block text-center text-sm font-semibold text-primary py-2">Check verification status</Link>
         </div>
       </div>

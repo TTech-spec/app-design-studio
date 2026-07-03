@@ -29,6 +29,9 @@ import { Route as PasswordResetSuccessRouteImport } from './routes/password-rese
 import { Route as OtpRouteImport } from './routes/otp'
 import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as MessagesRouteImport } from './routes/messages'
+import { Route as Onboarding3RouteImport } from './routes/onboarding-3'
+import { Route as Onboarding2RouteImport } from './routes/onboarding-2'
+import { Route as Onboarding1RouteImport } from './routes/onboarding-1'
 import { Route as MarketplaceRouteImport } from './routes/marketplace'
 import { Route as LanguageRouteImport } from './routes/language'
 import { Route as IntroRouteImport } from './routes/intro'
@@ -157,6 +160,21 @@ const NotificationsRoute = NotificationsRouteImport.update({
 const MessagesRoute = MessagesRouteImport.update({
   id: '/messages',
   path: '/messages',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const Onboarding3Route = Onboarding3RouteImport.update({
+  id: '/onboarding-3',
+  path: '/onboarding-3',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const Onboarding2Route = Onboarding2RouteImport.update({
+  id: '/onboarding-2',
+  path: '/onboarding-2',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const Onboarding1Route = Onboarding1RouteImport.update({
+  id: '/onboarding-1',
+  path: '/onboarding-1',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MarketplaceRoute = MarketplaceRouteImport.update({
@@ -335,6 +353,9 @@ export interface FileRoutesByFullPath {
   '/marketplace': typeof MarketplaceRoute
   '/messages': typeof MessagesRoute
   '/notifications': typeof NotificationsRoute
+  '/onboarding-1': typeof Onboarding1Route
+  '/onboarding-2': typeof Onboarding2Route
+  '/onboarding-3': typeof Onboarding3Route
   '/otp': typeof OtpRoute
   '/password-reset-success': typeof PasswordResetSuccessRoute
   '/personal-info': typeof PersonalInfoRoute
@@ -386,6 +407,9 @@ export interface FileRoutesByTo {
   '/marketplace': typeof MarketplaceRoute
   '/messages': typeof MessagesRoute
   '/notifications': typeof NotificationsRoute
+  '/onboarding-1': typeof Onboarding1Route
+  '/onboarding-2': typeof Onboarding2Route
+  '/onboarding-3': typeof Onboarding3Route
   '/otp': typeof OtpRoute
   '/password-reset-success': typeof PasswordResetSuccessRoute
   '/personal-info': typeof PersonalInfoRoute
@@ -438,6 +462,9 @@ export interface FileRoutesById {
   '/marketplace': typeof MarketplaceRoute
   '/messages': typeof MessagesRoute
   '/notifications': typeof NotificationsRoute
+  '/onboarding-1': typeof Onboarding1Route
+  '/onboarding-2': typeof Onboarding2Route
+  '/onboarding-3': typeof Onboarding3Route
   '/otp': typeof OtpRoute
   '/password-reset-success': typeof PasswordResetSuccessRoute
   '/personal-info': typeof PersonalInfoRoute
@@ -491,6 +518,9 @@ export interface FileRouteTypes {
     | '/marketplace'
     | '/messages'
     | '/notifications'
+    | '/onboarding-1'
+    | '/onboarding-2'
+    | '/onboarding-3'
     | '/otp'
     | '/password-reset-success'
     | '/personal-info'
@@ -542,6 +572,9 @@ export interface FileRouteTypes {
     | '/marketplace'
     | '/messages'
     | '/notifications'
+    | '/onboarding-1'
+    | '/onboarding-2'
+    | '/onboarding-3'
     | '/otp'
     | '/password-reset-success'
     | '/personal-info'
@@ -593,6 +626,9 @@ export interface FileRouteTypes {
     | '/marketplace'
     | '/messages'
     | '/notifications'
+    | '/onboarding-1'
+    | '/onboarding-2'
+    | '/onboarding-3'
     | '/otp'
     | '/password-reset-success'
     | '/personal-info'
@@ -645,6 +681,9 @@ export interface RootRouteChildren {
   MarketplaceRoute: typeof MarketplaceRoute
   MessagesRoute: typeof MessagesRoute
   NotificationsRoute: typeof NotificationsRoute
+  Onboarding1Route: typeof Onboarding1Route
+  Onboarding2Route: typeof Onboarding2Route
+  Onboarding3Route: typeof Onboarding3Route
   OtpRoute: typeof OtpRoute
   PasswordResetSuccessRoute: typeof PasswordResetSuccessRoute
   PersonalInfoRoute: typeof PersonalInfoRoute
@@ -807,6 +846,27 @@ declare module '@tanstack/react-router' {
       path: '/messages'
       fullPath: '/messages'
       preLoaderRoute: typeof MessagesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/onboarding-3': {
+      id: '/onboarding-3'
+      path: '/onboarding-3'
+      fullPath: '/onboarding-3'
+      preLoaderRoute: typeof Onboarding3RouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/onboarding-2': {
+      id: '/onboarding-2'
+      path: '/onboarding-2'
+      fullPath: '/onboarding-2'
+      preLoaderRoute: typeof Onboarding2RouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/onboarding-1': {
+      id: '/onboarding-1'
+      path: '/onboarding-1'
+      fullPath: '/onboarding-1'
+      preLoaderRoute: typeof Onboarding1RouteImport
       parentRoute: typeof rootRouteImport
     }
     '/marketplace': {
@@ -1045,6 +1105,9 @@ const rootRouteChildren: RootRouteChildren = {
   MarketplaceRoute: MarketplaceRoute,
   MessagesRoute: MessagesRoute,
   NotificationsRoute: NotificationsRoute,
+  Onboarding1Route: Onboarding1Route,
+  Onboarding2Route: Onboarding2Route,
+  Onboarding3Route: Onboarding3Route,
   OtpRoute: OtpRoute,
   PasswordResetSuccessRoute: PasswordResetSuccessRoute,
   PersonalInfoRoute: PersonalInfoRoute,
@@ -1069,13 +1132,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
