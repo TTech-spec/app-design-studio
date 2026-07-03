@@ -2,7 +2,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import {
   Sprout, Search, Bell, ShoppingCart, LogOut, Menu, Home as HomeIcon,
   Layers, MessageCircle, User as UserIcon, Settings as SettingsIcon,
-  Package, TrendingUp, MapPin, ArrowRight, Filter,
+  Package, TrendingUp, MapPin, ArrowRight,
 } from "lucide-react";
 import { useState } from "react";
 import type { ReactNode } from "react";
