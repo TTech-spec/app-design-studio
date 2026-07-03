@@ -251,6 +251,7 @@ export function TextInput({
   disabled,
   multiline,
   rows = 4,
+}: {
   label?: string;
   placeholder?: string;
   icon?: ReactNode;
@@ -265,6 +266,8 @@ export function TextInput({
   required?: boolean;
   autoComplete?: string;
   disabled?: boolean;
+  multiline?: boolean;
+  rows?: number;
 }) {
   const [showPassword, setShowPassword] = useState(false);
   const isPassword = type === "password";
