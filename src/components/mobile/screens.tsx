@@ -619,7 +619,7 @@ function OnboardingProgress({ step }: { step: number }) {
 export function UserType() {
   const navigate = useNavigate();
   const { profile, updateProfile } = useAuth();
-  const [selected, setSelected] = useState<"farmer" | "distributor">(profile?.user_type ?? "farmer");
+  const [selected, setSelected] = useState<"farmer" | "distributor">(profile?.user_type === "distributor" ? "distributor" : "farmer");
   const [loading, setLoading] = useState(false);
 
   const types = [
