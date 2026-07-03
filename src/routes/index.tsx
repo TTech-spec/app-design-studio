@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   Sprout, ShieldCheck, MessageCircle, TrendingUp, MapPin, Sparkles, Search, Users,
   BarChart3, ArrowRight, Check, Star, Phone, Mail, ChevronDown, Menu, X,
-  Facebook, Twitter, Instagram, Linkedin, Youtube,
+  Facebook, Twitter, Instagram, Linkedin, Youtube, Play,
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import type { ReactNode } from "react";
@@ -20,6 +20,24 @@ const fadeUp: Variants = {
   hidden: { opacity: 0, y: 26 },
   show: { opacity: 1, y: 0, transition: { duration: 0.55, ease: "easeOut" } },
 };
+
+const HERO_SLIDES = [
+  {
+    image: "/IMG_4213-removebg-preview.png",
+    heading: "Nigeria's most trusted agricultural marketplace.",
+    subheading: "Agricon connects verified farmers and distributors across Nigeria. Discover premium produce, chat directly, and transact with total confidence — all from one beautiful app.",
+  },
+  {
+    image: "/ChatGPT_Image_Jul_2__2026__05_31_53_PM-removebg-preview.png",
+    heading: "Connect With Farmers. Communicate in Any Language.",
+    subheading: "Connect directly with verified farmers across Nigeria. Communicate in any language, source quality produce, and grow your agribusiness all in one app.",
+  },
+  {
+    image: "/phone_hand_with_screen-removebg-preview.png",
+    heading: "Nigeria's most trusted agricultural marketplace.",
+    subheading: "Agricon connects verified farmers and distributors across Nigeria. Discover premium produce, chat directly, and transact with total confidence — all from one beautiful app.",
+  },
+];
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -149,12 +167,23 @@ function Landing() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [showSplash, setShowSplash] = useState(true);
+  const [heroImageIndex, setHeroImageIndex] = useState(0);
 
   useEffect(() => {
     if (!showSplash) return;
     const t = setTimeout(() => setShowSplash(false), 2200);
     return () => clearTimeout(t);
   }, [showSplash]);
+
+  // Cycle hero images every 3.5 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setHeroImageIndex((prev) => (prev + 1) % HERO_SLIDES.length);
+    }, 3500);
+    return () => clearInterval(interval);
+  }, []);
+
+  const activeSlide = HERO_SLIDES[heroImageIndex];
 
   const navLinks = [
     { label: "Features", href: "#features" },
@@ -183,13 +212,7 @@ function Landing() {
       <header className="sticky top-0 z-40 border-b border-border/70 bg-surface/85 backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
           <Link to="/" className="flex items-center gap-2.5">
-            <div className="grid h-10 w-10 place-items-center rounded-xl gradient-primary text-white shadow-glow">
-              <Sprout className="h-5 w-5" strokeWidth={2.5} />
-            </div>
-            <div>
-              <p className="text-base font-black tracking-tight text-forest">AGRICON</p>
-              <p className="-mt-1 text-[9px] font-bold uppercase tracking-[0.25em] text-primary">Nigeria</p>
-            </div>
+            <img src="/agricon_logo.png" alt="Agricon logo" className="h-10 w-auto" />
           </Link>
           <nav className="hidden items-center gap-8 md:flex">
             {navLinks.map((l) => (
@@ -220,6 +243,7 @@ function Landing() {
         )}
       </header>
 
+
       {/* HERO */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 gradient-mesh" />
@@ -233,12 +257,30 @@ function Landing() {
               <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
               Now live · 12,000+ verified farmers 🇳🇬
             </span>
-            <h1 className="mt-6 text-5xl font-black leading-[1.05] tracking-tight text-forest md:text-6xl lg:text-7xl">
-              Nigeria's most <span className="relative"><span className="relative z-10 text-primary">trusted</span><span className="absolute inset-x-0 bottom-2 h-3 -skew-x-6 rounded-md bg-gold/50" /></span> agricultural marketplace.
-            </h1>
-            <p className="mt-6 max-w-xl text-lg leading-relaxed text-foreground/70">
-              Agricon connects verified farmers and distributors across Nigeria. Discover premium produce, chat directly, and transact with total confidence — all from one beautiful app.
-            </p>
+            <AnimatePresence mode="wait">
+              <motion.h1
+                key={activeSlide.heading}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.45, ease: "easeOut" }}
+                className="mt-6 text-5xl font-black leading-[1.05] tracking-tight text-forest md:text-6xl lg:text-7xl"
+              >
+                {activeSlide.heading}
+              </motion.h1>
+            </AnimatePresence>
+            <AnimatePresence mode="wait">
+              <motion.p
+                key={activeSlide.subheading}
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -16 }}
+                transition={{ duration: 0.45, ease: "easeOut", delay: 0.08 }}
+                className="mt-6 max-w-xl text-lg leading-relaxed text-foreground/70"
+              >
+                {activeSlide.subheading}
+              </motion.p>
+            </AnimatePresence>
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <a href="#download" className="inline-flex h-13 min-h-[52px] items-center gap-2 rounded-2xl gradient-primary px-6 text-sm font-bold text-primary-foreground shadow-glow">
                 Get the app <ArrowRight className="h-4 w-4" />
@@ -247,7 +289,6 @@ function Landing() {
                 Get started <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
-
             <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4 text-xs text-muted-foreground">
               <div className="flex items-center gap-2"><ShieldCheck className="h-4 w-4 text-primary" /> KYC-verified farmers</div>
               <div className="flex items-center gap-2"><Sparkles className="h-4 w-4 text-primary" /> Zero listing fees</div>
@@ -278,36 +319,19 @@ function Landing() {
             transition={{ duration: 0.8, ease: "easeOut", delay: 0.15 }}
             className="relative flex items-center justify-center"
           >
-            <motion.div
-              className="relative z-10"
-              animate={{ y: [0, -10, 0] }}
-              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 0.4 }}
-            >
-              <img 
-                src="/phone_hand_with_screen-removebg-preview.png" 
-                alt="Agricon app in hand"
-                className="h-auto max-h-[700px] w-full max-w-2xl object-contain drop-shadow-2xl"
-              />
-            </motion.div>
-
-            {/* Floating stat cards */}
-            <div className="absolute -left-2 top-4 rounded-2xl bg-card p-3 shadow-pop lg:left-16">
-              <div className="flex items-center gap-2">
-                <div className="grid h-9 w-9 place-items-center rounded-xl bg-primary-soft text-primary"><ShieldCheck className="h-4 w-4" /></div>
-                <div>
-                  <p className="text-xs text-muted-foreground">Verified</p>
-                  <p className="text-sm font-black text-forest">12,483 farms</p>
-                </div>
-              </div>
-            </div>
-            <div className="absolute -right-2 bottom-8 rounded-2xl bg-card p-3 shadow-pop lg:right-16">
-              <div className="flex items-center gap-2">
-                <div className="grid h-9 w-9 place-items-center rounded-xl bg-gold-soft text-gold-foreground"><TrendingUp className="h-4 w-4" /></div>
-                <div>
-                  <p className="text-xs text-muted-foreground">Traded this year</p>
-                  <p className="text-sm font-black text-forest">₦4.2B+</p>
-                </div>
-              </div>
+            <div className="relative z-10">
+              <AnimatePresence mode="wait">
+                <motion.img
+                  key={activeSlide.image}
+                  src={activeSlide.image}
+                  alt="Verified farmer holding fresh produce"
+                  className="h-auto max-h-[850px] w-full max-w-3xl object-contain drop-shadow-2xl"
+                  initial={{ opacity: 0, scale: 0.96, x: 30 }}
+                  animate={{ opacity: 1, scale: 1, x: 0 }}
+                  exit={{ opacity: 0, scale: 0.96, x: -30 }}
+                  transition={{ duration: 0.6, ease: "easeInOut" }}
+                />
+              </AnimatePresence>
             </div>
           </motion.div>
         </div>
@@ -403,7 +427,7 @@ function Landing() {
                 className="relative z-10"
               >
                 <img 
-                  src="/iphone_mockup_with_screens__1_-removebg-preview.png" 
+                  src="/ChatGPT_Image_Jul_2__2026__09_53_57_AM-removebg-preview.png" 
                   alt="Agricon app interface showing user verification and profile setup"
                   className="h-auto max-h-[1200px] w-full max-w-full object-contain drop-shadow-2xl"
                 />
@@ -620,13 +644,7 @@ function Landing() {
           <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-5">
             <div className="lg:col-span-2">
               <div className="flex items-center gap-2.5">
-                <div className="grid h-11 w-11 place-items-center rounded-xl bg-primary text-primary-foreground">
-                  <Sprout className="h-6 w-6" strokeWidth={2.5} />
-                </div>
-                <div>
-                  <p className="text-lg font-black tracking-tight">AGRICON</p>
-                  <p className="-mt-1 text-[9px] font-bold uppercase tracking-[0.25em] text-gold">Nigeria</p>
-                </div>
+                <img src="/agricon_logo.png" alt="Agricon logo" className="h-11 w-auto" />
               </div>
               <p className="mt-4 max-w-sm text-sm opacity-70">Nigeria's most trusted agricultural marketplace. Verified farmers, secure conversations, seamless sourcing.</p>
               <div className="mt-6 flex gap-3">
@@ -642,7 +660,7 @@ function Landing() {
               </div>
             </div>
             {[
-              { title: "Product", links: ["Features", "Pricing", "Prototype", "Roadmap", "Changelog"] },
+              { title: "Product", links: ["Features", "Pricing", "Roadmap", "Changelog"] },
               { title: "Company", links: ["About us", "Careers", "Press", "Partners", "Blog"] },
               { title: "Support", links: ["Help center", "Contact", "Community", "Status", "API docs"] },
             ].map((col) => (

@@ -26,10 +26,16 @@ export function AuthLayout({ headline, tagline, title, subtitle, children, foote
     <div className="flex min-h-screen w-full items-center justify-center bg-surface p-8 xl:p-12">
       <div className="grid w-full max-w-[1100px] grid-cols-2 overflow-hidden rounded-[40px] shadow-pop">
         {/* Brand panel */}
-        <div className="relative flex flex-col justify-between overflow-hidden gradient-primary p-10 xl:p-12">
-          <div className="absolute inset-0 gradient-mesh opacity-40" />
+        <div className="relative flex flex-col justify-between overflow-hidden p-10 xl:p-12">
+          <div
+            className="absolute inset-0 bg-cover bg-center"
+            style={{ backgroundImage: "url('/ChatGPT_Image_Jul_2__2026__09_53_57_AM-removebg-preview.png')" }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-forest/90 via-forest/70 to-forest/95" />
+          <div className="absolute inset-0 gradient-mesh opacity-30" />
 
           <Link to="/" className="relative z-10 flex items-center gap-2.5">
+
             <div className="grid h-10 w-10 place-items-center rounded-xl bg-white/15 backdrop-blur-lg ring-2 ring-white/20">
               <Sprout className="h-5 w-5 text-white" strokeWidth={2.5} />
             </div>
