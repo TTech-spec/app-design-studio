@@ -45,17 +45,18 @@ function Sidebar({ open, onClose }: { open: boolean; onClose: () => void }) {
         <nav className="space-y-1 p-3">
           {NAV_ITEMS.map((it) => {
             const Icon = it.icon;
-            const linkProps = "params" in it
-              ? { to: it.to, params: it.params }
-              : { to: it.to };
+            const commonCls = "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold text-foreground/70 transition hover:bg-secondary hover:text-forest";
+            const activeProps = { className: "!bg-primary-soft !text-primary" };
+            if ("params" in it) {
+              return (
+                <Link key={it.label} to={it.to} params={it.params} onClick={onClose} className={commonCls} activeProps={activeProps}>
+                  <Icon className="h-5 w-5" />
+                  {it.label}
+                </Link>
+              );
+            }
             return (
-              <Link
-                key={it.label}
-                {...(linkProps as never)}
-                onClick={onClose}
-                className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold text-foreground/70 transition hover:bg-secondary hover:text-forest"
-                activeProps={{ className: "!bg-primary-soft !text-primary" }}
-              >
+              <Link key={it.label} to={it.to} onClick={onClose} className={commonCls} activeProps={activeProps}>
                 <Icon className="h-5 w-5" />
                 {it.label}
               </Link>
