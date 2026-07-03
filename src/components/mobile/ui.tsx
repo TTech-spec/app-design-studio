@@ -279,25 +279,40 @@ export function TextInput({
       {label && <label className="block text-sm font-medium text-foreground">{label}</label>}
       <div
         className={cn(
-          "flex h-13 min-h-[52px] items-center gap-2 rounded-2xl border-2 bg-card px-4 transition focus-within:border-primary",
+          "flex gap-2 rounded-2xl border-2 bg-card px-4 transition focus-within:border-primary",
+          multiline ? "min-h-[120px] py-3 items-start" : "h-13 min-h-[52px] items-center",
           error ? "border-destructive" : "border-border",
           disabled && "opacity-60"
         )}
       >
         {icon && <span className="text-muted-foreground shrink-0">{icon}</span>}
-        <input
-          type={resolvedType}
-          name={name}
-          placeholder={placeholder}
-          required={required}
-          autoComplete={autoComplete}
-          disabled={disabled}
-          {...(isControlled
-            ? { value: value ?? "", onChange: (e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value) }
-            : { defaultValue: value ?? defaultValue })}
-          className="flex-1 min-w-0 bg-transparent text-[15px] text-foreground placeholder:text-muted-foreground outline-none"
-        />
-        {isPassword ? (
+        {multiline ? (
+          <textarea
+            name={name}
+            placeholder={placeholder}
+            required={required}
+            disabled={disabled}
+            rows={rows}
+            {...(isControlled
+              ? { value: value ?? "", onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => onChange(e.target.value) }
+              : { defaultValue: value ?? defaultValue })}
+            className="flex-1 min-w-0 resize-none bg-transparent text-[15px] text-foreground placeholder:text-muted-foreground outline-none"
+          />
+        ) : (
+          <input
+            type={resolvedType}
+            name={name}
+            placeholder={placeholder}
+            required={required}
+            autoComplete={autoComplete}
+            disabled={disabled}
+            {...(isControlled
+              ? { value: value ?? "", onChange: (e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value) }
+              : { defaultValue: value ?? defaultValue })}
+            className="flex-1 min-w-0 bg-transparent text-[15px] text-foreground placeholder:text-muted-foreground outline-none"
+          />
+        )}
+        {!multiline && (isPassword ? (
           <button
             type="button"
             onClick={() => setShowPassword((s) => !s)}
@@ -308,7 +323,7 @@ export function TextInput({
           </button>
         ) : (
           suffix
-        )}
+        ))}
       </div>
       {hint && !error && <p className="text-xs text-muted-foreground">{hint}</p>}
       {error && <p className="text-xs text-destructive">{error}</p>}
