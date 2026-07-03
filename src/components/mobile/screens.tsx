@@ -619,7 +619,7 @@ function OnboardingProgress({ step }: { step: number }) {
 export function UserType() {
   const navigate = useNavigate();
   const { profile, updateProfile } = useAuth();
-  const [selected, setSelected] = useState<"farmer" | "distributor">(profile?.user_type ?? "farmer");
+  const [selected, setSelected] = useState<"farmer" | "distributor">(profile?.user_type === "distributor" ? "distributor" : "farmer");
   const [loading, setLoading] = useState(false);
 
   const types = [
@@ -2506,7 +2506,89 @@ export function ContactSupport() {
    REGISTRY
    ================================================================== */
 
+/* ==================================================================
+   H. POST-VERIFICATION ONBOARDING (3 screens before Home)
+   ================================================================== */
+import farmVegetables from "@/assets/farm-vegetables.jpg";
+import farmGrains from "@/assets/farm-grains.jpg";
+import farmCassava from "@/assets/farm-cassava.jpg";
+
+function OnboardingSlide({
+  step, title, body, image, primary, primaryHref, secondaryHref = "home",
+}: {
+  step: 1 | 2 | 3; title: string; body: string; image: string;
+  primary: string; primaryHref: string; secondaryHref?: string;
+}) {
+  return (
+    <MobileShell showBack={false} showBottomNav={false} fullBleed>
+      <div className="flex h-full flex-col p-6">
+        <div className="flex items-center justify-between">
+          <span className="text-xs font-bold text-muted-foreground">Step {step} of 3</span>
+          <Link to="/app/$screen" params={{ screen: secondaryHref }} className="text-sm font-semibold text-muted-foreground">Skip</Link>
+        </div>
+        <div className="mt-6 overflow-hidden rounded-[28px]">
+          <img src={image} alt="" className="h-64 w-full object-cover" />
+        </div>
+        <div className="mt-8 flex-1">
+          <h2 className="text-3xl font-black leading-tight text-forest">{title}</h2>
+          <p className="mt-3 text-[15px] leading-relaxed text-muted-foreground">{body}</p>
+        </div>
+        <div className="mb-2 flex justify-center gap-1.5">
+          {[1,2,3].map((i) => (
+            <span key={i} className={`h-1.5 rounded-full ${i === step ? "w-6 bg-primary" : "w-1.5 bg-border"}`} />
+          ))}
+        </div>
+        <div className="mt-4">
+          <PrimaryButton href={primaryHref}>{primary}</PrimaryButton>
+        </div>
+      </div>
+    </MobileShell>
+  );
+}
+
+export function Onboarding1() {
+  return (
+    <OnboardingSlide
+      step={1}
+      title="Fresh Produce, Delivered Faster"
+      body="Buy quality agricultural products directly from trusted local farmers and vendors."
+      image={farmVegetables}
+      primary="Next"
+      primaryHref="onboarding-2"
+    />
+  );
+}
+
+export function Onboarding2() {
+  return (
+    <OnboardingSlide
+      step={2}
+      title="Support Local Farmers"
+      body="Connect with verified farmers, compare products, and grow local agriculture together."
+      image={farmGrains}
+      primary="Next"
+      primaryHref="onboarding-3"
+    />
+  );
+}
+
+export function Onboarding3() {
+  return (
+    <OnboardingSlide
+      step={3}
+      title="Easy Ordering, Smart Shopping"
+      body="Browse products, place orders, make secure payments, and track deliveries effortlessly."
+      image={farmCassava}
+      primary="Get Started"
+      primaryHref="home"
+    />
+  );
+}
+
 export const SCREEN_COMPONENTS: Record<string, React.ComponentType> = {
+  "onboarding-1": Onboarding1,
+  "onboarding-2": Onboarding2,
+  "onboarding-3": Onboarding3,
   splash: Splash,
   intro: Intro,
   welcome: Welcome,
