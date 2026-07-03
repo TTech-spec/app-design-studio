@@ -15,6 +15,25 @@ const PENDING_EMAIL_KEY = "agricon_pending_email";
 const PENDING_FLOW_KEY = "agricon_pending_flow";
 const PENDING_SIGNUP_KEY = "agricon_pending_signup";
 
+function createPasswordRedirect(flow: PendingAuthFlow) {
+  return `${window.location.origin}/create-password?flow=${flow}`;
+}
+
+function readPendingFlowFromUrl(): PendingAuthFlow | null {
+  if (typeof window === "undefined") return null;
+  const flow = new URLSearchParams(window.location.search).get("flow");
+  if (flow === "signup" || flow === "recovery") return flow;
+  return null;
+}
+
+function persistPendingFlow(flow: PendingAuthFlow) {
+  window.sessionStorage.setItem(PENDING_FLOW_KEY, flow);
+}
+
+function persistPendingEmail(email: string) {
+  window.sessionStorage.setItem(PENDING_EMAIL_KEY, email);
+}
+
 function readSession<T>(key: string): T | null {
   if (typeof window === "undefined") return null;
   const raw = window.sessionStorage.getItem(key);
@@ -68,25 +87,52 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   useEffect(() => {
+    const urlFlow = readPendingFlowFromUrl();
+    if (urlFlow) {
+      persistPendingFlow(urlFlow);
+      setPendingFlow(urlFlow);
+    } else {
+      setPendingFlow(readSession<PendingAuthFlow>(PENDING_FLOW_KEY));
+    }
     setPendingEmail(readSession<string>(PENDING_EMAIL_KEY));
-    setPendingFlow(readSession<PendingAuthFlow>(PENDING_FLOW_KEY));
 
-    let active = true;
-    supabase.auth.getSession().then(({ data }) => {
-      if (!active) return;
-      setSession(data.session);
-      if (data.session?.user) fetchProfile(data.session.user.id);
-      setLoading(false);
-    });
-
-    const { data: sub } = supabase.auth.onAuthStateChange((_event, newSession) => {
+    const { data: sub } = supabase.auth.onAuthStateChange((event, newSession) => {
       setSession(newSession);
       if (newSession?.user) fetchProfile(newSession.user.id);
       else setProfile(null);
+
+      if (event === "INITIAL_SESSION") {
+        setLoading(false);
+      }
+
+      if (event === "PASSWORD_RECOVERY") {
+        persistPendingFlow("recovery");
+        setPendingFlow("recovery");
+        if (newSession?.user?.email) {
+          persistPendingEmail(newSession.user.email);
+          setPendingEmail(newSession.user.email);
+        }
+        if (window.location.pathname !== "/create-password") {
+          window.location.replace(createPasswordRedirect("recovery"));
+        }
+      } else if (event === "SIGNED_IN" && newSession?.user) {
+        const flow = readPendingFlowFromUrl() ?? readSession<PendingAuthFlow>(PENDING_FLOW_KEY);
+        if (flow) {
+          persistPendingFlow(flow);
+          setPendingFlow(flow);
+          if (window.location.pathname !== "/create-password") {
+            window.location.replace(createPasswordRedirect(flow));
+            return;
+          }
+        }
+        if (newSession.user.email) {
+          persistPendingEmail(newSession.user.email);
+          setPendingEmail(newSession.user.email);
+        }
+      }
     });
 
     return () => {
-      active = false;
       sub.subscription.unsubscribe();
     };
   }, [fetchProfile]);
@@ -116,7 +162,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         options: {
           shouldCreateUser: true,
           data: { first_name: firstName, last_name: lastName, phone },
-          emailRedirectTo: `${window.location.origin}/create-password`,
+          emailRedirectTo: createPasswordRedirect("signup"),
         },
       });
       if (error) throw error;
@@ -131,13 +177,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   );
 
   const requestPasswordReset = useCallback(async (email: string) => {
-    const { error } = await supabase.auth.signInWithOtp({
-      email,
-      options: { shouldCreateUser: false },
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: createPasswordRedirect("recovery"),
     });
     if (error) throw error;
-    window.sessionStorage.setItem(PENDING_EMAIL_KEY, email);
-    window.sessionStorage.setItem(PENDING_FLOW_KEY, "recovery");
+    persistPendingEmail(email);
+    persistPendingFlow("recovery");
     setPendingEmail(email);
     setPendingFlow("recovery");
   }, []);
@@ -153,11 +198,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const resendOtp = useCallback(async () => {
     if (!pendingEmail) throw new Error("No pending email found.");
-    const { error } = await supabase.auth.signInWithOtp({
-      email: pendingEmail,
-      options: { shouldCreateUser: pendingFlow === "signup" },
-    });
-    if (error) throw error;
+    if (pendingFlow === "recovery") {
+      const { error } = await supabase.auth.resetPasswordForEmail(pendingEmail, {
+        redirectTo: createPasswordRedirect("recovery"),
+      });
+      if (error) throw error;
+    } else {
+      const { error } = await supabase.auth.signInWithOtp({
+        email: pendingEmail,
+        options: {
+          shouldCreateUser: true,
+          emailRedirectTo: createPasswordRedirect("signup"),
+        },
+      });
+      if (error) throw error;
+    }
   }, [pendingEmail, pendingFlow]);
 
   const clearPendingFlow = useCallback(() => {
@@ -176,11 +231,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (pendingFlow === "signup") {
         const signup = readSession<PendingSignup>(PENDING_SIGNUP_KEY);
         const { data: userData } = await supabase.auth.getUser();
-        if (signup && userData.user) {
+        if (userData.user) {
+          const meta = userData.user.user_metadata;
           await updateProfile({
-            first_name: signup.firstName,
-            last_name: signup.lastName,
-            phone: signup.phone,
+            first_name: signup?.firstName ?? meta.first_name ?? null,
+            last_name: signup?.lastName ?? meta.last_name ?? null,
+            phone: signup?.phone ?? meta.phone ?? null,
           });
         }
       }
@@ -199,17 +255,34 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const uploadVerificationDocument = useCallback(async (docType: string, file: File) => {
-    const { data: userData, error: userError } = await supabase.auth.getUser();
-    if (userError || !userData.user) throw new Error("You must be signed in.");
-    const path = `${userData.user.id}/${docType}-${Date.now()}-${file.name}`;
+    const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+    if (sessionError || !sessionData.session?.user) {
+      throw new Error("You must be signed in to upload documents.");
+    }
+    const userId = sessionData.session.user.id;
+    const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
+    const path = `${userId}/${docType}-${Date.now()}-${safeName}`;
     const { error: uploadError } = await supabase.storage
       .from(VERIFICATION_BUCKET)
-      .upload(path, file, { upsert: true });
-    if (uploadError) throw uploadError;
+      .upload(path, file);
+    if (uploadError) {
+      throw new Error(
+        uploadError.message.includes("row-level security")
+          ? "Upload blocked by storage permissions. Ask your admin to run supabase/migrations/0003_fix_verification_storage_rls.sql in the Supabase SQL Editor."
+          : `Storage upload failed: ${uploadError.message}`
+      );
+    }
     const { error: insertError } = await supabase
       .from("verification_documents")
-      .insert({ user_id: userData.user.id, doc_type: docType, file_path: path });
-    if (insertError) throw insertError;
+      .insert({ user_id: userId, doc_type: docType, file_path: path });
+    if (insertError) {
+      await supabase.storage.from(VERIFICATION_BUCKET).remove([path]);
+      throw new Error(
+        insertError.message.includes("row-level security")
+          ? "Upload blocked by database permissions. Ask your admin to run supabase/migrations/0003_fix_verification_storage_rls.sql in the Supabase SQL Editor."
+          : `Could not save document record: ${insertError.message}`
+      );
+    }
   }, []);
 
   const submitForVerification = useCallback(async () => {

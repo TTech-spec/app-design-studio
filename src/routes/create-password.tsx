@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Lock, CheckCircle2 } from "lucide-react";
 import { MobileShell } from "@/components/mobile/MobileShell";
@@ -23,11 +23,26 @@ function passwordStrength(pw: string) {
 
 function CreatePasswordPage() {
   const navigate = useNavigate();
-  const { pendingFlow, setNewPassword } = useAuth();
+  const { session, loading: authLoading, pendingFlow, setNewPassword } = useAuth();
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.has("flow")) {
+      window.history.replaceState({}, "", window.location.pathname);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (authLoading) return;
+    if (!session) {
+      toast.error("Your link has expired or is invalid. Please start again.");
+      navigate({ to: "/signin" });
+    }
+  }, [authLoading, session, navigate]);
 
   const score = passwordStrength(password);
   const strengthLabel = ["Too weak", "Weak", "Fair", "Strong", "Very strong"][score];
@@ -63,6 +78,14 @@ function CreatePasswordPage() {
   }
 
   const heading = pendingFlow === "recovery" ? "Reset password" : "Create password";
+
+  if (authLoading || !session) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-background">
+        <p className="text-sm text-muted-foreground">Verifying your link…</p>
+      </div>
+    );
+  }
 
   const formFields = (
     <form
