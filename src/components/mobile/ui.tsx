@@ -249,7 +249,8 @@ export function TextInput({
   required,
   autoComplete,
   disabled,
-}: {
+  multiline,
+  rows = 4,
   label?: string;
   placeholder?: string;
   icon?: ReactNode;
