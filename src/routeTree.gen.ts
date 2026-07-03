@@ -20,6 +20,7 @@ import { Route as ProfilePhotoRouteImport } from './routes/profile-photo'
 import { Route as PersonalInfoRouteImport } from './routes/personal-info'
 import { Route as PasswordResetSuccessRouteImport } from './routes/password-reset-success'
 import { Route as OtpRouteImport } from './routes/otp'
+import { Route as Onboarding2RouteImport } from './routes/onboarding-2'
 import { Route as Onboarding1RouteImport } from './routes/onboarding-1'
 import { Route as MarketplaceRouteImport } from './routes/marketplace'
 import { Route as LanguageRouteImport } from './routes/language'
@@ -90,6 +91,11 @@ const PasswordResetSuccessRoute = PasswordResetSuccessRouteImport.update({
 const OtpRoute = OtpRouteImport.update({
   id: '/otp',
   path: '/otp',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const Onboarding2Route = Onboarding2RouteImport.update({
+  id: '/onboarding-2',
+  path: '/onboarding-2',
   getParentRoute: () => rootRouteImport,
 } as any)
 const Onboarding1Route = Onboarding1RouteImport.update({
@@ -188,6 +194,7 @@ export interface FileRoutesByFullPath {
   '/language': typeof LanguageRoute
   '/marketplace': typeof MarketplaceRoute
   '/onboarding-1': typeof Onboarding1Route
+  '/onboarding-2': typeof Onboarding2Route
   '/otp': typeof OtpRoute
   '/password-reset-success': typeof PasswordResetSuccessRoute
   '/personal-info': typeof PersonalInfoRoute
@@ -217,6 +224,7 @@ export interface FileRoutesByTo {
   '/language': typeof LanguageRoute
   '/marketplace': typeof MarketplaceRoute
   '/onboarding-1': typeof Onboarding1Route
+  '/onboarding-2': typeof Onboarding2Route
   '/otp': typeof OtpRoute
   '/password-reset-success': typeof PasswordResetSuccessRoute
   '/personal-info': typeof PersonalInfoRoute
@@ -247,6 +255,7 @@ export interface FileRoutesById {
   '/language': typeof LanguageRoute
   '/marketplace': typeof MarketplaceRoute
   '/onboarding-1': typeof Onboarding1Route
+  '/onboarding-2': typeof Onboarding2Route
   '/otp': typeof OtpRoute
   '/password-reset-success': typeof PasswordResetSuccessRoute
   '/personal-info': typeof PersonalInfoRoute
@@ -278,6 +287,7 @@ export interface FileRouteTypes {
     | '/language'
     | '/marketplace'
     | '/onboarding-1'
+    | '/onboarding-2'
     | '/otp'
     | '/password-reset-success'
     | '/personal-info'
@@ -307,6 +317,7 @@ export interface FileRouteTypes {
     | '/language'
     | '/marketplace'
     | '/onboarding-1'
+    | '/onboarding-2'
     | '/otp'
     | '/password-reset-success'
     | '/personal-info'
@@ -336,6 +347,7 @@ export interface FileRouteTypes {
     | '/language'
     | '/marketplace'
     | '/onboarding-1'
+    | '/onboarding-2'
     | '/otp'
     | '/password-reset-success'
     | '/personal-info'
@@ -366,6 +378,7 @@ export interface RootRouteChildren {
   LanguageRoute: typeof LanguageRoute
   MarketplaceRoute: typeof MarketplaceRoute
   Onboarding1Route: typeof Onboarding1Route
+  Onboarding2Route: typeof Onboarding2Route
   OtpRoute: typeof OtpRoute
   PasswordResetSuccessRoute: typeof PasswordResetSuccessRoute
   PersonalInfoRoute: typeof PersonalInfoRoute
@@ -458,6 +471,13 @@ declare module '@tanstack/react-router' {
       path: '/otp'
       fullPath: '/otp'
       preLoaderRoute: typeof OtpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/onboarding-2': {
+      id: '/onboarding-2'
+      path: '/onboarding-2'
+      fullPath: '/onboarding-2'
+      preLoaderRoute: typeof Onboarding2RouteImport
       parentRoute: typeof rootRouteImport
     }
     '/onboarding-1': {
@@ -590,6 +610,7 @@ const rootRouteChildren: RootRouteChildren = {
   LanguageRoute: LanguageRoute,
   MarketplaceRoute: MarketplaceRoute,
   Onboarding1Route: Onboarding1Route,
+  Onboarding2Route: Onboarding2Route,
   OtpRoute: OtpRoute,
   PasswordResetSuccessRoute: PasswordResetSuccessRoute,
   PersonalInfoRoute: PersonalInfoRoute,
