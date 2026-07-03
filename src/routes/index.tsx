@@ -33,9 +33,9 @@ const HERO_SLIDES = [
     subheading: "Connect directly with verified farmers across Nigeria. Communicate in any language, source quality produce, and grow your agribusiness all in one app.",
   },
   {
-    image: "/phone_hand_with_screen-removebg-preview.png",
-    heading: "Nigeria's most trusted agricultural marketplace.",
-    subheading: "Agricon connects verified farmers and distributors across Nigeria. Discover premium produce, chat directly, and transact with total confidence — all from one beautiful app.",
+    image: "/ChatGPT_Image_Jul_2__2026__04_28_04_PM-removebg-preview.png",
+    heading: "Know Exactly Where Your Produce Comes From",
+    subheading: "See verified farm locations, size, and distance before you buy — full transparency, every time.",
   },
 ];
 
@@ -95,14 +95,9 @@ function ScreenshotMarquee() {
     >
       <div ref={trackRef} className="flex w-max gap-8">
         {slides.map((s, i) => (
-          <motion.div
-            key={`${s}-${i}`}
-            className="shrink-0"
-            animate={{ y: [0, -10, 0] }}
-            transition={{ duration: 3.4 + (i % 3) * 0.4, repeat: Infinity, ease: "easeInOut", delay: (i % 4) * 0.25 }}
-          >
+          <div key={`${s}-${i}`} className="shrink-0">
             <PhonePreview slug={s} scale={0.72} height={620} />
-          </motion.div>
+          </div>
         ))}
       </div>
     </div>
@@ -168,6 +163,18 @@ function Landing() {
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [showSplash, setShowSplash] = useState(true);
   const [heroImageIndex, setHeroImageIndex] = useState(0);
+  const [navMounted, setNavMounted] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [activeHref, setActiveHref] = useState("#features");
+  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
+  const [indicator, setIndicator] = useState({ left: 0, width: 0, opacity: 0 });
+  const linkRefs = useRef<Array<HTMLAnchorElement | null>>([]);
+
+  const INK = "#1F2A22";
+  const CREAM = "#FBF8F2";
+  const PILL_BG = "#F0ECE2";
+  const GREEN = "#1B4332";
+  const GREEN_DARK = "#0F2A20";
 
   useEffect(() => {
     if (!showSplash) return;
@@ -183,6 +190,22 @@ function Landing() {
     return () => clearInterval(interval);
   }, []);
 
+  // Navbar mount + scroll
+  useEffect(() => {
+    const raf = requestAnimationFrame(() => setNavMounted(true));
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => { cancelAnimationFrame(raf); window.removeEventListener("scroll", onScroll); };
+  }, []);
+
+  // Hover indicator position
+  useEffect(() => {
+    if (hoveredIdx === null) { setIndicator((p) => ({ ...p, opacity: 0 })); return; }
+    const el = linkRefs.current[hoveredIdx];
+    if (el) setIndicator({ left: el.offsetLeft, width: el.offsetWidth, opacity: 1 });
+  }, [hoveredIdx]);
+
   const activeSlide = HERO_SLIDES[heroImageIndex];
 
   const navLinks = [
@@ -195,6 +218,17 @@ function Landing() {
 
   return (
     <>
+      <style>{`
+        @keyframes navFadeSlideDown {
+          from { opacity: 0; transform: translateY(-18px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes mobileLinkIn {
+          from { opacity: 0; transform: translateY(-6px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+      `}</style>
+
       <AnimatePresence>
         {showSplash && (
           <motion.div
@@ -207,43 +241,167 @@ function Landing() {
           </motion.div>
         )}
       </AnimatePresence>
-    <div className="min-h-screen bg-surface">
-      {/* NAV */}
-      <header className="sticky top-0 z-40 border-b border-border/70 bg-surface/85 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-          <Link to="/" className="flex items-center gap-2.5">
-            <img src="/agricon_logo.png" alt="Agricon logo" className="h-10 w-auto" />
-          </Link>
-          <nav className="hidden items-center gap-8 md:flex">
-            {navLinks.map((l) => (
-              <a key={l.href} href={l.href} className="text-sm font-semibold text-foreground/70 hover:text-primary transition">{l.label}</a>
-            ))}
-          </nav>
-          <div className="hidden items-center gap-3 md:flex">
-            <Link to="/app" className="text-sm font-semibold text-foreground/70 hover:text-primary">View prototype</Link>
-            <Link to="/signin" className="text-sm font-semibold text-foreground/70 hover:text-primary">Sign in</Link>
-            <a href="#download" className="inline-flex h-11 items-center gap-2 rounded-2xl gradient-primary px-5 text-sm font-bold text-primary-foreground shadow-glow">
-              Download app <ArrowRight className="h-4 w-4" />
-            </a>
-          </div>
-          <button className="md:hidden" onClick={() => setMenuOpen(!menuOpen)}>
-            {menuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-          </button>
-        </div>
-        {menuOpen && (
-          <div className="border-t border-border bg-card p-4 md:hidden">
-            <div className="space-y-1">
-              {navLinks.map((l) => (
-                <a key={l.href} href={l.href} onClick={() => setMenuOpen(false)} className="block rounded-xl px-4 py-3 text-sm font-semibold hover:bg-secondary">{l.label}</a>
-              ))}
-              <Link to="/signin" className="block rounded-xl px-4 py-3 text-sm font-semibold text-primary">Sign in →</Link>
-              <Link to="/app" className="block rounded-xl px-4 py-3 text-sm font-semibold text-primary">View prototype →</Link>
+
+      {/* NAVBAR — flat before scroll, floating pill after scroll */}
+      <div className="w-full sticky top-0 z-50">
+
+        {/* === BEFORE SCROLL: original full-width flat nav === */}
+        <motion.header
+          className="w-full"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: scrolled ? 0 : 1, y: scrolled ? -8 : 0 }}
+          transition={{ duration: 0.4, ease: "easeOut" }}
+          style={{ pointerEvents: scrolled ? "none" : "auto", position: scrolled ? "absolute" : "relative" }}
+        >
+          <div className="border-b border-border/70 bg-surface/85 backdrop-blur-xl">
+            <div className="mx-auto flex max-w-7xl items-center justify-between px-8 py-5">
+              <Link to="/" className="flex items-center gap-2.5">
+                <img src="/agricon_logo.png" alt="Agricon logo" className="h-14 w-auto" />
+              </Link>
+              <nav className="hidden items-center gap-8 md:flex">
+                {navLinks.map((l) => (
+                  <a key={l.href} href={l.href} className="text-sm font-semibold text-foreground/70 hover:text-primary transition">{l.label}</a>
+                ))}
+              </nav>
+              <div className="hidden items-center gap-3 md:flex">
+                <Link to="/app" className="text-sm font-semibold text-foreground/70 hover:text-primary">View prototype</Link>
+                <Link to="/signin" className="text-sm font-semibold text-foreground/70 hover:text-primary">Sign in</Link>
+                <a href="#download" className="inline-flex h-11 items-center gap-2 rounded-2xl gradient-primary px-5 text-sm font-bold text-primary-foreground shadow-glow">
+                  Download app <ArrowRight className="h-4 w-4" />
+                </a>
+              </div>
+              <button className="md:hidden" onClick={() => setMenuOpen(!menuOpen)}>
+                {menuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              </button>
             </div>
+            {menuOpen && !scrolled && (
+              <div className="border-t border-border bg-card p-4 md:hidden">
+                <div className="space-y-1">
+                  {navLinks.map((l) => (
+                    <a key={l.href} href={l.href} onClick={() => setMenuOpen(false)} className="block rounded-xl px-4 py-3 text-sm font-semibold hover:bg-secondary">{l.label}</a>
+                  ))}
+                  <Link to="/signin" className="block rounded-xl px-4 py-3 text-sm font-semibold text-primary">Sign in →</Link>
+                  <Link to="/app" className="block rounded-xl px-4 py-3 text-sm font-semibold text-primary">View prototype →</Link>
+                </div>
+              </div>
+            )}
           </div>
-        )}
-      </header>
+        </motion.header>
 
+        {/* === AFTER SCROLL: floating pill nav === */}
+        <motion.div
+          className="w-full flex justify-center px-4 sm:px-6 pt-3"
+          initial={{ opacity: 0, y: -24, scale: 0.97 }}
+          animate={{ opacity: scrolled ? 1 : 0, y: scrolled ? 0 : -16, scale: scrolled ? 1 : 0.97 }}
+          transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+          style={{ pointerEvents: scrolled ? "auto" : "none", position: "absolute", top: 0, left: 0, right: 0 }}
+        >
+          <nav
+            className="w-full max-w-6xl flex items-center justify-between gap-3 rounded-full border py-3 px-5 shadow-xl"
+            style={{ backgroundColor: CREAM, borderColor: "rgba(0,0,0,0.06)" }}
+          >
+            <Link to="/" className="flex items-center gap-2 shrink-0 select-none">
+              <img src="/agricon_logo.png" alt="Agricon logo" className="h-12 w-auto" />
+            </Link>
 
+            {/* Center link pill */}
+            <div
+              className="hidden md:flex relative items-center rounded-full px-1.5 py-1.5"
+              style={{ backgroundColor: PILL_BG }}
+              onMouseLeave={() => setHoveredIdx(null)}
+            >
+              <span
+                className="absolute top-1.5 bottom-1.5 rounded-full transition-all duration-300 ease-out pointer-events-none"
+                style={{ left: indicator.left, width: indicator.width, opacity: indicator.opacity, backgroundColor: "#FFFFFF", boxShadow: "0 1px 4px rgba(0,0,0,0.08)" }}
+              />
+              {navLinks.map((link, idx) => {
+                const isActive = activeHref === link.href;
+                return (
+                  <a
+                    key={link.href}
+                    ref={(el) => (linkRefs.current[idx] = el)}
+                    href={link.href}
+                    onMouseEnter={() => setHoveredIdx(idx)}
+                    onClick={() => setActiveHref(link.href)}
+                    className="relative z-10 px-4 py-2 text-sm font-medium rounded-full transition-colors duration-200"
+                    style={{ color: isActive ? INK : "#5B5F58" }}
+                  >
+                    {link.label}
+                    <span
+                      className="absolute left-1/2 -bottom-0.5 h-[2px] rounded-full transition-all duration-300 ease-out"
+                      style={{ backgroundColor: GREEN, width: isActive ? "60%" : "0%", transform: "translateX(-50%)" }}
+                    />
+                  </a>
+                );
+              })}
+            </div>
+
+            <div className="flex items-center gap-2">
+              <Link
+                to="/signin"
+                className="hidden sm:inline-flex items-center rounded-full px-5 py-2.5 text-sm font-semibold text-white transition-all duration-200 ease-out hover:-translate-y-0.5"
+                style={{ backgroundColor: GREEN, boxShadow: "0 2px 10px rgba(27,67,50,0.25)" }}
+                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = GREEN_DARK)}
+                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = GREEN)}
+              >
+                Sign in
+              </Link>
+              <button
+                type="button"
+                onClick={() => setMenuOpen((v) => !v)}
+                className="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-full transition-transform duration-200 active:scale-90"
+                style={{ backgroundColor: PILL_BG, color: INK }}
+              >
+                <span style={{ transform: menuOpen ? "rotate(90deg)" : "rotate(0deg)", display: "inline-flex", transition: "transform 0.3s" }}>
+                  {menuOpen ? <X size={18} /> : <Menu size={18} />}
+                </span>
+              </button>
+            </div>
+          </nav>
+
+          {/* Pill mobile dropdown */}
+          <AnimatePresence>
+            {scrolled && menuOpen && (
+              <motion.div
+                initial={{ opacity: 0, y: -10, scale: 0.97 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -10, scale: 0.97 }}
+                transition={{ duration: 0.25, ease: "easeOut" }}
+                className="absolute top-full left-4 right-4 sm:left-6 sm:right-6 mt-2 md:hidden"
+              >
+                <div className="mx-auto max-w-6xl rounded-3xl border p-3 shadow-lg" style={{ backgroundColor: CREAM, borderColor: "rgba(0,0,0,0.06)" }}>
+                  <div className="flex flex-col">
+                    {navLinks.map((link, idx) => (
+                      <motion.a
+                        key={link.href}
+                        href={link.href}
+                        initial={{ opacity: 0, y: -6 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: idx * 0.04 }}
+                        onClick={() => { setActiveHref(link.href); setMenuOpen(false); }}
+                        className="px-4 py-3 rounded-2xl text-sm font-medium transition-colors duration-200 hover:bg-black/5"
+                        style={{ color: activeHref === link.href ? INK : "#5B5F58" }}
+                      >
+                        {link.label}
+                      </motion.a>
+                    ))}
+                    <Link
+                      to="/signin"
+                      onClick={() => setMenuOpen(false)}
+                      className="mt-2 text-center rounded-full px-5 py-3 text-sm font-semibold text-white"
+                      style={{ backgroundColor: GREEN }}
+                    >
+                      Sign in
+                    </Link>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.div>
+      </div>
+
+    <div className="min-h-screen bg-surface">
       {/* HERO */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 gradient-mesh" />
@@ -255,7 +413,7 @@ function Landing() {
           >
             <span className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary-soft px-3 py-1.5 text-xs font-bold text-primary">
               <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
-              Now live · 12,000+ verified farmers 🇳🇬
+              Now live · 12,000+ verified farmers
             </span>
             <AnimatePresence mode="wait">
               <motion.h1
@@ -615,20 +773,20 @@ function Landing() {
         </div>
 
         {/* Newsletter */}
-        <div id="download" className="mt-24 overflow-hidden rounded-[36px] gradient-primary p-10 md:p-16 text-primary-foreground shadow-glow">
-          <div className="grid gap-10 md:grid-cols-2 md:items-center">
+        <div id="download" className="mt-24 overflow-hidden rounded-[36px] gradient-primary p-6 sm:p-10 md:p-16 text-primary-foreground shadow-glow">
+          <div className="grid gap-8 md:gap-10 md:grid-cols-2 md:items-center">
             <div>
-              <h2 className="text-3xl font-black tracking-tight md:text-4xl">Get the app. Grow with Agricon.</h2>
-              <p className="mt-3 opacity-90">Download Agricon NG on iOS and Android. Join 12,000+ verified farmers and distributors trading with confidence.</p>
+              <h2 className="text-2xl font-black tracking-tight sm:text-3xl md:text-4xl">Get the app. Grow with Agricon.</h2>
+              <p className="mt-3 text-sm sm:text-base opacity-90">Download Agricon NG on iOS and Android. Join 12,000+ verified farmers and distributors trading with confidence.</p>
               <div className="mt-6 flex flex-wrap gap-3">
                 <AppStoreBadge />
                 <GooglePlayBadge />
               </div>
             </div>
-            <div className="rounded-3xl bg-white/10 p-6 backdrop-blur-xl">
+            <div className="rounded-3xl bg-white/10 p-4 sm:p-6 backdrop-blur-xl">
               <p className="text-sm font-bold">Subscribe to our newsletter</p>
               <p className="mt-1 text-xs opacity-80">Monthly insights on Nigerian agriculture, seasonal produce, and product updates.</p>
-              <div className="mt-4 flex gap-2">
+              <div className="mt-4 flex flex-col sm:flex-row gap-2">
                 <input className="h-12 flex-1 min-w-0 rounded-2xl bg-white/95 px-4 text-sm text-foreground outline-none" placeholder="your@email.com" />
                 <button className="h-12 shrink-0 rounded-2xl bg-gold px-5 text-sm font-bold text-gold-foreground">Subscribe</button>
               </div>

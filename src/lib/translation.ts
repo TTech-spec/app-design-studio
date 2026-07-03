@@ -1,6 +1,24 @@
-const GROQ_API_KEY = "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";
+const GROQ_API_KEY = import.meta.env.VITE_GROQ_API_KEY;
 
 export async function translateText(text: string, targetLanguage: string): Promise<string> {
+  if (!GROQ_API_KEY) {
+    throw new Error("Groq API key not configured");
+  }
+
+  const languageMap: Record<string, string> = {
+    "en": "English",
+    "ha": "Hausa",
+    "yo": "Yoruba",
+    "ig": "Igbo",
+    "pcm": "Nigerian Pidgin",
+    "fr": "French",
+    "es": "Spanish",
+    "pt": "Portuguese",
+    "ar": "Arabic",
+  };
+
+  const targetLangName = languageMap[targetLanguage] || targetLanguage;
+
   try {
     const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
       method: "POST",
@@ -13,7 +31,7 @@ export async function translateText(text: string, targetLanguage: string): Promi
         messages: [
           {
             role: "system",
-            content: `You are a professional translator. Translate the given text to ${targetLanguage}. Only return the translated text, nothing else.`
+            content: `You are a professional translator. Translate the given text to ${targetLangName}. Only return the translated text, nothing else. Keep the meaning and tone intact.`
           },
           {
             role: "user",
@@ -26,7 +44,8 @@ export async function translateText(text: string, targetLanguage: string): Promi
     });
 
     if (!response.ok) {
-      throw new Error(`Translation API error: ${response.statusText}`);
+      const error = await response.json();
+      throw new Error(error.error?.message || `Translation API error: ${response.statusText}`);
     }
 
     const data = await response.json();

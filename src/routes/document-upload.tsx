@@ -1,12 +1,14 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
-import { CheckCircle2, FileCheck2, FileText, Upload } from "lucide-react";
+import { CheckCircle2, FileCheck2, FileText, Upload, ArrowLeft } from "lucide-react";
 import { MobileShell } from "@/components/mobile/MobileShell";
+import { DesktopShell } from "@/components/desktop";
 import { PrimaryButton, OnboardingProgress } from "@/components/mobile/ui";
 import { useAuth, authErrorMessage } from "@/lib/auth-context";
 import { supabase } from "@/lib/supabase";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export const Route = createFileRoute("/document-upload")({
   head: () => ({ meta: [{ title: "Agricon NG — Document upload" }] }),
@@ -31,6 +33,7 @@ const DISTRIBUTOR_DOCS: DocDef[] = [
 function DocumentUploadPage() {
   const navigate = useNavigate();
   const { user, profile, uploadVerificationDocument, submitForVerification } = useAuth();
+  const isMobile = useIsMobile();
   const queryClient = useQueryClient();
   const [uploadingType, setUploadingType] = useState<DocType | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -88,6 +91,96 @@ function DocumentUploadPage() {
     }
   }
 
+  // Desktop view
+  if (!isMobile) {
+    return (
+      <DesktopShell title="Document Upload" activeNav="profile">
+        <div className="max-w-4xl mx-auto p-8">
+          <div className="mb-8">
+            <Link
+              to={profile?.user_type === "distributor" ? "/business-info" : "/farm-info"}
+              className="inline-flex items-center gap-2 text-sm font-semibold text-[#44483d] hover:text-[#154212] transition-colors"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              Back
+            </Link>
+          </div>
+
+          <div className="bg-white border border-[#c2c9bb] rounded-[32px] p-8">
+            <h1 className="text-2xl font-bold text-[#154212] mb-2">Document Upload</h1>
+            <p className="text-sm text-[#44483d] mb-8">Upload the following to complete verification. Documents are reviewed within 24-48 hours.</p>
+
+            <div className="space-y-4">
+              {docs.map((d) => {
+                const count = uploaded?.[d.docType]?.count ?? 0;
+                const lastFile = uploaded?.[d.docType]?.lastFile;
+                const status: "uploaded" | "progress" | "empty" = count >= d.minCount ? "uploaded" : count > 0 ? "progress" : "empty";
+                const pct = Math.min(100, Math.round((count / d.minCount) * 100));
+                const isUploading = uploadingType === d.docType;
+                return (
+                  <div key={d.docType} className="rounded-2xl border-2 border-[#c2c9bb] bg-[#f3f4ed] p-6">
+                    <div className="flex items-start gap-4">
+                      <div className={`grid h-14 w-14 shrink-0 place-items-center rounded-2xl ${status === "uploaded" ? "bg-[#d6e4c8] text-[#154212]" : status === "progress" ? "bg-[#f3f4ed] text-[#154212]" : "bg-[#e7e9e1] text-[#44483d]"}`}>
+                        {status === "uploaded" ? <FileCheck2 className="h-6 w-6" /> : status === "progress" ? <Upload className="h-6 w-6" /> : <FileText className="h-6 w-6" />}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h4 className="text-base font-bold text-[#191c18]">{d.title}</h4>
+                        <p className="mt-1 text-sm text-[#44483d]">{d.body}</p>
+                        {status === "uploaded" && lastFile && (
+                          <div className="mt-3 inline-flex items-center gap-2 rounded-full bg-[#d6e4c8] px-3 py-1.5 text-xs font-semibold text-[#154212]">
+                            <CheckCircle2 className="h-4 w-4" /> {lastFile}
+                          </div>
+                        )}
+                        {status === "progress" && (
+                          <div className="mt-3 space-y-2">
+                            <div className="flex justify-between text-sm"><span className="text-[#44483d]">{count}/{d.minCount} uploaded</span><span className="font-semibold text-[#154212]">{pct}%</span></div>
+                            <div className="h-2 rounded-full bg-[#c2c9bb]"><div className="h-full rounded-full bg-[#154212]" style={{ width: `${pct}%` }} /></div>
+                          </div>
+                        )}
+                        <button
+                          type="button"
+                          disabled={isUploading}
+                          onClick={() => fileInputs.current[d.docType]?.click()}
+                          className="mt-4 text-sm font-semibold text-[#154212] disabled:opacity-50 hover:underline"
+                        >
+                          {isUploading ? "Uploading..." : status === "empty" ? "Upload document →" : count < d.minCount ? "Upload another →" : "Update"}
+                        </button>
+                        <input
+                          ref={(el) => { fileInputs.current[d.docType] = el; }}
+                          type="file"
+                          accept="image/*,.pdf"
+                          className="hidden"
+                          onChange={(e) => handleFile(d, e)}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            <div className="mt-8 flex gap-4">
+              <button
+                onClick={handleSubmit}
+                disabled={!allRequiredMet}
+                className="flex-1 inline-flex items-center justify-center gap-2 rounded-2xl bg-[#154212] px-6 py-3 text-sm font-bold text-white shadow-lg transition hover:bg-[#0f2a20] disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {submitting ? "Submitting..." : "Submit for verification"}
+              </button>
+              <Link
+                to="/verification-submitted"
+                className="inline-flex items-center justify-center rounded-2xl border-2 border-[#c2c9bb] px-6 py-3 text-sm font-semibold text-[#44483d] hover:bg-[#f3f4ed] transition-all"
+              >
+                Skip for now
+              </Link>
+            </div>
+          </div>
+        </div>
+      </DesktopShell>
+    );
+  }
+
+  // Mobile view
   return (
     <MobileShell standalone title="Document upload" showBottomNav={false} backTo={profile?.user_type === "distributor" ? "/business-info" : "/farm-info"}>
       <OnboardingProgress step={5} />

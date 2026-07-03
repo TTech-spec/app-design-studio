@@ -1,7 +1,34 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { SCREEN_COMPONENTS } from "@/components/mobile/screens";
 import { SCREENS } from "@/lib/agricon-data";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Zap } from "lucide-react";
+
+/* Map prototype slugs → standalone functional route paths */
+const LIVE_ROUTES: Record<string, string> = {
+  home:             "/home",
+  marketplace:      "/marketplace",
+  categories:       "/categories",
+  search:           "/search",
+  "search-results": "/search-results",
+  filters:          "/filters",
+  "featured-farms": "/featured-farms",
+  seasonal:         "/seasonal",
+  "farm-profile":   "/farm-profile",
+  "farmer-profile": "/farmer-profile",
+  "crop-details":   "/crop-details",
+  "photo-gallery":  "/photo-gallery",
+  reviews:          "/reviews",
+  "harvest-timeline": "/harvest-timeline",
+  "farm-map":       "/farm-map",
+  "contact-farmer": "/contact-farmer",
+  messages:         "/messages",
+  chat:             "/chat",
+  "image-viewer":   "/image-viewer",
+  notifications:    "/notifications",
+  settings:         "/settings",
+  "help-center":    "/help-center",
+  "contact-support":"/contact-support",
+};
 
 export const Route = createFileRoute("/app/$screen")({
   component: ScreenView,
@@ -22,6 +49,7 @@ function ScreenView() {
   const prev = idx > 0 ? SCREENS[idx - 1] : null;
   const next = idx < SCREENS.length - 1 ? SCREENS[idx + 1] : null;
   const current = SCREENS[idx];
+  const liveRoute = LIVE_ROUTES[screen];
 
   return (
     <div className="min-h-screen w-full bg-[oklch(0.95_0.008_120)]">
@@ -72,9 +100,21 @@ function ScreenView() {
             </div>
           </div>
 
-          <Link to="/app" className="mt-6 text-sm font-semibold text-primary underline underline-offset-4">
-            View all 50 screens
-          </Link>
+          {/* Navigation links */}
+          <div className="mt-6 flex flex-col items-center gap-3">
+            <Link to="/app" className="text-sm font-semibold text-primary underline underline-offset-4">
+              View all 50 screens
+            </Link>
+            {/* Live page shortcut */}
+            {liveRoute && (
+              <Link
+                to={liveRoute as never}
+                className="inline-flex items-center gap-2 rounded-2xl border-2 border-primary bg-primary-soft px-5 py-2.5 text-sm font-bold text-primary hover:bg-primary hover:text-primary-foreground transition shadow-glow"
+              >
+                <Zap className="h-4 w-4" /> Open live functional page
+              </Link>
+            )}
+          </div>
         </div>
 
         {/* Right: next button (desktop) */}

@@ -17,3 +17,8 @@ export function useIsMobile() {
 
   return !!isMobile;
 }
+
+// Backwards-compatible wrapper used across the codebase
+export function useMobile() {
+  return useIsMobile();
+}

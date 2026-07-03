@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { ShieldCheck, Sprout, Star } from "lucide-react";
+import { Sprout } from "lucide-react";
 
 type Props = {
   /** Large heading on the brand panel, e.g. "Welcome back to Agricon". */
@@ -54,29 +54,6 @@ export function AuthLayout({ headline, tagline, title, subtitle, children, foote
               <div className="grid h-44 w-44 place-items-center rounded-[44px] bg-white/15 backdrop-blur-lg ring-2 ring-white/20 shadow-glow">
                 <Sprout className="h-20 w-20 text-white" strokeWidth={1.8} />
               </div>
-              <motion.div
-                animate={{ y: [0, -10, 0] }}
-                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.6 }}
-                className="absolute -left-16 -top-6 rounded-2xl bg-card p-3 shadow-pop"
-              >
-                <div className="flex items-center gap-2">
-                  <div className="grid h-9 w-9 place-items-center rounded-xl bg-primary-soft text-primary"><ShieldCheck className="h-4 w-4" /></div>
-                  <div>
-                    <p className="text-[10px] text-muted-foreground">Verified</p>
-                    <p className="text-xs font-black text-forest">12,483 farms</p>
-                  </div>
-                </div>
-              </motion.div>
-              <motion.div
-                animate={{ y: [0, 10, 0] }}
-                transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                className="absolute -bottom-8 -right-14 rounded-2xl bg-card p-3 shadow-pop"
-              >
-                <div className="flex items-center gap-1">
-                  {[1, 2, 3, 4, 5].map((i) => <Star key={i} className="h-3 w-3 fill-gold text-gold" />)}
-                  <span className="ml-1 text-xs font-bold text-foreground">4.9</span>
-                </div>
-              </motion.div>
             </motion.div>
           </div>
 

@@ -20,6 +20,7 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
 export const VERIFICATION_BUCKET = "verification-documents";
 export const AVATAR_BUCKET = "avatars";
 export const PRODUCTS_BUCKET = "products";
+export const CHAT_FILES_BUCKET = "chat-files";
 
 export type VerificationStatus = "unverified" | "pending" | "verified" | "rejected";
 
@@ -70,4 +71,28 @@ export type Product = {
   status: ProductStatus;
   created_at: string;
   updated_at: string;
+};
+
+export type ChatMessage = {
+  id: string;
+  conversation_id: string;
+  sender_id: string;
+  receiver_id: string;
+  text: string | null;
+  file_url: string | null;
+  file_type: string | null;
+  voice_url: string | null;
+  voice_transcription: string | null;
+  original_language: string | null;
+  translated_text: Record<string, string> | null;
+  read: boolean;
+  created_at: string;
+};
+
+export type ConversationParticipant = {
+  conversation_id: string;
+  user1_id: string;
+  user2_id: string;
+  last_message_at: string | null;
+  created_at: string;
 };

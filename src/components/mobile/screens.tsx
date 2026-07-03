@@ -10,7 +10,7 @@ import {
   Settings, HelpCircle, LogOut, Globe, ShieldAlert, Info, ExternalLink, Package,
   Users, DollarSign, ArrowUpRight, Calendar, Layers, X, Check, PlusCircle,
   ChevronDown, Sliders, BarChart3, MessageSquare, FileText, Headphones, Truck,
-  ArrowLeft, Share2, Flag, Play, Loader2,
+  ArrowLeft, Share2, Flag, Play, Loader2, Wheat, CreditCard,
 } from "lucide-react";
 import { MobileShell, NotificationBell } from "./MobileShell";
 import { FarmCard, CropCard, SectionHeader, PrimaryButton, TextInput, EmptyState, Chip, VerificationBadge, Rating, FarmImage } from "./ui";
@@ -1132,7 +1132,7 @@ export function Home() {
       </div>
 
       <div className="mt-6">
-        <SectionHeader title="🌾 In season now" action="See all" actionHref="seasonal" />
+        <SectionHeader title={<span className="flex items-center gap-2"><Wheat className="h-4 w-4" /> In season now</span>} action="See all" actionHref="seasonal" />
         <div className="-mx-4 flex gap-3 overflow-x-auto scrollbar-hide px-4">
           {CROPS.slice(0, 4).map((c) => (
             <div key={c.id} className="w-40 shrink-0"><CropCard crop={c} /></div>
@@ -1350,7 +1350,7 @@ export function FeaturedFarms() {
 
 export function Seasonal() {
   return (
-    <MobileShell title="🌾 In season">
+    <MobileShell title={<span className="flex items-center gap-2"><Wheat className="h-4 w-4" /> In season</span>}>
       <div className="rounded-2xl gradient-gold p-5 text-gold-foreground">
         <p className="text-xs font-bold uppercase tracking-wider opacity-80">This month</p>
         <h2 className="mt-1 text-xl font-black">Rainy season harvests</h2>
@@ -1772,7 +1772,9 @@ export function FarmMap() {
                 <VerificationBadge />
               </div>
               <p className="text-xs text-muted-foreground">Ibarapa Central, Oyo State</p>
-              <p className="mt-1 text-xs text-primary font-semibold">📍 42 hectares · 3.2km from town</p>
+              <p className="mt-1 text-xs text-primary font-semibold flex items-center gap-1">
+                <MapPin className="h-3 w-3" /> 42 hectares · 3.2km from town
+              </p>
             </div>
           </div>
           <div className="mt-3 grid grid-cols-2 gap-2">
@@ -2411,12 +2413,12 @@ export function SettingsScreen() {
 
 export function HelpCenter() {
   const topics = [
-    { icon: "🌱", title: "Getting started", body: "Onboarding, verification, and setup" },
-    { icon: "🔐", title: "Account & security", body: "Password, 2FA, and privacy" },
-    { icon: "📢", title: "Listing crops", body: "Best practices and visibility" },
-    { icon: "💬", title: "Inquiries & chats", body: "Managing conversations" },
-    { icon: "🚚", title: "Delivery & logistics", body: "Shipping and fulfilment" },
-    { icon: "💳", title: "Payments", body: "How payments work on Agricon" },
+    { icon: <Sprout className="h-6 w-6" />, title: "Getting started", body: "Onboarding, verification, and setup" },
+    { icon: <Lock className="h-6 w-6" />, title: "Account & security", body: "Password, 2FA, and privacy" },
+    { icon: <Bell className="h-6 w-6" />, title: "Listing crops", body: "Best practices and visibility" },
+    { icon: <MessageCircle className="h-6 w-6" />, title: "Inquiries & chats", body: "Managing conversations" },
+    { icon: <Truck className="h-6 w-6" />, title: "Delivery & logistics", body: "Shipping and fulfilment" },
+    { icon: <CreditCard className="h-6 w-6" />, title: "Payments", body: "How payments work on Agricon" },
   ];
   const faqs = [
     "How does farm verification work?",
@@ -2431,8 +2433,8 @@ export function HelpCenter() {
       <div className="grid grid-cols-2 gap-3">
         {topics.map((t) => (
           <button key={t.title} className="rounded-2xl border border-border bg-card p-4 text-left hover:border-primary/40">
-            <div className="text-2xl">{t.icon}</div>
-            <p className="mt-2 text-sm font-bold text-foreground">{t.title}</p>
+            <div className="text-[#154212] mb-2">{t.icon}</div>
+            <p className="text-sm font-bold text-foreground">{t.title}</p>
             <p className="mt-0.5 text-[11px] text-muted-foreground">{t.body}</p>
           </button>
         ))}

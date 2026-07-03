@@ -7,7 +7,7 @@ import {
   type ReactNode,
 } from "react";
 import type { Session, User } from "@supabase/supabase-js";
-import { supabase, VERIFICATION_BUCKET, AVATAR_BUCKET, PRODUCTS_BUCKET, type Profile, type Product } from "./supabase";
+import { supabase, VERIFICATION_BUCKET, AVATAR_BUCKET, PRODUCTS_BUCKET, CHAT_FILES_BUCKET, type Profile, type Product, type ChatMessage, type ConversationParticipant } from "./supabase";
 
 export type PendingAuthFlow = "signup" | "recovery";
 
@@ -70,6 +70,16 @@ type AuthContextValue = {
   uploadProductImage: (file: File) => Promise<string>;
   createProduct: (product: Omit<Product, "id" | "seller_id" | "created_at" | "updated_at">) => Promise<Product>;
   getProducts: (sellerId?: string) => Promise<Product[]>;
+  getConversations: () => Promise<ConversationParticipant[]>;
+  getChatMessages: (conversationId: string) => Promise<ChatMessage[]>;
+  sendChatMessage: (receiverId: string, text: string, fileUrl?: string, fileType?: string, voiceUrl?: string) => Promise<ChatMessage>;
+  uploadChatFile: (file: File) => Promise<string>;
+  uploadVoiceNote: (file: File) => Promise<string>;
+  markMessageAsRead: (messageId: string) => Promise<void>;
+  getNotifications: () => Promise<any[]>;
+  markNotificationAsRead: (notificationId: string) => Promise<void>;
+  submitLandIssueReport: (report: Omit<any, "id" | "user_id" | "status" | "admin_notes" | "created_at" | "updated_at">) => Promise<void>;
+  translateMessage: (text: string, targetLanguage: string) => Promise<string>;
 };
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -294,12 +304,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (userError || !userData.user) throw new Error("You must be signed in.");
     const fileExt = file.name.split('.').pop();
     const fileName = `${userData.user.id}-${Date.now()}.${fileExt}`;
-    const filePath = `${fileName}`;
+    const filePath = `${userData.user.id}/${fileName}`;
     
     const { error: uploadError } = await supabase.storage
       .from(AVATAR_BUCKET)
       .upload(filePath, file, { upsert: true });
-    if (uploadError) throw uploadError;
+    if (uploadError) {
+      throw new Error(
+        uploadError.message.includes("row-level security")
+          ? "Upload blocked by storage permissions. Ask your admin to run supabase/migrations/0006_storage_buckets.sql in the Supabase SQL Editor."
+          : `Storage upload failed: ${uploadError.message}`
+      );
+    }
     
     const { data: { publicUrl } } = supabase.storage
       .from(AVATAR_BUCKET)
@@ -314,12 +330,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (userError || !userData.user) throw new Error("You must be signed in.");
     const fileExt = file.name.split('.').pop();
     const fileName = `${userData.user.id}-${Date.now()}.${fileExt}`;
-    const filePath = `${fileName}`;
+    const filePath = `${userData.user.id}/${fileName}`;
     
     const { error: uploadError } = await supabase.storage
       .from(PRODUCTS_BUCKET)
       .upload(filePath, file, { upsert: true });
-    if (uploadError) throw uploadError;
+    if (uploadError) {
+      throw new Error(
+        uploadError.message.includes("row-level security")
+          ? "Upload blocked by storage permissions. Ask your admin to run supabase/migrations/0006_storage_buckets.sql in the Supabase SQL Editor."
+          : `Storage upload failed: ${uploadError.message}`
+      );
+    }
     
     const { data: { publicUrl } } = supabase.storage
       .from(PRODUCTS_BUCKET)
@@ -353,6 +375,242 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return data as Product[];
   }, []);
 
+  const getConversations = useCallback(async () => {
+    const { data: userData, error: userError } = await supabase.auth.getUser();
+    if (userError || !userData.user) throw new Error("You must be signed in.");
+    const userId = userData.user.id;
+
+    const { data, error } = await supabase
+      .from("conversation_participants")
+      .select("*")
+      .or(`user1_id.eq.${userId},user2_id.eq.${userId}`)
+      .order("last_message_at", { ascending: false, nullsFirst: false });
+    
+    if (error) throw error;
+    return data as ConversationParticipant[];
+  }, []);
+
+  const getChatMessages = useCallback(async (conversationId: string) => {
+    const { data, error } = await supabase
+      .from("chat_messages")
+      .select("*")
+      .eq("conversation_id", conversationId)
+      .order("created_at", { ascending: true });
+    
+    if (error) throw error;
+    return data as ChatMessage[];
+  }, []);
+
+  const sendChatMessage = useCallback(async (receiverId: string, text: string, fileUrl?: string, fileType?: string, voiceUrl?: string) => {
+    const { data: userData, error: userError } = await supabase.auth.getUser();
+    if (userError || !userData.user) throw new Error("You must be signed in.");
+    const senderId = userData.user.id;
+
+    // Get or create conversation
+    const { data: convData, error: convError } = await supabase
+      .from("conversation_participants")
+      .select("*")
+      .or(`and(user1_id.eq.${senderId},user2_id.eq.${receiverId}),and(user1_id.eq.${receiverId},user2_id.eq.${senderId})`)
+      .maybeSingle();
+    
+    let conversationId: string;
+    if (convError || !convData) {
+      // Create new conversation
+      const { data: newConv, error: newConvError } = await supabase
+        .from("conversation_participants")
+        .insert({
+          user1_id: senderId,
+          user2_id: receiverId,
+          last_message_at: new Date().toISOString()
+        })
+        .select()
+        .single();
+      
+      if (newConvError) throw newConvError;
+      conversationId = newConv.conversation_id;
+    } else {
+      conversationId = convData.conversation_id;
+      // Update last_message_at
+      await supabase
+        .from("conversation_participants")
+        .update({ last_message_at: new Date().toISOString() })
+        .eq("conversation_id", conversationId);
+    }
+
+    // Send message
+    const { data, error } = await supabase
+      .from("chat_messages")
+      .insert({
+        conversation_id: conversationId,
+        sender_id: senderId,
+        receiver_id: receiverId,
+        text,
+        file_url: fileUrl || null,
+        file_type: fileType || null,
+        voice_url: voiceUrl || null,
+        read: false
+      })
+      .select()
+      .single();
+    
+    if (error) throw error;
+    return data as ChatMessage;
+  }, []);
+
+  const uploadChatFile = useCallback(async (file: File) => {
+    const { data: userData, error: userError } = await supabase.auth.getUser();
+    if (userError || !userData.user) throw new Error("You must be signed in.");
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${userData.user.id}-${Date.now()}.${fileExt}`;
+    const filePath = `${userData.user.id}/${fileName}`;
+    
+    const { error: uploadError } = await supabase.storage
+      .from(CHAT_FILES_BUCKET)
+      .upload(filePath, file, { upsert: true });
+    if (uploadError) {
+      throw new Error(
+        uploadError.message.includes("row-level security")
+          ? "Upload blocked by storage permissions. Ask your admin to run supabase/migrations/0006_storage_buckets.sql in the Supabase SQL Editor."
+          : `Storage upload failed: ${uploadError.message}`
+      );
+    }
+    
+    const { data: { publicUrl } } = supabase.storage
+      .from(CHAT_FILES_BUCKET)
+      .getPublicUrl(filePath);
+    
+    return publicUrl;
+  }, []);
+
+  const uploadVoiceNote = useCallback(async (file: File) => {
+    const { data: userData, error: userError } = await supabase.auth.getUser();
+    if (userError || !userData.user) throw new Error("You must be signed in.");
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${userData.user.id}-voice-${Date.now()}.${fileExt}`;
+    const filePath = `${userData.user.id}/${fileName}`;
+    
+    const { error: uploadError } = await supabase.storage
+      .from(CHAT_FILES_BUCKET)
+      .upload(filePath, file, { upsert: true });
+    if (uploadError) {
+      throw new Error(
+        uploadError.message.includes("row-level security")
+          ? "Upload blocked by storage permissions. Ask your admin to run supabase/migrations/0006_storage_buckets.sql in the Supabase SQL Editor."
+          : `Storage upload failed: ${uploadError.message}`
+      );
+    }
+    
+    const { data: { publicUrl } } = supabase.storage
+      .from(CHAT_FILES_BUCKET)
+      .getPublicUrl(filePath);
+    
+    return publicUrl;
+  }, []);
+
+  const markMessageAsRead = useCallback(async (messageId: string) => {
+    const { error } = await supabase
+      .from("chat_messages")
+      .update({ read: true })
+      .eq("id", messageId);
+    
+    if (error) throw error;
+  }, []);
+
+  const getNotifications = useCallback(async () => {
+    const { data: userData, error: userError } = await supabase.auth.getUser();
+    if (userError || !userData.user) throw new Error("You must be signed in.");
+    const userId = userData.user.id;
+
+    const { data, error } = await supabase
+      .from("notifications")
+      .select("*")
+      .eq("user_id", userId)
+      .order("created_at", { ascending: false })
+      .limit(20);
+    
+    if (error) throw error;
+    return data || [];
+  }, []);
+
+  const markNotificationAsRead = useCallback(async (notificationId: string) => {
+    const { error } = await supabase
+      .from("notifications")
+      .update({ read: true })
+      .eq("id", notificationId);
+    
+    if (error) throw error;
+  }, []);
+
+  const submitLandIssueReport = useCallback(async (report: Omit<any, "id" | "user_id" | "status" | "admin_notes" | "created_at" | "updated_at">) => {
+    const { data: userData, error: userError } = await supabase.auth.getUser();
+    if (userError || !userData.user) throw new Error("You must be signed in.");
+    const userId = userData.user.id;
+
+    const { error } = await supabase
+      .from("land_issue_reports")
+      .insert({
+        ...report,
+        user_id: userId,
+        status: "pending",
+      });
+    
+    if (error) throw error;
+  }, []);
+
+  const translateMessage = useCallback(async (text: string, targetLanguage: string) => {
+    const groqApiKey = import.meta.env.VITE_GROQ_API_KEY;
+    if (!groqApiKey) {
+      throw new Error("Groq API key not configured");
+    }
+
+    const languageMap: Record<string, string> = {
+      "en": "English",
+      "ha": "Hausa",
+      "yo": "Yoruba",
+      "ig": "Igbo",
+      "pcm": "Nigerian Pidgin",
+    };
+
+    const targetLangName = languageMap[targetLanguage] || targetLanguage;
+
+    try {
+      const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${groqApiKey}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model: "llama3-70b-8192",
+          messages: [
+            {
+              role: "system",
+              content: `You are a professional translator. Translate the given text to ${targetLangName}. Only return the translated text, nothing else. Keep the meaning and tone intact.`
+            },
+            {
+              role: "user",
+              content: text
+            }
+          ],
+          temperature: 0.3,
+          max_tokens: 500,
+        }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error?.message || "Translation failed");
+      }
+
+      const data = await response.json();
+      const translatedText = data.choices?.[0]?.message?.content || text;
+      return translatedText;
+    } catch (error) {
+      console.error("Translation error:", error);
+      throw error;
+    }
+  }, []);
+
   const value: AuthContextValue = {
     session,
     user: session?.user ?? null,
@@ -376,6 +634,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     uploadProductImage,
     createProduct,
     getProducts,
+    getConversations,
+    getChatMessages,
+    sendChatMessage,
+    uploadChatFile,
+    uploadVoiceNote,
+    markMessageAsRead,
+    getNotifications,
+    markNotificationAsRead,
+    submitLandIssueReport,
+    translateMessage,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

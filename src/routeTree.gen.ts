@@ -16,19 +16,42 @@ import { Route as UserTypeRouteImport } from './routes/user-type'
 import { Route as SplashRouteImport } from './routes/splash'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as SigninRouteImport } from './routes/signin'
+import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as SeasonalRouteImport } from './routes/seasonal'
+import { Route as SearchResultsRouteImport } from './routes/search-results'
+import { Route as SearchRouteImport } from './routes/search'
+import { Route as ReviewsRouteImport } from './routes/reviews'
+import { Route as ReportIssueRouteImport } from './routes/report-issue'
 import { Route as ProfilePhotoRouteImport } from './routes/profile-photo'
+import { Route as PhotoGalleryRouteImport } from './routes/photo-gallery'
 import { Route as PersonalInfoRouteImport } from './routes/personal-info'
 import { Route as PasswordResetSuccessRouteImport } from './routes/password-reset-success'
 import { Route as OtpRouteImport } from './routes/otp'
+import { Route as NotificationsRouteImport } from './routes/notifications'
+import { Route as MessagesRouteImport } from './routes/messages'
 import { Route as MarketplaceRouteImport } from './routes/marketplace'
 import { Route as LanguageRouteImport } from './routes/language'
 import { Route as IntroRouteImport } from './routes/intro'
+import { Route as ImageViewerRouteImport } from './routes/image-viewer'
 import { Route as HomeRouteImport } from './routes/home'
+import { Route as HelpCenterRouteImport } from './routes/help-center'
+import { Route as HarvestTimelineRouteImport } from './routes/harvest-timeline'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
+import { Route as FiltersRouteImport } from './routes/filters'
+import { Route as FeaturedFarmsRouteImport } from './routes/featured-farms'
+import { Route as FarmerProfileRouteImport } from './routes/farmer-profile'
+import { Route as FarmerDashboardRouteImport } from './routes/farmer-dashboard'
+import { Route as FarmProfileRouteImport } from './routes/farm-profile'
+import { Route as FarmMapRouteImport } from './routes/farm-map'
 import { Route as FarmInfoRouteImport } from './routes/farm-info'
 import { Route as DocumentUploadRouteImport } from './routes/document-upload'
+import { Route as CropDetailsRouteImport } from './routes/crop-details'
 import { Route as CreatePasswordRouteImport } from './routes/create-password'
+import { Route as ContactSupportRouteImport } from './routes/contact-support'
 import { Route as ContactInfoRouteImport } from './routes/contact-info'
+import { Route as ContactFarmerRouteImport } from './routes/contact-farmer'
+import { Route as ChatRouteImport } from './routes/chat'
+import { Route as CategoriesRouteImport } from './routes/categories'
 import { Route as BuyerProfileRouteImport } from './routes/buyer-profile'
 import { Route as BusinessInfoRouteImport } from './routes/business-info'
 import { Route as AddProductRouteImport } from './routes/add-product'
@@ -71,9 +94,44 @@ const SigninRoute = SigninRouteImport.update({
   path: '/signin',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SeasonalRoute = SeasonalRouteImport.update({
+  id: '/seasonal',
+  path: '/seasonal',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SearchResultsRoute = SearchResultsRouteImport.update({
+  id: '/search-results',
+  path: '/search-results',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SearchRoute = SearchRouteImport.update({
+  id: '/search',
+  path: '/search',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReviewsRoute = ReviewsRouteImport.update({
+  id: '/reviews',
+  path: '/reviews',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReportIssueRoute = ReportIssueRouteImport.update({
+  id: '/report-issue',
+  path: '/report-issue',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProfilePhotoRoute = ProfilePhotoRouteImport.update({
   id: '/profile-photo',
   path: '/profile-photo',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PhotoGalleryRoute = PhotoGalleryRouteImport.update({
+  id: '/photo-gallery',
+  path: '/photo-gallery',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PersonalInfoRoute = PersonalInfoRouteImport.update({
@@ -91,6 +149,16 @@ const OtpRoute = OtpRouteImport.update({
   path: '/otp',
   getParentRoute: () => rootRouteImport,
 } as any)
+const NotificationsRoute = NotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MessagesRoute = MessagesRouteImport.update({
+  id: '/messages',
+  path: '/messages',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MarketplaceRoute = MarketplaceRouteImport.update({
   id: '/marketplace',
   path: '/marketplace',
@@ -106,14 +174,59 @@ const IntroRoute = IntroRouteImport.update({
   path: '/intro',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ImageViewerRoute = ImageViewerRouteImport.update({
+  id: '/image-viewer',
+  path: '/image-viewer',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const HomeRoute = HomeRouteImport.update({
   id: '/home',
   path: '/home',
   getParentRoute: () => rootRouteImport,
 } as any)
+const HelpCenterRoute = HelpCenterRouteImport.update({
+  id: '/help-center',
+  path: '/help-center',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HarvestTimelineRoute = HarvestTimelineRouteImport.update({
+  id: '/harvest-timeline',
+  path: '/harvest-timeline',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
   id: '/forgot-password',
   path: '/forgot-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FiltersRoute = FiltersRouteImport.update({
+  id: '/filters',
+  path: '/filters',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FeaturedFarmsRoute = FeaturedFarmsRouteImport.update({
+  id: '/featured-farms',
+  path: '/featured-farms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FarmerProfileRoute = FarmerProfileRouteImport.update({
+  id: '/farmer-profile',
+  path: '/farmer-profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FarmerDashboardRoute = FarmerDashboardRouteImport.update({
+  id: '/farmer-dashboard',
+  path: '/farmer-dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FarmProfileRoute = FarmProfileRouteImport.update({
+  id: '/farm-profile',
+  path: '/farm-profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FarmMapRoute = FarmMapRouteImport.update({
+  id: '/farm-map',
+  path: '/farm-map',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FarmInfoRoute = FarmInfoRouteImport.update({
@@ -126,14 +239,39 @@ const DocumentUploadRoute = DocumentUploadRouteImport.update({
   path: '/document-upload',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CropDetailsRoute = CropDetailsRouteImport.update({
+  id: '/crop-details',
+  path: '/crop-details',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CreatePasswordRoute = CreatePasswordRouteImport.update({
   id: '/create-password',
   path: '/create-password',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ContactSupportRoute = ContactSupportRouteImport.update({
+  id: '/contact-support',
+  path: '/contact-support',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ContactInfoRoute = ContactInfoRouteImport.update({
   id: '/contact-info',
   path: '/contact-info',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactFarmerRoute = ContactFarmerRouteImport.update({
+  id: '/contact-farmer',
+  path: '/contact-farmer',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ChatRoute = ChatRouteImport.update({
+  id: '/chat',
+  path: '/chat',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CategoriesRoute = CategoriesRouteImport.update({
+  id: '/categories',
+  path: '/categories',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BuyerProfileRoute = BuyerProfileRouteImport.update({
@@ -172,19 +310,42 @@ export interface FileRoutesByFullPath {
   '/add-product': typeof AddProductRoute
   '/business-info': typeof BusinessInfoRoute
   '/buyer-profile': typeof BuyerProfileRoute
+  '/categories': typeof CategoriesRoute
+  '/chat': typeof ChatRoute
+  '/contact-farmer': typeof ContactFarmerRoute
   '/contact-info': typeof ContactInfoRoute
+  '/contact-support': typeof ContactSupportRoute
   '/create-password': typeof CreatePasswordRoute
+  '/crop-details': typeof CropDetailsRoute
   '/document-upload': typeof DocumentUploadRoute
   '/farm-info': typeof FarmInfoRoute
+  '/farm-map': typeof FarmMapRoute
+  '/farm-profile': typeof FarmProfileRoute
+  '/farmer-dashboard': typeof FarmerDashboardRoute
+  '/farmer-profile': typeof FarmerProfileRoute
+  '/featured-farms': typeof FeaturedFarmsRoute
+  '/filters': typeof FiltersRoute
   '/forgot-password': typeof ForgotPasswordRoute
+  '/harvest-timeline': typeof HarvestTimelineRoute
+  '/help-center': typeof HelpCenterRoute
   '/home': typeof HomeRoute
+  '/image-viewer': typeof ImageViewerRoute
   '/intro': typeof IntroRoute
   '/language': typeof LanguageRoute
   '/marketplace': typeof MarketplaceRoute
+  '/messages': typeof MessagesRoute
+  '/notifications': typeof NotificationsRoute
   '/otp': typeof OtpRoute
   '/password-reset-success': typeof PasswordResetSuccessRoute
   '/personal-info': typeof PersonalInfoRoute
+  '/photo-gallery': typeof PhotoGalleryRoute
   '/profile-photo': typeof ProfilePhotoRoute
+  '/report-issue': typeof ReportIssueRoute
+  '/reviews': typeof ReviewsRoute
+  '/search': typeof SearchRoute
+  '/search-results': typeof SearchResultsRoute
+  '/seasonal': typeof SeasonalRoute
+  '/settings': typeof SettingsRoute
   '/signin': typeof SigninRoute
   '/signup': typeof SignupRoute
   '/splash': typeof SplashRoute
@@ -200,19 +361,42 @@ export interface FileRoutesByTo {
   '/add-product': typeof AddProductRoute
   '/business-info': typeof BusinessInfoRoute
   '/buyer-profile': typeof BuyerProfileRoute
+  '/categories': typeof CategoriesRoute
+  '/chat': typeof ChatRoute
+  '/contact-farmer': typeof ContactFarmerRoute
   '/contact-info': typeof ContactInfoRoute
+  '/contact-support': typeof ContactSupportRoute
   '/create-password': typeof CreatePasswordRoute
+  '/crop-details': typeof CropDetailsRoute
   '/document-upload': typeof DocumentUploadRoute
   '/farm-info': typeof FarmInfoRoute
+  '/farm-map': typeof FarmMapRoute
+  '/farm-profile': typeof FarmProfileRoute
+  '/farmer-dashboard': typeof FarmerDashboardRoute
+  '/farmer-profile': typeof FarmerProfileRoute
+  '/featured-farms': typeof FeaturedFarmsRoute
+  '/filters': typeof FiltersRoute
   '/forgot-password': typeof ForgotPasswordRoute
+  '/harvest-timeline': typeof HarvestTimelineRoute
+  '/help-center': typeof HelpCenterRoute
   '/home': typeof HomeRoute
+  '/image-viewer': typeof ImageViewerRoute
   '/intro': typeof IntroRoute
   '/language': typeof LanguageRoute
   '/marketplace': typeof MarketplaceRoute
+  '/messages': typeof MessagesRoute
+  '/notifications': typeof NotificationsRoute
   '/otp': typeof OtpRoute
   '/password-reset-success': typeof PasswordResetSuccessRoute
   '/personal-info': typeof PersonalInfoRoute
+  '/photo-gallery': typeof PhotoGalleryRoute
   '/profile-photo': typeof ProfilePhotoRoute
+  '/report-issue': typeof ReportIssueRoute
+  '/reviews': typeof ReviewsRoute
+  '/search': typeof SearchRoute
+  '/search-results': typeof SearchResultsRoute
+  '/seasonal': typeof SeasonalRoute
+  '/settings': typeof SettingsRoute
   '/signin': typeof SigninRoute
   '/signup': typeof SignupRoute
   '/splash': typeof SplashRoute
@@ -229,19 +413,42 @@ export interface FileRoutesById {
   '/add-product': typeof AddProductRoute
   '/business-info': typeof BusinessInfoRoute
   '/buyer-profile': typeof BuyerProfileRoute
+  '/categories': typeof CategoriesRoute
+  '/chat': typeof ChatRoute
+  '/contact-farmer': typeof ContactFarmerRoute
   '/contact-info': typeof ContactInfoRoute
+  '/contact-support': typeof ContactSupportRoute
   '/create-password': typeof CreatePasswordRoute
+  '/crop-details': typeof CropDetailsRoute
   '/document-upload': typeof DocumentUploadRoute
   '/farm-info': typeof FarmInfoRoute
+  '/farm-map': typeof FarmMapRoute
+  '/farm-profile': typeof FarmProfileRoute
+  '/farmer-dashboard': typeof FarmerDashboardRoute
+  '/farmer-profile': typeof FarmerProfileRoute
+  '/featured-farms': typeof FeaturedFarmsRoute
+  '/filters': typeof FiltersRoute
   '/forgot-password': typeof ForgotPasswordRoute
+  '/harvest-timeline': typeof HarvestTimelineRoute
+  '/help-center': typeof HelpCenterRoute
   '/home': typeof HomeRoute
+  '/image-viewer': typeof ImageViewerRoute
   '/intro': typeof IntroRoute
   '/language': typeof LanguageRoute
   '/marketplace': typeof MarketplaceRoute
+  '/messages': typeof MessagesRoute
+  '/notifications': typeof NotificationsRoute
   '/otp': typeof OtpRoute
   '/password-reset-success': typeof PasswordResetSuccessRoute
   '/personal-info': typeof PersonalInfoRoute
+  '/photo-gallery': typeof PhotoGalleryRoute
   '/profile-photo': typeof ProfilePhotoRoute
+  '/report-issue': typeof ReportIssueRoute
+  '/reviews': typeof ReviewsRoute
+  '/search': typeof SearchRoute
+  '/search-results': typeof SearchResultsRoute
+  '/seasonal': typeof SeasonalRoute
+  '/settings': typeof SettingsRoute
   '/signin': typeof SigninRoute
   '/signup': typeof SignupRoute
   '/splash': typeof SplashRoute
@@ -259,19 +466,42 @@ export interface FileRouteTypes {
     | '/add-product'
     | '/business-info'
     | '/buyer-profile'
+    | '/categories'
+    | '/chat'
+    | '/contact-farmer'
     | '/contact-info'
+    | '/contact-support'
     | '/create-password'
+    | '/crop-details'
     | '/document-upload'
     | '/farm-info'
+    | '/farm-map'
+    | '/farm-profile'
+    | '/farmer-dashboard'
+    | '/farmer-profile'
+    | '/featured-farms'
+    | '/filters'
     | '/forgot-password'
+    | '/harvest-timeline'
+    | '/help-center'
     | '/home'
+    | '/image-viewer'
     | '/intro'
     | '/language'
     | '/marketplace'
+    | '/messages'
+    | '/notifications'
     | '/otp'
     | '/password-reset-success'
     | '/personal-info'
+    | '/photo-gallery'
     | '/profile-photo'
+    | '/report-issue'
+    | '/reviews'
+    | '/search'
+    | '/search-results'
+    | '/seasonal'
+    | '/settings'
     | '/signin'
     | '/signup'
     | '/splash'
@@ -287,19 +517,42 @@ export interface FileRouteTypes {
     | '/add-product'
     | '/business-info'
     | '/buyer-profile'
+    | '/categories'
+    | '/chat'
+    | '/contact-farmer'
     | '/contact-info'
+    | '/contact-support'
     | '/create-password'
+    | '/crop-details'
     | '/document-upload'
     | '/farm-info'
+    | '/farm-map'
+    | '/farm-profile'
+    | '/farmer-dashboard'
+    | '/farmer-profile'
+    | '/featured-farms'
+    | '/filters'
     | '/forgot-password'
+    | '/harvest-timeline'
+    | '/help-center'
     | '/home'
+    | '/image-viewer'
     | '/intro'
     | '/language'
     | '/marketplace'
+    | '/messages'
+    | '/notifications'
     | '/otp'
     | '/password-reset-success'
     | '/personal-info'
+    | '/photo-gallery'
     | '/profile-photo'
+    | '/report-issue'
+    | '/reviews'
+    | '/search'
+    | '/search-results'
+    | '/seasonal'
+    | '/settings'
     | '/signin'
     | '/signup'
     | '/splash'
@@ -315,19 +568,42 @@ export interface FileRouteTypes {
     | '/add-product'
     | '/business-info'
     | '/buyer-profile'
+    | '/categories'
+    | '/chat'
+    | '/contact-farmer'
     | '/contact-info'
+    | '/contact-support'
     | '/create-password'
+    | '/crop-details'
     | '/document-upload'
     | '/farm-info'
+    | '/farm-map'
+    | '/farm-profile'
+    | '/farmer-dashboard'
+    | '/farmer-profile'
+    | '/featured-farms'
+    | '/filters'
     | '/forgot-password'
+    | '/harvest-timeline'
+    | '/help-center'
     | '/home'
+    | '/image-viewer'
     | '/intro'
     | '/language'
     | '/marketplace'
+    | '/messages'
+    | '/notifications'
     | '/otp'
     | '/password-reset-success'
     | '/personal-info'
+    | '/photo-gallery'
     | '/profile-photo'
+    | '/report-issue'
+    | '/reviews'
+    | '/search'
+    | '/search-results'
+    | '/seasonal'
+    | '/settings'
     | '/signin'
     | '/signup'
     | '/splash'
@@ -344,19 +620,42 @@ export interface RootRouteChildren {
   AddProductRoute: typeof AddProductRoute
   BusinessInfoRoute: typeof BusinessInfoRoute
   BuyerProfileRoute: typeof BuyerProfileRoute
+  CategoriesRoute: typeof CategoriesRoute
+  ChatRoute: typeof ChatRoute
+  ContactFarmerRoute: typeof ContactFarmerRoute
   ContactInfoRoute: typeof ContactInfoRoute
+  ContactSupportRoute: typeof ContactSupportRoute
   CreatePasswordRoute: typeof CreatePasswordRoute
+  CropDetailsRoute: typeof CropDetailsRoute
   DocumentUploadRoute: typeof DocumentUploadRoute
   FarmInfoRoute: typeof FarmInfoRoute
+  FarmMapRoute: typeof FarmMapRoute
+  FarmProfileRoute: typeof FarmProfileRoute
+  FarmerDashboardRoute: typeof FarmerDashboardRoute
+  FarmerProfileRoute: typeof FarmerProfileRoute
+  FeaturedFarmsRoute: typeof FeaturedFarmsRoute
+  FiltersRoute: typeof FiltersRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
+  HarvestTimelineRoute: typeof HarvestTimelineRoute
+  HelpCenterRoute: typeof HelpCenterRoute
   HomeRoute: typeof HomeRoute
+  ImageViewerRoute: typeof ImageViewerRoute
   IntroRoute: typeof IntroRoute
   LanguageRoute: typeof LanguageRoute
   MarketplaceRoute: typeof MarketplaceRoute
+  MessagesRoute: typeof MessagesRoute
+  NotificationsRoute: typeof NotificationsRoute
   OtpRoute: typeof OtpRoute
   PasswordResetSuccessRoute: typeof PasswordResetSuccessRoute
   PersonalInfoRoute: typeof PersonalInfoRoute
+  PhotoGalleryRoute: typeof PhotoGalleryRoute
   ProfilePhotoRoute: typeof ProfilePhotoRoute
+  ReportIssueRoute: typeof ReportIssueRoute
+  ReviewsRoute: typeof ReviewsRoute
+  SearchRoute: typeof SearchRoute
+  SearchResultsRoute: typeof SearchResultsRoute
+  SeasonalRoute: typeof SeasonalRoute
+  SettingsRoute: typeof SettingsRoute
   SigninRoute: typeof SigninRoute
   SignupRoute: typeof SignupRoute
   SplashRoute: typeof SplashRoute
@@ -419,11 +718,60 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SigninRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/seasonal': {
+      id: '/seasonal'
+      path: '/seasonal'
+      fullPath: '/seasonal'
+      preLoaderRoute: typeof SeasonalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/search-results': {
+      id: '/search-results'
+      path: '/search-results'
+      fullPath: '/search-results'
+      preLoaderRoute: typeof SearchResultsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/search': {
+      id: '/search'
+      path: '/search'
+      fullPath: '/search'
+      preLoaderRoute: typeof SearchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reviews': {
+      id: '/reviews'
+      path: '/reviews'
+      fullPath: '/reviews'
+      preLoaderRoute: typeof ReviewsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/report-issue': {
+      id: '/report-issue'
+      path: '/report-issue'
+      fullPath: '/report-issue'
+      preLoaderRoute: typeof ReportIssueRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/profile-photo': {
       id: '/profile-photo'
       path: '/profile-photo'
       fullPath: '/profile-photo'
       preLoaderRoute: typeof ProfilePhotoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/photo-gallery': {
+      id: '/photo-gallery'
+      path: '/photo-gallery'
+      fullPath: '/photo-gallery'
+      preLoaderRoute: typeof PhotoGalleryRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/personal-info': {
@@ -447,6 +795,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OtpRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/notifications': {
+      id: '/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof NotificationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/messages': {
+      id: '/messages'
+      path: '/messages'
+      fullPath: '/messages'
+      preLoaderRoute: typeof MessagesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/marketplace': {
       id: '/marketplace'
       path: '/marketplace'
@@ -468,6 +830,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IntroRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/image-viewer': {
+      id: '/image-viewer'
+      path: '/image-viewer'
+      fullPath: '/image-viewer'
+      preLoaderRoute: typeof ImageViewerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/home': {
       id: '/home'
       path: '/home'
@@ -475,11 +844,67 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HomeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/help-center': {
+      id: '/help-center'
+      path: '/help-center'
+      fullPath: '/help-center'
+      preLoaderRoute: typeof HelpCenterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/harvest-timeline': {
+      id: '/harvest-timeline'
+      path: '/harvest-timeline'
+      fullPath: '/harvest-timeline'
+      preLoaderRoute: typeof HarvestTimelineRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/forgot-password': {
       id: '/forgot-password'
       path: '/forgot-password'
       fullPath: '/forgot-password'
       preLoaderRoute: typeof ForgotPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/filters': {
+      id: '/filters'
+      path: '/filters'
+      fullPath: '/filters'
+      preLoaderRoute: typeof FiltersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/featured-farms': {
+      id: '/featured-farms'
+      path: '/featured-farms'
+      fullPath: '/featured-farms'
+      preLoaderRoute: typeof FeaturedFarmsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/farmer-profile': {
+      id: '/farmer-profile'
+      path: '/farmer-profile'
+      fullPath: '/farmer-profile'
+      preLoaderRoute: typeof FarmerProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/farmer-dashboard': {
+      id: '/farmer-dashboard'
+      path: '/farmer-dashboard'
+      fullPath: '/farmer-dashboard'
+      preLoaderRoute: typeof FarmerDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/farm-profile': {
+      id: '/farm-profile'
+      path: '/farm-profile'
+      fullPath: '/farm-profile'
+      preLoaderRoute: typeof FarmProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/farm-map': {
+      id: '/farm-map'
+      path: '/farm-map'
+      fullPath: '/farm-map'
+      preLoaderRoute: typeof FarmMapRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/farm-info': {
@@ -496,6 +921,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DocumentUploadRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/crop-details': {
+      id: '/crop-details'
+      path: '/crop-details'
+      fullPath: '/crop-details'
+      preLoaderRoute: typeof CropDetailsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/create-password': {
       id: '/create-password'
       path: '/create-password'
@@ -503,11 +935,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CreatePasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/contact-support': {
+      id: '/contact-support'
+      path: '/contact-support'
+      fullPath: '/contact-support'
+      preLoaderRoute: typeof ContactSupportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/contact-info': {
       id: '/contact-info'
       path: '/contact-info'
       fullPath: '/contact-info'
       preLoaderRoute: typeof ContactInfoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact-farmer': {
+      id: '/contact-farmer'
+      path: '/contact-farmer'
+      fullPath: '/contact-farmer'
+      preLoaderRoute: typeof ContactFarmerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/chat': {
+      id: '/chat'
+      path: '/chat'
+      fullPath: '/chat'
+      preLoaderRoute: typeof ChatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/categories': {
+      id: '/categories'
+      path: '/categories'
+      fullPath: '/categories'
+      preLoaderRoute: typeof CategoriesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/buyer-profile': {
@@ -560,19 +1020,42 @@ const rootRouteChildren: RootRouteChildren = {
   AddProductRoute: AddProductRoute,
   BusinessInfoRoute: BusinessInfoRoute,
   BuyerProfileRoute: BuyerProfileRoute,
+  CategoriesRoute: CategoriesRoute,
+  ChatRoute: ChatRoute,
+  ContactFarmerRoute: ContactFarmerRoute,
   ContactInfoRoute: ContactInfoRoute,
+  ContactSupportRoute: ContactSupportRoute,
   CreatePasswordRoute: CreatePasswordRoute,
+  CropDetailsRoute: CropDetailsRoute,
   DocumentUploadRoute: DocumentUploadRoute,
   FarmInfoRoute: FarmInfoRoute,
+  FarmMapRoute: FarmMapRoute,
+  FarmProfileRoute: FarmProfileRoute,
+  FarmerDashboardRoute: FarmerDashboardRoute,
+  FarmerProfileRoute: FarmerProfileRoute,
+  FeaturedFarmsRoute: FeaturedFarmsRoute,
+  FiltersRoute: FiltersRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
+  HarvestTimelineRoute: HarvestTimelineRoute,
+  HelpCenterRoute: HelpCenterRoute,
   HomeRoute: HomeRoute,
+  ImageViewerRoute: ImageViewerRoute,
   IntroRoute: IntroRoute,
   LanguageRoute: LanguageRoute,
   MarketplaceRoute: MarketplaceRoute,
+  MessagesRoute: MessagesRoute,
+  NotificationsRoute: NotificationsRoute,
   OtpRoute: OtpRoute,
   PasswordResetSuccessRoute: PasswordResetSuccessRoute,
   PersonalInfoRoute: PersonalInfoRoute,
+  PhotoGalleryRoute: PhotoGalleryRoute,
   ProfilePhotoRoute: ProfilePhotoRoute,
+  ReportIssueRoute: ReportIssueRoute,
+  ReviewsRoute: ReviewsRoute,
+  SearchRoute: SearchRoute,
+  SearchResultsRoute: SearchResultsRoute,
+  SeasonalRoute: SeasonalRoute,
+  SettingsRoute: SettingsRoute,
   SigninRoute: SigninRoute,
   SignupRoute: SignupRoute,
   SplashRoute: SplashRoute,
