@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import {
   Sprout, ShieldCheck, MessageCircle, TrendingUp, MapPin, Sparkles, Search, Users,
   BarChart3, ArrowRight, Check, Star, Phone, Mail, ChevronDown, Menu, X,
@@ -9,10 +9,10 @@ import type { ReactNode } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import type { Variants } from "framer-motion";
 import gsap from "gsap";
-import { SCREEN_COMPONENTS } from "@/components/mobile/screens";
+// SCREEN_COMPONENTS removed (PhonePreview no longer used)
 import { PhoneFrame } from "@/components/landing/PhoneFrame";
-import { SplashVisual } from "@/components/landing/SplashVisual";
-import { AppStoreBadge, GooglePlayBadge } from "@/components/landing/StoreBadges";
+// SplashVisual removed
+// StoreBadges removed
 import { cn } from "@/lib/utils";
 
 /** Reveal-on-scroll variant shared across sections below. */
@@ -23,29 +23,38 @@ const fadeUp: Variants = {
 
 const HERO_SLIDES = [
   {
-    image: "/IMG_4213-removebg-preview.png",
-    heading: "Nigeria's most trusted agricultural marketplace.",
-    subheading: "Agricon connects verified farmers and distributors across Nigeria. Discover premium produce, chat directly, and transact with total confidence — all from one beautiful app.",
+    type: "image" as const,
+    image: "/ChatGPT_Image_Jul_9__2026__02_11_45_PM-removebg-preview.png",
+    heading: "Do Extraordinary Things",
+    subheading: "Learn in-demand tech skills from expert instructors. Get certified, build real projects, and launch your career in tech — from anywhere in Nigeria.",
   },
   {
-    image: "/ChatGPT_Image_Jul_2__2026__05_31_53_PM-removebg-preview.png",
-    heading: "Connect With Farmers. Communicate in Any Language.",
-    subheading: "Connect directly with verified farmers across Nigeria. Communicate in any language, source quality produce, and grow your agribusiness all in one app.",
+    type: "image" as const,
+    image: "/ChatGPT_Image_Jul_9__2026__02_26_53_PM-removebg-preview.png",
+    heading: "Start Your Learning Journey Today.",
+    subheading: "Join a community of builders, creators and problem solvers. Pick a course, enroll, and go from beginner to job-ready.",
   },
   {
-    image: "/ChatGPT_Image_Jul_2__2026__04_28_04_PM-removebg-preview.png",
-    heading: "Know Exactly Where Your Produce Comes From",
-    subheading: "See verified farm locations, size, and distance before you buy — full transparency, every time.",
+    type: "image" as const,
+    image: "/ChatGPT_Image_Jul_9__2026__02_11_45_PM-removebg-preview.png",
+    heading: "Get Industry-Recognized Certificates",
+    subheading: "Complete your course and earn a certificate you can proudly share on LinkedIn and use in job applications across Nigeria and beyond.",
+  },
+  {
+    type: "image" as const,
+    image: "/Stylish_Image_Of_Lady_On_Purple___Yellow_Shirts__Holding_A_PowerBank___Pointing_Towards_Her_Right_-removebg-preview.png",
+    heading: "Stuck on Where to Start? We've Got You.",
+    subheading: "Confused about where to start or what to learn next? We've got you covered — with clear paths, real projects, and support every step of the way.",
   },
 ];
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Agricon NG — Nigeria's Trusted Agricultural Marketplace" },
-      { name: "description", content: "Agricon NG connects verified farmers and distributors across Nigeria. Discover premium produce, chat directly, and transact with total confidence." },
-      { property: "og:title", content: "Agricon NG — Nigeria's Trusted Agricultural Marketplace" },
-      { property: "og:description", content: "Verified farmers, secure conversations, seamless sourcing. The mobile app powering Nigerian agriculture." },
+      { title: "DarlTech Academy — Do Extraordinary Things" },
+      { name: "description", content: "Learn in-demand tech skills from expert instructors. Get certified and launch your career in tech with DarlTech Academy." },
+      { property: "og:title", content: "DarlTech Academy — Do Extraordinary Things" },
+      { property: "og:description", content: "Nigeria's leading tech academy. Expert instructors, structured courses, and industry-recognized certificates." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -53,19 +62,18 @@ export const Route = createFileRoute("/")({
   component: Landing,
 });
 
-function PhonePreview({ slug, scale = 0.55, height = 460 }: { slug: string; scale?: number; height?: number }) {
-  const Component = SCREEN_COMPONENTS[slug];
-  const width = 375 * scale;
-  return (
-    <PhoneFrame width={width} height={height}>
-      <div className="origin-top-left" style={{ transform: `scale(${scale})`, width: "375px", height: `${height / scale}px` }}>
-        {Component && <Component />}
-      </div>
-    </PhoneFrame>
-  );
-}
+// PhonePreview removed (no longer used)
 
-const SCREENSHOT_SLUGS = ["home", "farm-profile", "crop-details", "chat", "farmer-dashboard", "messages", "marketplace", "notifications"];
+const SCREENSHOT_IMAGES = [
+  "/ChatGPT Image Jul 14, 2026, 07_21_16 AM.png",
+  "/ChatGPT Image Jul 14, 2026, 07_25_47 AM.png",
+  "/ChatGPT Image Jul 14, 2026, 07_29_52 AM.png",
+  "/ChatGPT_Image_Jul_9__2026__02_11_45_PM-removebg-preview.png",
+  "/ChatGPT_Image_Jul_9__2026__02_26_53_PM-removebg-preview.png",
+  "/ChatGPT Image Jul 14, 2026, 07_21_16 AM.png",
+  "/ChatGPT Image Jul 14, 2026, 07_25_47 AM.png",
+  "/ChatGPT Image Jul 14, 2026, 07_29_52 AM.png",
+];
 
 function ScreenshotMarquee() {
   const trackRef = useRef<HTMLDivElement | null>(null);
@@ -75,7 +83,7 @@ function ScreenshotMarquee() {
     if (!trackRef.current) return;
     const tween = gsap.to(trackRef.current, {
       xPercent: -50,
-      duration: 32,
+      duration: 36,
       ease: "none",
       repeat: -1,
     });
@@ -85,7 +93,7 @@ function ScreenshotMarquee() {
     };
   }, []);
 
-  const slides = [...SCREENSHOT_SLUGS, ...SCREENSHOT_SLUGS];
+  const slides = [...SCREENSHOT_IMAGES, ...SCREENSHOT_IMAGES];
 
   return (
     <div
@@ -94,9 +102,18 @@ function ScreenshotMarquee() {
       onMouseLeave={() => tweenRef.current?.play()}
     >
       <div ref={trackRef} className="flex w-max gap-8">
-        {slides.map((s, i) => (
-          <div key={`${s}-${i}`} className="shrink-0">
-            <PhonePreview slug={s} scale={0.72} height={620} />
+        {slides.map((src, i) => (
+          <div key={i} className="shrink-0">
+            <PhoneFrame width={300} height={620}>
+              <div className="h-full w-full overflow-hidden rounded-[42px]">
+                <img
+                  src={src}
+                  alt="DarlTech Academy screen"
+                  className="h-full w-full object-cover"
+                  loading="lazy"
+                />
+              </div>
+            </PhoneFrame>
           </div>
         ))}
       </div>
@@ -161,7 +178,7 @@ function Marquee<T>({
 function Landing() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
-  const [showSplash, setShowSplash] = useState(true);
+  const [showSplash] = useState(false);
   const [heroImageIndex, setHeroImageIndex] = useState(0);
   const [navMounted, setNavMounted] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -170,17 +187,13 @@ function Landing() {
   const [indicator, setIndicator] = useState({ left: 0, width: 0, opacity: 0 });
   const linkRefs = useRef<Array<HTMLAnchorElement | null>>([]);
 
-  const INK = "#1F2A22";
-  const CREAM = "#FBF8F2";
-  const PILL_BG = "#F0ECE2";
-  const GREEN = "#1B4332";
-  const GREEN_DARK = "#0F2A20";
+  const INK = "#0E2A54";
+  const CREAM = "#0E2A54";
+  const PILL_BG = "#1a3d72";
+  const GREEN = "#EF4136";
+  const GREEN_DARK = "#c73229";
 
-  useEffect(() => {
-    if (!showSplash) return;
-    const t = setTimeout(() => setShowSplash(false), 2200);
-    return () => clearTimeout(t);
-  }, [showSplash]);
+  // splash removed
 
   // Cycle hero images every 3.5 seconds
   useEffect(() => {
@@ -209,7 +222,7 @@ function Landing() {
   const activeSlide = HERO_SLIDES[heroImageIndex];
 
   const navLinks = [
-    { label: "Features", href: "#features" },
+    { label: "Courses", href: "#features" },
     { label: "How it works", href: "#how" },
     { label: "Pricing", href: "#pricing" },
     { label: "FAQ", href: "#faq" },
@@ -229,18 +242,7 @@ function Landing() {
         }
       `}</style>
 
-      <AnimatePresence>
-        {showSplash && (
-          <motion.div
-            key="splash"
-            exit={{ opacity: 0, scale: 1.06 }}
-            transition={{ duration: 0.6, ease: "easeInOut" }}
-            className="fixed inset-0 z-[100]"
-          >
-            <SplashVisual onSkip={() => setShowSplash(false)} />
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* splash removed */}
 
       {/* NAVBAR — flat before scroll, floating pill after scroll */}
       <div className="w-full sticky top-0 z-50">
@@ -253,21 +255,21 @@ function Landing() {
           transition={{ duration: 0.4, ease: "easeOut" }}
           style={{ pointerEvents: scrolled ? "none" : "auto", position: scrolled ? "absolute" : "relative" }}
         >
-          <div className="border-b border-border/70 bg-surface/85 backdrop-blur-xl">
+          <div className="border-b border-white/10" style={{backgroundColor:"#0E2A54"}}>
             <div className="mx-auto flex max-w-7xl items-center justify-between px-8 py-5">
-              <Link to="/" className="flex items-center gap-2.5">
-                <img src="/agricon_logo.png" alt="Agricon logo" className="h-14 w-auto" />
-              </Link>
+              <a href="/" className="flex items-center gap-2.5">
+                <img src="/PHOTO-2026-07-02-04-10-58.jpg" alt="DarlTech Academy" className="h-12 w-auto rounded-lg object-contain" />
+              </a>
               <nav className="hidden items-center gap-8 md:flex">
                 {navLinks.map((l) => (
-                  <a key={l.href} href={l.href} className="text-sm font-semibold text-foreground/70 hover:text-primary transition">{l.label}</a>
+                  <a key={l.href} href={l.href} className="text-sm font-semibold transition" style={{color:"rgba(255,255,255,0.85)"}} onMouseEnter={e=>(e.currentTarget.style.color="#ffffff")} onMouseLeave={e=>(e.currentTarget.style.color="rgba(255,255,255,0.85)")}>{l.label}</a>
                 ))}
               </nav>
               <div className="hidden items-center gap-3 md:flex">
-                <Link to="/app" className="text-sm font-semibold text-foreground/70 hover:text-primary">View prototype</Link>
-                <Link to="/signin" className="text-sm font-semibold text-foreground/70 hover:text-primary">Sign in</Link>
-                <a href="#download" className="inline-flex h-11 items-center gap-2 rounded-2xl gradient-primary px-5 text-sm font-bold text-primary-foreground shadow-glow">
-                  Download app <ArrowRight className="h-4 w-4" />
+                <a href="#features" className="text-sm font-semibold" style={{color:"rgba(255,255,255,0.85)"}}>View Courses</a>
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSdE5sqp_RKUwhzLQqhICRR1gR6HNJ8VJgjdH7ETmhQVeRdCNw/viewform?pli=1" target="_blank" rel="noopener noreferrer" className="text-sm font-semibold" style={{color:"rgba(255,255,255,0.85)"}}>Log In</a>
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSdE5sqp_RKUwhzLQqhICRR1gR6HNJ8VJgjdH7ETmhQVeRdCNw/viewform?pli=1" target="_blank" rel="noopener noreferrer" className="inline-flex h-11 items-center gap-2 rounded-2xl gradient-primary px-5 text-sm font-bold text-primary-foreground shadow-glow">
+                  Get Started <ArrowRight className="h-4 w-4" />
                 </a>
               </div>
               <button className="md:hidden" onClick={() => setMenuOpen(!menuOpen)}>
@@ -280,8 +282,8 @@ function Landing() {
                   {navLinks.map((l) => (
                     <a key={l.href} href={l.href} onClick={() => setMenuOpen(false)} className="block rounded-xl px-4 py-3 text-sm font-semibold hover:bg-secondary">{l.label}</a>
                   ))}
-                  <Link to="/signin" className="block rounded-xl px-4 py-3 text-sm font-semibold text-primary">Sign in →</Link>
-                  <Link to="/app" className="block rounded-xl px-4 py-3 text-sm font-semibold text-primary">View prototype →</Link>
+                  <a href="https://docs.google.com/forms/d/e/1FAIpQLSdE5sqp_RKUwhzLQqhICRR1gR6HNJ8VJgjdH7ETmhQVeRdCNw/viewform?pli=1" target="_blank" rel="noopener noreferrer" className="block rounded-xl px-4 py-3 text-sm font-semibold" style={{color:"#EF4136"}}>Get Started →</a>
+                  <a href="#features" className="block rounded-xl px-4 py-3 text-sm font-semibold" style={{color:"#EF4136"}}>View Courses →</a>
                 </div>
               </div>
             )}
@@ -300,9 +302,9 @@ function Landing() {
             className="w-full max-w-6xl flex items-center justify-between gap-3 rounded-full border py-3 px-5 shadow-xl"
             style={{ backgroundColor: CREAM, borderColor: "rgba(0,0,0,0.06)" }}
           >
-            <Link to="/" className="flex items-center gap-2 shrink-0 select-none">
-              <img src="/agricon_logo.png" alt="Agricon logo" className="h-12 w-auto" />
-            </Link>
+            <a href="/" className="flex items-center gap-2 shrink-0 select-none">
+              <img src="/PHOTO-2026-07-02-04-10-58.jpg" alt="DarlTech Academy" className="h-10 w-auto rounded-lg object-contain" />
+            </a>
 
             {/* Center link pill */}
             <div
@@ -337,15 +339,17 @@ function Landing() {
             </div>
 
             <div className="flex items-center gap-2">
-              <Link
-                to="/signin"
+              <a
+                href="https://docs.google.com/forms/d/e/1FAIpQLSdE5sqp_RKUwhzLQqhICRR1gR6HNJ8VJgjdH7ETmhQVeRdCNw/viewform?pli=1"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="hidden sm:inline-flex items-center rounded-full px-5 py-2.5 text-sm font-semibold text-white transition-all duration-200 ease-out hover:-translate-y-0.5"
-                style={{ backgroundColor: GREEN, boxShadow: "0 2px 10px rgba(27,67,50,0.25)" }}
+                style={{ backgroundColor: GREEN, boxShadow: "0 2px 10px rgba(239,65,54,0.3)" }}
                 onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = GREEN_DARK)}
                 onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = GREEN)}
               >
-                Sign in
-              </Link>
+                Get Started
+              </a>
               <button
                 type="button"
                 onClick={() => setMenuOpen((v) => !v)}
@@ -385,14 +389,16 @@ function Landing() {
                         {link.label}
                       </motion.a>
                     ))}
-                    <Link
-                      to="/signin"
+                    <a
+                      href="https://docs.google.com/forms/d/e/1FAIpQLSdE5sqp_RKUwhzLQqhICRR1gR6HNJ8VJgjdH7ETmhQVeRdCNw/viewform?pli=1"
+                      target="_blank"
+                      rel="noopener noreferrer"
                       onClick={() => setMenuOpen(false)}
                       className="mt-2 text-center rounded-full px-5 py-3 text-sm font-semibold text-white"
                       style={{ backgroundColor: GREEN }}
                     >
-                      Sign in
-                    </Link>
+                      Get Started
+                    </a>
                   </div>
                 </div>
               </motion.div>
@@ -411,9 +417,9 @@ function Landing() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: "easeOut" }}
           >
-            <span className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary-soft px-3 py-1.5 text-xs font-bold text-primary">
-              <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
-              Now live · 12,000+ verified farmers
+            <span className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-3 py-1.5 text-xs font-bold text-white">
+              <span className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" />
+              🎓 Now live · Nigeria's Leading Tech Academy
             </span>
             <AnimatePresence mode="wait">
               <motion.h1
@@ -422,7 +428,7 @@ function Landing() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.45, ease: "easeOut" }}
-                className="mt-6 text-5xl font-black leading-[1.05] tracking-tight text-forest md:text-6xl lg:text-7xl"
+                className="mt-6 text-5xl font-black leading-[1.05] tracking-tight text-white md:text-6xl lg:text-7xl"
               >
                 {activeSlide.heading}
               </motion.h1>
@@ -434,39 +440,39 @@ function Landing() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -16 }}
                 transition={{ duration: 0.45, ease: "easeOut", delay: 0.08 }}
-                className="mt-6 max-w-xl text-lg leading-relaxed text-foreground/70"
+                className="mt-6 max-w-xl text-lg leading-relaxed text-white/80"
               >
                 {activeSlide.subheading}
               </motion.p>
             </AnimatePresence>
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <a href="#download" className="inline-flex h-13 min-h-[52px] items-center gap-2 rounded-2xl gradient-primary px-6 text-sm font-bold text-primary-foreground shadow-glow">
-                Get the app <ArrowRight className="h-4 w-4" />
+              <a href="#features" className="inline-flex h-13 min-h-[52px] items-center gap-2 rounded-2xl gradient-primary px-6 text-sm font-bold text-primary-foreground shadow-glow">
+                Browse Courses <ArrowRight className="h-4 w-4" />
               </a>
-              <Link to="/splash" className="inline-flex h-13 min-h-[52px] items-center gap-2 rounded-2xl border-2 border-forest bg-card px-6 text-sm font-bold text-forest hover:bg-secondary">
-                Get started <ArrowRight className="h-4 w-4" />
-              </Link>
+              <a href="#scholarship" className="inline-flex h-13 min-h-[52px] items-center gap-2 rounded-2xl border-2 border-white bg-transparent px-6 text-sm font-bold text-white hover:bg-white/10">
+                Apply for Scholarship <ArrowRight className="h-4 w-4" />
+              </a>
             </div>
-            <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4 text-xs text-muted-foreground">
-              <div className="flex items-center gap-2"><ShieldCheck className="h-4 w-4 text-primary" /> KYC-verified farmers</div>
-              <div className="flex items-center gap-2"><Sparkles className="h-4 w-4 text-primary" /> Zero listing fees</div>
-              <div className="flex items-center gap-2"><MessageCircle className="h-4 w-4 text-primary" /> In-app secure chat</div>
+            <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4 text-xs text-white/75">
+              <div className="flex items-center gap-2"><ShieldCheck className="h-4 w-4 text-primary" /> 10+ Tech Courses</div>
+              <div className="flex items-center gap-2"><Sparkles className="h-4 w-4 text-primary" /> Industry Certificates</div>
+              <div className="flex items-center gap-2"><MessageCircle className="h-4 w-4 text-primary" /> Expert Instructors</div>
             </div>
 
             <div className="mt-10 flex items-center gap-6">
               <div className="flex -space-x-3">
                 {["#c98a1a", "#2f7d3a", "#8b5a2b", "#1f6b5e"].map((c, i) => (
                   <div key={i} className="grid h-10 w-10 place-items-center rounded-full ring-4 ring-surface text-xs font-bold text-white" style={{ background: c }}>
-                    {["AK", "FB", "CO", "MI"][i]}
+                    {["AD", "FA", "CK", "MI"][i]}
                   </div>
                 ))}
               </div>
               <div>
                 <div className="flex items-center gap-1">
                   {[1,2,3,4,5].map((i) => <Star key={i} className="h-3.5 w-3.5 fill-gold text-gold" />)}
-                  <span className="ml-1 text-sm font-bold text-foreground">4.9</span>
+                  <span className="ml-1 text-sm font-bold text-white">4.9</span>
                 </div>
-                <p className="text-xs text-muted-foreground">from 2,400+ reviews across NG</p>
+                <p className="text-xs text-white/70">from 1,800+ student reviews</p>
               </div>
             </div>
           </motion.div>
@@ -479,16 +485,32 @@ function Landing() {
           >
             <div className="relative z-10">
               <AnimatePresence mode="wait">
-                <motion.img
-                  key={activeSlide.image}
-                  src={activeSlide.image}
-                  alt="Verified farmer holding fresh produce"
-                  className="h-auto max-h-[850px] w-full max-w-3xl object-contain drop-shadow-2xl"
-                  initial={{ opacity: 0, scale: 0.96, x: 30 }}
-                  animate={{ opacity: 1, scale: 1, x: 0 }}
-                  exit={{ opacity: 0, scale: 0.96, x: -30 }}
-                  transition={{ duration: 0.6, ease: "easeInOut" }}
-                />
+                {activeSlide.type === "video" ? (
+                  <motion.video
+                    key={activeSlide.video}
+                    src={activeSlide.video}
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    className="h-auto max-h-[850px] w-full max-w-3xl object-contain drop-shadow-2xl rounded-3xl"
+                    initial={{ opacity: 0, scale: 0.96, x: 30 }}
+                    animate={{ opacity: 1, scale: 1, x: 0 }}
+                    exit={{ opacity: 0, scale: 0.96, x: -30 }}
+                    transition={{ duration: 0.6, ease: "easeInOut" }}
+                  />
+                ) : (
+                  <motion.img
+                    key={activeSlide.image}
+                    src={activeSlide.image}
+                    alt="DarlTech Academy student portal screens"
+                    className="h-auto max-h-[850px] w-full max-w-3xl object-contain drop-shadow-2xl"
+                    initial={{ opacity: 0, scale: 0.96, x: 30 }}
+                    animate={{ opacity: 1, scale: 1, x: 0 }}
+                    exit={{ opacity: 0, scale: 0.96, x: -30 }}
+                    transition={{ duration: 0.6, ease: "easeInOut" }}
+                  />
+                )}
               </AnimatePresence>
             </div>
           </motion.div>
@@ -497,10 +519,10 @@ function Landing() {
 
       {/* Trust / logo strip — auto-scrolling marquee */}
       <section className="border-y border-border bg-card py-8">
-        <p className="text-center text-xs font-bold uppercase tracking-widest text-muted-foreground">Trusted by farms and distributors across all 36 states</p>
+        <p className="text-center text-xs font-bold uppercase tracking-widest text-muted-foreground">Our graduates work at top companies across Nigeria</p>
         <div className="mt-6">
           <Marquee
-            items={["Sahel Grains", "Green Delta", "Kolawole Farms", "Northern Harvest", "Cross River Cocoa", "Ogun Estates", "Ogun Poultry Estate", "Kaduna Tomato Union", "Enugu Cassava Growers", "Jos Plateau Produce"]}
+            items={["Google", "Microsoft", "Andela", "Paystack", "Flutterwave", "Kuda Bank", "Access Bank", "MTN Nigeria", "Jumia", "Sterling Bank"]}
             direction="left"
             speed={32}
             renderItem={(n) => (
@@ -514,17 +536,17 @@ function Landing() {
       <section id="features" className="mx-auto max-w-7xl px-6 py-24">
         <div className="mx-auto max-w-2xl text-center">
           <p className="text-xs font-bold uppercase tracking-widest text-primary">Features</p>
-          <h2 className="mt-3 text-4xl font-black tracking-tight text-forest md:text-5xl">Built for the way Nigeria farms and trades</h2>
-          <p className="mt-4 text-lg text-muted-foreground">Every feature is designed around trust, speed, and clarity — from verification to conversation to closing the deal.</p>
+          <h2 className="mt-3 text-4xl font-black tracking-tight text-forest md:text-5xl">Why Choose DarlTech Academy?</h2>
+          <p className="mt-4 text-lg text-muted-foreground">Every feature is designed around your success — from enrollment to certification.</p>
         </div>
         <div className="mt-14 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {[
-            { icon: <ShieldCheck className="h-6 w-6" />, title: "Verified farms only", body: "Every farm undergoes KYC, land-title checks, and photo verification. Trade with total confidence." },
-            { icon: <Search className="h-6 w-6" />, title: "Smart discovery", body: "Filter by crop, location, season, and rating. Find exactly what you need in seconds." },
-            { icon: <MessageCircle className="h-6 w-6" />, title: "Secure in-app chat", body: "Message farmers directly. Share photos, negotiate quantities, arrange delivery — all in one thread." },
-            { icon: <TrendingUp className="h-6 w-6" />, title: "Seasonal insights", body: "Real harvest timelines help you plan sourcing months ahead and lock in the best pricing." },
-            { icon: <MapPin className="h-6 w-6" />, title: "Farm location maps", body: "See every farm on a map with GPS coordinates, size, and directions." },
-            { icon: <BarChart3 className="h-6 w-6" />, title: "Analytics dashboards", body: "Track listings, inquiries, response rates, and top-performing crops with beautiful charts." },
+            { icon: <ShieldCheck className="h-6 w-6" />, title: "Expert Instructors", body: "Learn directly from industry practitioners with real-world experience in their field." },
+            { icon: <Search className="h-6 w-6" />, title: "Structured Curriculum", body: "Every course follows a focused, module-by-module structure designed to take you from zero to job-ready." },
+            { icon: <MessageCircle className="h-6 w-6" />, title: "Industry Certificates", body: "Earn a recognized DarlTech Academy certificate upon completion — downloadable and shareable on LinkedIn." },
+            { icon: <TrendingUp className="h-6 w-6" />, title: "Progress Dashboard", body: "Track your completion, upcoming deadlines, and quiz scores all from one clean student dashboard." },
+            { icon: <MapPin className="h-6 w-6" />, title: "Discussion Threads", body: "Ask questions, share ideas, and collaborate with fellow students through in-course discussion boards." },
+            { icon: <BarChart3 className="h-6 w-6" />, title: "Scholarship Program", body: "Apply for financial aid on any course. Pay a ₦30,000 acceptance fee and let our team review your application." },
           ].map((f, i) => (
             <motion.div
               key={f.title}
@@ -550,13 +572,13 @@ function Landing() {
           <div className="grid gap-16 lg:grid-cols-[1fr_1.2fr] lg:items-center">
             <div>
               <p className="text-xs font-bold uppercase tracking-widest text-gold">How it works</p>
-              <h2 className="mt-3 text-4xl font-black tracking-tight md:text-5xl">Three simple steps to start trading</h2>
-              <p className="mt-4 text-lg text-forest-foreground/70">Whether you're a farmer listing produce or a distributor sourcing, Agricon gets you started in minutes.</p>
+              <h2 className="mt-3 text-4xl font-black tracking-tight md:text-5xl">Three simple steps to start learning</h2>
+              <p className="mt-4 text-lg text-forest-foreground/70">Whether you're a complete beginner or upskilling, DarlTech gets you started in minutes.</p>
               <div className="mt-10 space-y-6">
                 {[
-                  { n: "01", title: "Verify your identity", body: "Upload your ID and farm documents. Our team reviews and approves within 24-48 hours." },
-                  { n: "02", title: "Set up your profile", body: "Add photos, describe your farm or business, and select the crops you produce or source." },
-                  { n: "03", title: "Discover and connect", body: "Browse verified partners, message directly, request quotes, and close deals — all in the app." },
+                  { n: "01", title: "Create your account", body: "Sign up as a student in under 2 minutes. Choose your role and set up your profile." },
+                  { n: "02", title: "Enroll in a course", body: "Browse 10 in-demand tech programs. Pay your course fee and gain instant access to all materials." },
+                  { n: "03", title: "Learn, complete & get certified", body: "Watch lessons, take quizzes, submit assignments, and download your certificate when done." },
                 ].map((s, i) => (
                   <motion.div
                     key={s.n}
@@ -585,8 +607,8 @@ function Landing() {
                 className="relative z-10"
               >
                 <img 
-                  src="/ChatGPT_Image_Jul_2__2026__09_53_57_AM-removebg-preview.png" 
-                  alt="Agricon app interface showing user verification and profile setup"
+                  src="/ChatGPT_Image_Jul_9__2026__02_26_53_PM-removebg-preview.png" 
+                  alt="DarlTech Academy student portal on mobile"
                   className="h-auto max-h-[1200px] w-full max-w-full object-contain drop-shadow-2xl"
                 />
               </motion.div>
@@ -599,14 +621,14 @@ function Landing() {
       <section id="screenshots" className="mx-auto max-w-7xl px-6 py-24">
         <div className="mx-auto max-w-2xl text-center">
           <p className="text-xs font-bold uppercase tracking-widest text-primary">Screenshots</p>
-          <h2 className="mt-3 text-4xl font-black tracking-tight text-forest md:text-5xl">A closer look at every screen</h2>
-          <p className="mt-4 text-lg text-muted-foreground">Every screen is designed with the same attention to spacing, color, and hierarchy. Explore 50 pixel-perfect designs.</p>
+          <h2 className="mt-3 text-4xl font-black tracking-tight text-forest md:text-5xl">A closer look at your student portal</h2>
+          <p className="mt-4 text-lg text-muted-foreground">Every screen is designed with clarity and ease of use in mind. Explore the full learning experience.</p>
         </div>
         <ScreenshotMarquee />
         <div className="mt-10 text-center">
-          <Link to="/app" className="inline-flex items-center gap-2 rounded-2xl border-2 border-forest bg-card px-6 py-3 text-sm font-bold text-forest hover:bg-secondary">
-            View all 50 screens <ArrowRight className="h-4 w-4" />
-          </Link>
+          <a href="#features" className="inline-flex items-center gap-2 rounded-2xl border-2 border-forest bg-card px-6 py-3 text-sm font-bold text-forest hover:bg-secondary">
+            Explore the Portal <ArrowRight className="h-4 w-4" />
+          </a>
         </div>
       </section>
 
@@ -615,13 +637,13 @@ function Landing() {
         <div className="mx-auto max-w-7xl px-6 py-24">
           <div className="mx-auto max-w-2xl text-center">
             <p className="text-xs font-bold uppercase tracking-widest text-primary">Testimonials</p>
-            <h2 className="mt-3 text-4xl font-black tracking-tight text-forest md:text-5xl">Loved by farmers and distributors</h2>
+            <h2 className="mt-3 text-4xl font-black tracking-tight text-forest md:text-5xl">Loved by students across Nigeria</h2>
           </div>
           <div className="mt-12 grid gap-6 md:grid-cols-3">
             {[
-              { name: "Adekunle Kolawole", role: "Cassava farmer · Oyo State", text: "Since joining Agricon, we've tripled our distributor network. The verification badge alone changed how buyers see us.", init: "AK", color: "#2f7d3a" },
-              { name: "Fatima Bello", role: "Grains farmer · Kano State", text: "The chat feature makes negotiations painless. I close deals with distributors in Lagos without ever leaving my farm.", init: "FB", color: "#c98a1a" },
-              { name: "Emeka Nwosu", role: "Distributor · Lagos", text: "Sourcing used to take weeks of calls. Now I find verified farms, chat, and get quotes in under an hour. Game-changing.", init: "EN", color: "#1f6b5e" },
+              { name: "Adebayo Okafor", role: "Frontend Developer · Lagos", text: "DarlTech Academy completely changed my career. I went from zero coding knowledge to landing a frontend dev role in 8 months.", init: "AO", color: "#0E2A54" },
+              { name: "Fatima Aliyu", role: "Data Analyst · Abuja", text: "The Data Analysis course was incredibly well-structured. The instructors are knowledgeable and the dashboard made tracking my progress so easy.", init: "FA", color: "#EF4136" },
+              { name: "Chukwuemeka Nwosu", role: "UI/UX Designer · Port Harcourt", text: "I applied for the scholarship and got in. DarlTech believed in me when I couldn't afford the full fee. Now I'm working at a top design agency.", init: "CN", color: "#1a3d72" },
             ].map((t, i) => (
               <motion.div
                 key={t.name}
@@ -655,13 +677,13 @@ function Landing() {
         <div className="mx-auto max-w-2xl text-center">
           <p className="text-xs font-bold uppercase tracking-widest text-primary">Pricing</p>
           <h2 className="mt-3 text-4xl font-black tracking-tight text-forest md:text-5xl">Simple, transparent pricing</h2>
-          <p className="mt-4 text-lg text-muted-foreground">Start free. Upgrade when you're ready to grow.</p>
+          <p className="mt-4 text-lg text-muted-foreground">Enroll in one course or apply for a scholarship. No hidden fees.</p>
         </div>
         <div className="mt-14 grid gap-6 md:grid-cols-3">
           {[
-            { name: "Starter", price: "Free", body: "Perfect for new farmers just getting started.", features: ["Up to 3 crop listings", "Verified farm badge", "In-app chat", "Basic analytics"], cta: "Get started free", highlight: false },
-            { name: "Grower", price: "₦4,500", period: "/month", body: "For active farmers building a real business.", features: ["Unlimited listings", "Priority in search", "Advanced analytics", "Harvest timeline tools", "Featured farm badge"], cta: "Start free trial", highlight: true },
-            { name: "Enterprise", price: "Custom", body: "For distributors, co-ops, and processors.", features: ["Everything in Grower", "Multi-farm management", "Team accounts", "Dedicated account manager", "API access"], cta: "Contact sales", highlight: false },
+            { name: "Short Courses", price: "₦150,000", period: "–₦250,000", body: "Perfect for focused skill-building.", features: ["AI Automation (3 months)", "UI/UX Design (4 months)", "Graphics Design (4 months)", "Course certificate", "Student portal access"], cta: "Enroll Now", highlight: false },
+            { name: "Full Programs", price: "₦300,000", period: "–₦800,000", body: "8-month deep-dive professional programs.", features: ["Data Analysis, Cybersecurity & more", "All 8-month courses", "Expert instructors", "Progress dashboard", "Industry certificate"], cta: "Browse Courses", highlight: true },
+            { name: "Scholarship", price: "₦30,000", period: " acceptance fee", body: "Apply for financial aid on any course.", features: ["Choose any course", "Submit eligibility details", "Admin review", "Enrolled if approved", "Full course access"], cta: "Apply Now", highlight: false },
           ].map((p, i) => (
             <motion.div
               key={p.name}
@@ -704,12 +726,12 @@ function Landing() {
           </div>
           <div className="mt-12 space-y-3">
             {[
-              { q: "How does farm verification work?", a: "We verify every farmer's identity via NIN or government ID, confirm land ownership through title documents or community letters, and require photos of the actual farm. Verification typically completes in 24-48 hours." },
-              { q: "Is Agricon free to use?", a: "Yes — our Starter plan is completely free and includes up to 3 listings, verified badge, and in-app chat. Upgrade to Grower or Enterprise when you're ready to scale." },
-              { q: "How do payments work?", a: "Payments happen directly between farmer and distributor via bank transfer or agreed method. We're rolling out Agricon Pay (escrow) in Q2 2026 for secure in-app settlements." },
-              { q: "Which crops are supported?", a: "All of them — grains, tubers, vegetables, fruits, legumes, cash crops, livestock, and poultry. If you grow or source it, you can list or find it on Agricon." },
-              { q: "Do I need a smartphone?", a: "Yes, Agricon is a mobile-first app. It works on any Android or iOS smartphone and uses very little data — designed to work well on 3G." },
-              { q: "How is Agricon different from other agri platforms?", a: "We're the only platform combining strict verification, in-app chat, harvest timelines, and Nigerian-first design. Every screen is built for how Nigerians actually farm and trade." },
+              { q: "How do I enroll in a course?", a: "Browse our course catalog, select your preferred course, create an account, and complete payment to gain immediate access to your learning portal." },
+              { q: "What is the scholarship program?", a: "Our scholarship program provides financial aid for eligible students. You apply for a specific course, pay a ₦30,000 acceptance fee to confirm your application, and our admin team reviews and approves or declines your application." },
+              { q: "Is the ₦30,000 acceptance fee refundable?", a: "This is currently an open question being finalized by the DarlTech Academy team. Contact us for the latest policy." },
+              { q: "What certificate do I get?", a: "Upon completing a course, you receive an industry-recognized DarlTech Academy completion certificate that you can download and share on LinkedIn." },
+              { q: "Can I learn at my own pace?", a: "Yes — all course content is accessible 24/7 through your student portal. Progress through lessons, quizzes, and assignments at your own schedule." },
+              { q: "How is DarlTech different from other platforms?", a: "We're the only platform combining structured Nigerian tech education, scholarship access, a real student portal with progress tracking, and industry-recognized certificates — all in one place." },
             ].map((f, i) => (
               <div key={i} className="overflow-hidden rounded-2xl border border-border bg-surface">
                 <button onClick={() => setOpenFaq(openFaq === i ? null : i)} className="flex w-full items-center justify-between gap-4 p-5 text-left">
@@ -729,12 +751,12 @@ function Landing() {
           <div>
             <p className="text-xs font-bold uppercase tracking-widest text-primary">Contact</p>
             <h2 className="mt-3 text-4xl font-black tracking-tight text-forest md:text-5xl">Talk to our team</h2>
-            <p className="mt-4 text-lg text-muted-foreground">Questions about pricing, partnerships, or how Agricon can help your co-op? We'd love to hear from you.</p>
+            <p className="mt-4 text-lg text-muted-foreground">Questions about courses, scholarships, or enrollment? We'd love to hear from you.</p>
             <div className="mt-8 space-y-4">
               {[
-                { icon: <Phone className="h-5 w-5" />, label: "Call us", value: "+234 (0)800 AGRICON" },
-                { icon: <Mail className="h-5 w-5" />, label: "Email", value: "hello@agricon.ng" },
-                { icon: <MapPin className="h-5 w-5" />, label: "Head office", value: "Plot 42, Adeola Odeku, Victoria Island, Lagos" },
+                { icon: <Phone className="h-5 w-5" />, label: "Call us", value: "+234 (0)800 DARLTECH" },
+                { icon: <Mail className="h-5 w-5" />, label: "Email", value: "hello@darltechacademy.com" },
+                { icon: <MapPin className="h-5 w-5" />, label: "Head office", value: "DarlTech Academy, Lagos, Nigeria" },
               ].map((c) => (
                 <div key={c.label} className="flex items-center gap-4">
                   <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-primary-soft text-primary">{c.icon}</div>
@@ -776,16 +798,16 @@ function Landing() {
         <div id="download" className="mt-24 overflow-hidden rounded-[36px] gradient-primary p-6 sm:p-10 md:p-16 text-primary-foreground shadow-glow">
           <div className="grid gap-8 md:gap-10 md:grid-cols-2 md:items-center">
             <div>
-              <h2 className="text-2xl font-black tracking-tight sm:text-3xl md:text-4xl">Get the app. Grow with Agricon.</h2>
-              <p className="mt-3 text-sm sm:text-base opacity-90">Download Agricon NG on iOS and Android. Join 12,000+ verified farmers and distributors trading with confidence.</p>
+              <h2 className="text-2xl font-black tracking-tight sm:text-3xl md:text-4xl">Get started. Learn with DarlTech Academy.</h2>
+              <p className="mt-3 text-sm sm:text-base opacity-90">Enroll in a course today and join thousands of students building careers in tech across Nigeria.</p>
               <div className="mt-6 flex flex-wrap gap-3">
-                <AppStoreBadge />
-                <GooglePlayBadge />
+                <a href="#features" className="inline-flex h-12 items-center gap-2 rounded-2xl border-2 border-white bg-white/10 px-6 text-sm font-bold text-white">Browse Courses <ArrowRight className="h-4 w-4" /></a>
+                <a href="#scholarship" className="inline-flex h-12 items-center gap-2 rounded-2xl border-2 border-white bg-white/10 px-6 text-sm font-bold text-white">Apply for Scholarship</a>
               </div>
             </div>
             <div className="rounded-3xl bg-white/10 p-4 sm:p-6 backdrop-blur-xl">
               <p className="text-sm font-bold">Subscribe to our newsletter</p>
-              <p className="mt-1 text-xs opacity-80">Monthly insights on Nigerian agriculture, seasonal produce, and product updates.</p>
+              <p className="mt-1 text-xs opacity-80">Monthly updates on new courses, scholarship openings, and career tips for Nigerian tech professionals.</p>
               <div className="mt-4 flex flex-col sm:flex-row gap-2">
                 <input className="h-12 flex-1 min-w-0 rounded-2xl bg-white/95 px-4 text-sm text-foreground outline-none" placeholder="your@email.com" />
                 <button className="h-12 shrink-0 rounded-2xl bg-gold px-5 text-sm font-bold text-gold-foreground">Subscribe</button>
@@ -802,9 +824,9 @@ function Landing() {
           <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-5">
             <div className="lg:col-span-2">
               <div className="flex items-center gap-2.5">
-                <img src="/agricon_logo.png" alt="Agricon logo" className="h-11 w-auto" />
+                <img src="/PHOTO-2026-07-02-04-10-58.jpg" alt="DarlTech Academy" className="h-14 w-auto rounded-lg object-contain" />
               </div>
-              <p className="mt-4 max-w-sm text-sm opacity-70">Nigeria's most trusted agricultural marketplace. Verified farmers, secure conversations, seamless sourcing.</p>
+              <p className="mt-4 max-w-sm text-sm opacity-70">Do Extraordinary Things. Nigeria's leading tech academy — expert instructors, structured courses, and industry-recognized certificates.</p>
               <div className="mt-6 flex gap-3">
                 {[Facebook, Twitter, Instagram, Linkedin, Youtube].map((Icon, i) => (
                   <a key={i} href="#" className="grid h-10 w-10 place-items-center rounded-xl bg-white/10 hover:bg-white/20">
@@ -813,17 +835,17 @@ function Landing() {
                 ))}
               </div>
               <div className="mt-6 flex flex-wrap gap-3">
-                <AppStoreBadge className="px-4 py-2" />
-                <GooglePlayBadge className="px-4 py-2" />
+                <a href="#features" className="inline-flex h-10 items-center gap-2 rounded-xl border border-white/30 bg-white/10 px-4 text-xs font-bold text-white">Browse Courses</a>
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSdE5sqp_RKUwhzLQqhICRR1gR6HNJ8VJgjdH7ETmhQVeRdCNw/viewform?pli=1" target="_blank" rel="noopener noreferrer" className="inline-flex h-10 items-center gap-2 rounded-xl bg-[#EF4136] px-4 text-xs font-bold text-white">Get Started</a>
               </div>
             </div>
             {[
-              { title: "Product", links: ["Features", "Pricing", "Roadmap", "Changelog"] },
-              { title: "Company", links: ["About us", "Careers", "Press", "Partners", "Blog"] },
-              { title: "Support", links: ["Help center", "Contact", "Community", "Status", "API docs"] },
+              { title: "Courses", links: ["Data Analysis", "Cybersecurity", "AI Automation", "Frontend/Backend Dev", "Python Development"] },
+              { title: "Academy", links: ["About us", "Scholarship", "Contact", "Blog"] },
+              { title: "Support", links: ["Help center", "FAQ", "Sign Up", "Log In"] },
             ].map((col) => (
               <div key={col.title}>
-                <h4 className="text-sm font-black uppercase tracking-wider text-gold">{col.title}</h4>
+                <h4 className="text-sm font-black uppercase tracking-wider" style={{color:"#EF4136"}}>{col.title}</h4>
                 <ul className="mt-4 space-y-2">
                   {col.links.map((l) => (
                     <li key={l}><a href="#" className="text-sm opacity-70 hover:opacity-100">{l}</a></li>
@@ -833,7 +855,7 @@ function Landing() {
             ))}
           </div>
           <div className="mt-12 flex flex-wrap items-center justify-between gap-4 border-t border-white/10 pt-6 text-xs opacity-70">
-            <p>© 2026 Agricon NG Ltd. All rights reserved. Made with 💚 in Lagos.</p>
+            <p>© 2025 DarlTech Academy. All rights reserved. Made with ❤️ in Nigeria.</p>
             <div className="flex flex-wrap gap-x-6 gap-y-2">
               <a href="#" className="hover:opacity-100">Privacy Policy</a>
               <a href="#" className="hover:opacity-100">Terms of Service</a>

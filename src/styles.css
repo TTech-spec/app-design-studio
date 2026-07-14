@@ -83,51 +83,67 @@
 :root {
   --radius: 1rem;
 
-  /* Neutrals — light only, never black */
-  --background: oklch(0.99 0.005 120);
-  --foreground: oklch(0.22 0.02 240);
-  --surface: oklch(0.985 0.006 120);
-  --surface-2: oklch(0.97 0.008 120);
+  /* DarlTech Academy — Navy / Red / White */
+  --background: #ffffff;
+  --foreground: #0E2A54;
+  --surface: #f7f8fc;
+  --surface-2: #eef1f8;
 
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.22 0.02 240);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.22 0.02 240);
+  --card: #ffffff;
+  --card-foreground: #0E2A54;
+  --popover: #ffffff;
+  --popover-foreground: #0E2A54;
 
-  /* Agricon Green — inspired by OPay but unique, warmer, more organic */
-  --primary: oklch(0.62 0.17 152);
-  --primary-foreground: oklch(0.99 0.005 120);
-  --primary-soft: oklch(0.95 0.04 152);
+  /* Navy — primary brand colour */
+  --primary: #0E2A54;
+  --primary-foreground: #ffffff;
+  --primary-soft: #e8edf5;
 
-  /* Forest Green — headers, important cards */
-  --forest: oklch(0.34 0.08 152);
-  --forest-foreground: oklch(0.99 0.005 120);
+  /* Re-use "forest" slot for the navy dark shade */
+  --forest: #0E2A54;
+  --forest-foreground: #ffffff;
 
-  /* Harvest Gold — warnings, harvest indicators, premium */
-  --gold: oklch(0.78 0.14 82);
-  --gold-foreground: oklch(0.28 0.05 82);
-  --gold-soft: oklch(0.96 0.05 82);
+  /* Red — CTA / accent */
+  --red: #EF4136;
+  --red-foreground: #ffffff;
+  --red-soft: #fdecea;
 
-  --secondary: oklch(0.96 0.008 152);
-  --secondary-foreground: oklch(0.28 0.04 152);
-  --muted: oklch(0.965 0.006 240);
-  --muted-foreground: oklch(0.5 0.02 240);
-  --accent: oklch(0.95 0.04 152);
-  --accent-foreground: oklch(0.34 0.08 152);
+  /* Gold slot repurposed → light navy tint (used in marquee tags etc.) */
+  --gold: #EF4136;
+  --gold-foreground: #ffffff;
+  --gold-soft: #fdecea;
 
-  --destructive: oklch(0.62 0.22 25);
-  --destructive-foreground: oklch(0.99 0 0);
-  --success: oklch(0.68 0.16 152);
-  --success-foreground: oklch(0.99 0 0);
-  --warning: oklch(0.78 0.14 82);
-  --info: oklch(0.62 0.14 240);
+  --secondary: #eef1f8;
+  --secondary-foreground: #0E2A54;
+  --muted: #f0f2f8;
+  --muted-foreground: #5a6a8a;
+  --accent: #e8edf5;
+  --accent-foreground: #0E2A54;
 
-  --border: oklch(0.92 0.008 240);
-  --input: oklch(0.94 0.008 240);
-  --ring: oklch(0.62 0.17 152);
+  --destructive: #EF4136;
+  --destructive-foreground: #ffffff;
+  --success: #16a34a;
+  --success-foreground: #ffffff;
+  --warning: #d97706;
+  --info: #0284c7;
+
+  --border: #dde3ef;
+  --input: #e8edf5;
+  --ring: #EF4136;
 }
 
-.dark {
-  --background: oklch(0.985 0.006 120);
-  --foreground: oklch(0.22 0.02 240);
+/* Utility classes for the DarlTech palette */
+.bg-navy   { background-color: #0E2A54; }
+.bg-red    { background-color: #EF4136; }
+.text-navy { color: #0E2A54; }
+.text-red  { color: #EF4136; }
+
+/* CTA gradient — solid red for DarlTech */
+.gradient-primary {
+  background: #EF4136;
+}
+
+/* Subtle navy-tinted mesh for hero backgrounds */
+.gradient-mesh {
+  background: linear-gradient(135deg, #0E2A54 0%, #1a3d72 60%, #0E2A54 100%);
 }

@@ -27,11 +27,11 @@ import { Route as PhotoGalleryRouteImport } from './routes/photo-gallery'
 import { Route as PersonalInfoRouteImport } from './routes/personal-info'
 import { Route as PasswordResetSuccessRouteImport } from './routes/password-reset-success'
 import { Route as OtpRouteImport } from './routes/otp'
-import { Route as NotificationsRouteImport } from './routes/notifications'
-import { Route as MessagesRouteImport } from './routes/messages'
 import { Route as Onboarding3RouteImport } from './routes/onboarding-3'
 import { Route as Onboarding2RouteImport } from './routes/onboarding-2'
 import { Route as Onboarding1RouteImport } from './routes/onboarding-1'
+import { Route as NotificationsRouteImport } from './routes/notifications'
+import { Route as MessagesRouteImport } from './routes/messages'
 import { Route as MarketplaceRouteImport } from './routes/marketplace'
 import { Route as LanguageRouteImport } from './routes/language'
 import { Route as IntroRouteImport } from './routes/intro'
@@ -152,16 +152,6 @@ const OtpRoute = OtpRouteImport.update({
   path: '/otp',
   getParentRoute: () => rootRouteImport,
 } as any)
-const NotificationsRoute = NotificationsRouteImport.update({
-  id: '/notifications',
-  path: '/notifications',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MessagesRoute = MessagesRouteImport.update({
-  id: '/messages',
-  path: '/messages',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const Onboarding3Route = Onboarding3RouteImport.update({
   id: '/onboarding-3',
   path: '/onboarding-3',
@@ -175,6 +165,16 @@ const Onboarding2Route = Onboarding2RouteImport.update({
 const Onboarding1Route = Onboarding1RouteImport.update({
   id: '/onboarding-1',
   path: '/onboarding-1',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NotificationsRoute = NotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MessagesRoute = MessagesRouteImport.update({
+  id: '/messages',
+  path: '/messages',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MarketplaceRoute = MarketplaceRouteImport.update({
@@ -834,20 +834,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OtpRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/notifications': {
-      id: '/notifications'
-      path: '/notifications'
-      fullPath: '/notifications'
-      preLoaderRoute: typeof NotificationsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/messages': {
-      id: '/messages'
-      path: '/messages'
-      fullPath: '/messages'
-      preLoaderRoute: typeof MessagesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/onboarding-3': {
       id: '/onboarding-3'
       path: '/onboarding-3'
@@ -867,6 +853,20 @@ declare module '@tanstack/react-router' {
       path: '/onboarding-1'
       fullPath: '/onboarding-1'
       preLoaderRoute: typeof Onboarding1RouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/notifications': {
+      id: '/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof NotificationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/messages': {
+      id: '/messages'
+      path: '/messages'
+      fullPath: '/messages'
+      preLoaderRoute: typeof MessagesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/marketplace': {
@@ -1132,3 +1132,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
