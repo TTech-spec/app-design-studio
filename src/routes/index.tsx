@@ -21,6 +21,8 @@ const fadeUp: Variants = {
   show: { opacity: 1, y: 0, transition: { duration: 0.55, ease: "easeOut" } },
 };
 
+const GOOGLE_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSdE5sqp_RKUwhzLQqhICRR1gR6HNJ8VJgjdH7ETmhQVeRdCNw/viewform?pli=1";
+
 const HERO_SLIDES = [
   {
     type: "image" as const,
@@ -68,8 +70,8 @@ const SCREENSHOT_IMAGES = [
   "/ChatGPT Image Jul 14, 2026, 07_21_16 AM.png",
   "/ChatGPT Image Jul 14, 2026, 07_25_47 AM.png",
   "/ChatGPT Image Jul 14, 2026, 07_29_52 AM.png",
-  "/ChatGPT_Image_Jul_9__2026__02_11_45_PM-removebg-preview.png",
-  "/ChatGPT_Image_Jul_9__2026__02_26_53_PM-removebg-preview.png",
+  "/ChatGPT Image Jul 20, 2026, 08_09_10 AM.png",
+  "/ChatGPT Image Jul 20, 2026, 03_22_23 PM.png",
   "/ChatGPT Image Jul 14, 2026, 07_21_16 AM.png",
   "/ChatGPT Image Jul 14, 2026, 07_25_47 AM.png",
   "/ChatGPT Image Jul 14, 2026, 07_29_52 AM.png",
@@ -267,8 +269,8 @@ function Landing() {
               </nav>
               <div className="hidden items-center gap-3 md:flex">
                 <a href="#features" className="text-sm font-semibold" style={{color:"rgba(255,255,255,0.85)"}}>View Courses</a>
-                <a href="https://docs.google.com/forms/d/e/1FAIpQLSdE5sqp_RKUwhzLQqhICRR1gR6HNJ8VJgjdH7ETmhQVeRdCNw/viewform?pli=1" target="_blank" rel="noopener noreferrer" className="text-sm font-semibold" style={{color:"rgba(255,255,255,0.85)"}}>Log In</a>
-                <a href="https://docs.google.com/forms/d/e/1FAIpQLSdE5sqp_RKUwhzLQqhICRR1gR6HNJ8VJgjdH7ETmhQVeRdCNw/viewform?pli=1" target="_blank" rel="noopener noreferrer" className="inline-flex h-11 items-center gap-2 rounded-2xl gradient-primary px-5 text-sm font-bold text-primary-foreground shadow-glow">
+                <a href={GOOGLE_FORM_URL} target="_blank" rel="noopener noreferrer" className="text-sm font-semibold" style={{color:"rgba(255,255,255,0.85)"}}>Log In</a>
+                <a href={GOOGLE_FORM_URL} target="_blank" rel="noopener noreferrer" className="inline-flex h-11 items-center gap-2 rounded-2xl gradient-primary px-5 text-sm font-bold text-primary-foreground shadow-glow">
                   Get Started <ArrowRight className="h-4 w-4" />
                 </a>
               </div>
@@ -282,7 +284,7 @@ function Landing() {
                   {navLinks.map((l) => (
                     <a key={l.href} href={l.href} onClick={() => setMenuOpen(false)} className="block rounded-xl px-4 py-3 text-sm font-semibold hover:bg-secondary">{l.label}</a>
                   ))}
-                  <a href="https://docs.google.com/forms/d/e/1FAIpQLSdE5sqp_RKUwhzLQqhICRR1gR6HNJ8VJgjdH7ETmhQVeRdCNw/viewform?pli=1" target="_blank" rel="noopener noreferrer" className="block rounded-xl px-4 py-3 text-sm font-semibold" style={{color:"#EF4136"}}>Get Started →</a>
+                  <a href={GOOGLE_FORM_URL} target="_blank" rel="noopener noreferrer" className="block rounded-xl px-4 py-3 text-sm font-semibold" style={{color:"#EF4136"}}>Get Started →</a>
                   <a href="#features" className="block rounded-xl px-4 py-3 text-sm font-semibold" style={{color:"#EF4136"}}>View Courses →</a>
                 </div>
               </div>
@@ -340,7 +342,7 @@ function Landing() {
 
             <div className="flex items-center gap-2">
               <a
-                href="https://docs.google.com/forms/d/e/1FAIpQLSdE5sqp_RKUwhzLQqhICRR1gR6HNJ8VJgjdH7ETmhQVeRdCNw/viewform?pli=1"
+                href={GOOGLE_FORM_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hidden sm:inline-flex items-center rounded-full px-5 py-2.5 text-sm font-semibold text-white transition-all duration-200 ease-out hover:-translate-y-0.5"
@@ -390,7 +392,7 @@ function Landing() {
                       </motion.a>
                     ))}
                     <a
-                      href="https://docs.google.com/forms/d/e/1FAIpQLSdE5sqp_RKUwhzLQqhICRR1gR6HNJ8VJgjdH7ETmhQVeRdCNw/viewform?pli=1"
+                      href={GOOGLE_FORM_URL}
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={() => setMenuOpen(false)}
@@ -446,10 +448,10 @@ function Landing() {
               </motion.p>
             </AnimatePresence>
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <a href="#features" className="inline-flex h-13 min-h-[52px] items-center gap-2 rounded-2xl gradient-primary px-6 text-sm font-bold text-primary-foreground shadow-glow">
+              <a href={GOOGLE_FORM_URL} target="_blank" rel="noopener noreferrer" className="inline-flex h-13 min-h-[52px] items-center gap-2 rounded-2xl gradient-primary px-6 text-sm font-bold text-primary-foreground shadow-glow">
                 Browse Courses <ArrowRight className="h-4 w-4" />
               </a>
-              <a href="#scholarship" className="inline-flex h-13 min-h-[52px] items-center gap-2 rounded-2xl border-2 border-white bg-transparent px-6 text-sm font-bold text-white hover:bg-white/10">
+              <a href={GOOGLE_FORM_URL} target="_blank" rel="noopener noreferrer" className="inline-flex h-13 min-h-[52px] items-center gap-2 rounded-2xl border-2 border-white bg-transparent px-6 text-sm font-bold text-white hover:bg-white/10">
                 Apply for Scholarship <ArrowRight className="h-4 w-4" />
               </a>
             </div>
@@ -626,7 +628,7 @@ function Landing() {
         </div>
         <ScreenshotMarquee />
         <div className="mt-10 text-center">
-          <a href="#features" className="inline-flex items-center gap-2 rounded-2xl border-2 border-forest bg-card px-6 py-3 text-sm font-bold text-forest hover:bg-secondary">
+          <a href={GOOGLE_FORM_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-2xl border-2 border-forest bg-card px-6 py-3 text-sm font-bold text-forest hover:bg-secondary">
             Explore the Portal <ArrowRight className="h-4 w-4" />
           </a>
         </div>
@@ -709,9 +711,14 @@ function Landing() {
                   </li>
                 ))}
               </ul>
-              <button className={`mt-8 h-12 w-full rounded-2xl text-sm font-bold ${p.highlight ? "gradient-primary text-primary-foreground shadow-glow" : "border-2 border-forest text-forest hover:bg-secondary"}`}>
+              <a
+                href={GOOGLE_FORM_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`mt-8 flex h-12 w-full items-center justify-center rounded-2xl text-sm font-bold ${p.highlight ? "gradient-primary text-primary-foreground shadow-glow" : "border-2 border-forest text-forest hover:bg-secondary"}`}
+              >
                 {p.cta}
-              </button>
+              </a>
             </motion.div>
           ))}
         </div>
@@ -754,15 +761,19 @@ function Landing() {
             <p className="mt-4 text-lg text-muted-foreground">Questions about courses, scholarships, or enrollment? We'd love to hear from you.</p>
             <div className="mt-8 space-y-4">
               {[
-                { icon: <Phone className="h-5 w-5" />, label: "Call us", value: "+234 (0)800 DARLTECH" },
-                { icon: <Mail className="h-5 w-5" />, label: "Email", value: "hello@darltechacademy.com" },
+                { icon: <Phone className="h-5 w-5" />, label: "Call us", value: "+234 708 116 4457", href: "tel:+2347081164457" },
+                { icon: <Mail className="h-5 w-5" />, label: "Email", value: "darltechacademy@gmail.com", href: "mailto:darltechacademy@gmail.com" },
                 { icon: <MapPin className="h-5 w-5" />, label: "Head office", value: "DarlTech Academy, Lagos, Nigeria" },
               ].map((c) => (
                 <div key={c.label} className="flex items-center gap-4">
                   <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-primary-soft text-primary">{c.icon}</div>
                   <div>
                     <p className="text-xs uppercase tracking-wider text-muted-foreground">{c.label}</p>
-                    <p className="text-sm font-bold text-forest">{c.value}</p>
+                    {c.href ? (
+                      <a href={c.href} className="text-sm font-bold text-forest hover:text-primary">{c.value}</a>
+                    ) : (
+                      <p className="text-sm font-bold text-forest">{c.value}</p>
+                    )}
                   </div>
                 </div>
               ))}
@@ -789,7 +800,14 @@ function Landing() {
                 <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-muted-foreground">Message</label>
                 <textarea rows={4} className="w-full rounded-2xl border-2 border-border bg-surface p-4 text-sm outline-none focus:border-primary" placeholder="How can we help?" />
               </div>
-              <button type="button" className="h-13 min-h-[52px] w-full rounded-2xl gradient-primary text-sm font-bold text-primary-foreground shadow-glow">Send message</button>
+              <a
+                href={GOOGLE_FORM_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex h-13 min-h-[52px] w-full items-center justify-center rounded-2xl gradient-primary text-sm font-bold text-primary-foreground shadow-glow"
+              >
+                Send message
+              </a>
             </div>
           </form>
         </div>
@@ -801,8 +819,8 @@ function Landing() {
               <h2 className="text-2xl font-black tracking-tight sm:text-3xl md:text-4xl">Get started. Learn with DarlTech Academy.</h2>
               <p className="mt-3 text-sm sm:text-base opacity-90">Enroll in a course today and join thousands of students building careers in tech across Nigeria.</p>
               <div className="mt-6 flex flex-wrap gap-3">
-                <a href="#features" className="inline-flex h-12 items-center gap-2 rounded-2xl border-2 border-white bg-white/10 px-6 text-sm font-bold text-white">Browse Courses <ArrowRight className="h-4 w-4" /></a>
-                <a href="#scholarship" className="inline-flex h-12 items-center gap-2 rounded-2xl border-2 border-white bg-white/10 px-6 text-sm font-bold text-white">Apply for Scholarship</a>
+                <a href={GOOGLE_FORM_URL} target="_blank" rel="noopener noreferrer" className="inline-flex h-12 items-center gap-2 rounded-2xl border-2 border-white bg-white/10 px-6 text-sm font-bold text-white">Browse Courses <ArrowRight className="h-4 w-4" /></a>
+                <a href={GOOGLE_FORM_URL} target="_blank" rel="noopener noreferrer" className="inline-flex h-12 items-center gap-2 rounded-2xl border-2 border-white bg-white/10 px-6 text-sm font-bold text-white">Apply for Scholarship</a>
               </div>
             </div>
             <div className="rounded-3xl bg-white/10 p-4 sm:p-6 backdrop-blur-xl">
@@ -810,7 +828,7 @@ function Landing() {
               <p className="mt-1 text-xs opacity-80">Monthly updates on new courses, scholarship openings, and career tips for Nigerian tech professionals.</p>
               <div className="mt-4 flex flex-col sm:flex-row gap-2">
                 <input className="h-12 flex-1 min-w-0 rounded-2xl bg-white/95 px-4 text-sm text-foreground outline-none" placeholder="your@email.com" />
-                <button className="h-12 shrink-0 rounded-2xl bg-gold px-5 text-sm font-bold text-gold-foreground">Subscribe</button>
+                <a href={GOOGLE_FORM_URL} target="_blank" rel="noopener noreferrer" className="flex h-12 shrink-0 items-center justify-center rounded-2xl bg-gold px-5 text-sm font-bold text-gold-foreground">Subscribe</a>
               </div>
               <p className="mt-3 text-[11px] opacity-70">No spam. Unsubscribe anytime.</p>
             </div>
@@ -835,21 +853,35 @@ function Landing() {
                 ))}
               </div>
               <div className="mt-6 flex flex-wrap gap-3">
-                <a href="#features" className="inline-flex h-10 items-center gap-2 rounded-xl border border-white/30 bg-white/10 px-4 text-xs font-bold text-white">Browse Courses</a>
-                <a href="https://docs.google.com/forms/d/e/1FAIpQLSdE5sqp_RKUwhzLQqhICRR1gR6HNJ8VJgjdH7ETmhQVeRdCNw/viewform?pli=1" target="_blank" rel="noopener noreferrer" className="inline-flex h-10 items-center gap-2 rounded-xl bg-[#EF4136] px-4 text-xs font-bold text-white">Get Started</a>
+                <a href={GOOGLE_FORM_URL} target="_blank" rel="noopener noreferrer" className="inline-flex h-10 items-center gap-2 rounded-xl border border-white/30 bg-white/10 px-4 text-xs font-bold text-white">Browse Courses</a>
+                <a href={GOOGLE_FORM_URL} target="_blank" rel="noopener noreferrer" className="inline-flex h-10 items-center gap-2 rounded-xl bg-[#EF4136] px-4 text-xs font-bold text-white">Get Started</a>
               </div>
             </div>
             {[
               { title: "Courses", links: ["Data Analysis", "Cybersecurity", "AI Automation", "Frontend/Backend Dev", "Python Development"] },
-              { title: "Academy", links: ["About us", "Scholarship", "Contact", "Blog"] },
-              { title: "Support", links: ["Help center", "FAQ", "Sign Up", "Log In"] },
+              { title: "Academy", links: [{ label: "About us" }, { label: "Scholarship", href: GOOGLE_FORM_URL }, { label: "Contact", href: "#contact" }, { label: "Blog" }] },
+              { title: "Support", links: [{ label: "Help center" }, { label: "FAQ", href: "#faq" }, { label: "Sign Up", href: GOOGLE_FORM_URL }, { label: "Log In", href: GOOGLE_FORM_URL }] },
             ].map((col) => (
               <div key={col.title}>
                 <h4 className="text-sm font-black uppercase tracking-wider" style={{color:"#EF4136"}}>{col.title}</h4>
                 <ul className="mt-4 space-y-2">
-                  {col.links.map((l) => (
-                    <li key={l}><a href="#" className="text-sm opacity-70 hover:opacity-100">{l}</a></li>
-                  ))}
+                  {col.links.map((l) => {
+                    const label = typeof l === "string" ? l : l.label;
+                    const href = typeof l === "string" ? "#" : (l.href ?? "#");
+                    const external = href.startsWith("http");
+                    return (
+                      <li key={label}>
+                        <a
+                          href={href}
+                          target={external ? "_blank" : undefined}
+                          rel={external ? "noopener noreferrer" : undefined}
+                          className="text-sm opacity-70 hover:opacity-100"
+                        >
+                          {label}
+                        </a>
+                      </li>
+                    );
+                  })}
                 </ul>
               </div>
             ))}
