@@ -602,7 +602,7 @@ function DesktopCropDetails({
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 max-w-7xl mx-auto">
           <div className="col-span-1">
             <div className="text-xl font-bold text-primary mb-4">Agro-Farm Connect</div>
-            <p className="text-sm text-gray-600 mb-6">© 2024 Agro-Farm Connect. Cultivating transparency.</p>
+            <p className="text-sm text-gray-600 mb-6">© 2026 Agro-Farm Connect. Cultivating transparency.</p>
           </div>
           <div>
             <h4 className="font-bold text-primary mb-4">Resources</h4>

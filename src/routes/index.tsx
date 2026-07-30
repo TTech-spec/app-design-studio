@@ -887,7 +887,7 @@ function Landing() {
             ))}
           </div>
           <div className="mt-12 flex flex-wrap items-center justify-between gap-4 border-t border-white/10 pt-6 text-xs opacity-70">
-            <p>© 2025 DarlTech Academy. All rights reserved. Made with ❤️ in Nigeria.</p>
+            <p>© 2026 DarlTech Academy. All rights reserved. Made with ❤️ in Nigeria.</p>
             <div className="flex flex-wrap gap-x-6 gap-y-2">
               <a href="#" className="hover:opacity-100">Privacy Policy</a>
               <a href="#" className="hover:opacity-100">Terms of Service</a>
