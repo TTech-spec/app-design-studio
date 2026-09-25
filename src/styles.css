@@ -147,3 +147,21 @@
 .gradient-mesh {
   background: linear-gradient(135deg, #0E2A54 0%, #1a3d72 60%, #0E2A54 100%);
 }
+/* DarlTech app (sign-up, student and tutor portals) */
+.academy {
+  font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
+  color: #0e2a54;
+}
+.academy h1,
+.academy h2,
+.academy h3,
+.academy h4 {
+  font-family: "Plus Jakarta Sans", "Inter", ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: -0.02em;
+}
+.academy .no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.academy .no-scrollbar {
+  scrollbar-width: none;
+}

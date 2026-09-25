@@ -13,6 +13,9 @@ import { Route as WelcomeRouteImport } from './routes/welcome'
 import { Route as VerificationSubmittedRouteImport } from './routes/verification-submitted'
 import { Route as VerificationStatusRouteImport } from './routes/verification-status'
 import { Route as UserTypeRouteImport } from './routes/user-type'
+import { Route as TutorRouteImport } from './routes/tutor'
+import { Route as TourRouteImport } from './routes/tour'
+import { Route as StudentRouteImport } from './routes/student'
 import { Route as SplashRouteImport } from './routes/splash'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as SigninRouteImport } from './routes/signin'
@@ -33,6 +36,7 @@ import { Route as Onboarding1RouteImport } from './routes/onboarding-1'
 import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as MessagesRouteImport } from './routes/messages'
 import { Route as MarketplaceRouteImport } from './routes/marketplace'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as LanguageRouteImport } from './routes/language'
 import { Route as IntroRouteImport } from './routes/intro'
 import { Route as ImageViewerRouteImport } from './routes/image-viewer'
@@ -59,8 +63,31 @@ import { Route as BuyerProfileRouteImport } from './routes/buyer-profile'
 import { Route as BusinessInfoRouteImport } from './routes/business-info'
 import { Route as AddProductRouteImport } from './routes/add-product'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as TutorIndexRouteImport } from './routes/tutor.index'
+import { Route as StudentIndexRouteImport } from './routes/student.index'
+import { Route as JoinIndexRouteImport } from './routes/join.index'
 import { Route as AppIndexRouteImport } from './routes/app.index'
+import { Route as TutorProfileRouteImport } from './routes/tutor.profile'
+import { Route as TutorMessagesRouteImport } from './routes/tutor.messages'
+import { Route as TutorFeedRouteImport } from './routes/tutor.feed'
+import { Route as StudentStoreRouteImport } from './routes/student.store'
+import { Route as StudentSearchRouteImport } from './routes/student.search'
+import { Route as StudentQuizzesRouteImport } from './routes/student.quizzes'
+import { Route as StudentProfileRouteImport } from './routes/student.profile'
+import { Route as StudentMessagesRouteImport } from './routes/student.messages'
+import { Route as StudentFeedRouteImport } from './routes/student.feed'
+import { Route as StudentExploreRouteImport } from './routes/student.explore'
+import { Route as QuizQuizIdRouteImport } from './routes/quiz.$quizId'
+import { Route as QQuizIdRouteImport } from './routes/q.$quizId'
+import { Route as JoinTutorRouteImport } from './routes/join.tutor'
+import { Route as JoinStudentRouteImport } from './routes/join.student'
 import { Route as AppScreenRouteImport } from './routes/app.$screen'
+import { Route as TutorQuizzesIndexRouteImport } from './routes/tutor.quizzes.index'
+import { Route as TutorQuizzesNewRouteImport } from './routes/tutor.quizzes.new'
+import { Route as TutorQuizzesQuizIdRouteImport } from './routes/tutor.quizzes.$quizId'
+import { Route as StudentTutorsTutorIdRouteImport } from './routes/student.tutors.$tutorId'
+import { Route as StudentCoursesCourseIdRouteImport } from './routes/student.courses.$courseId'
+import { Route as StudentCheckoutCourseIdRouteImport } from './routes/student.checkout.$courseId'
 
 const WelcomeRoute = WelcomeRouteImport.update({
   id: '/welcome',
@@ -80,6 +107,21 @@ const VerificationStatusRoute = VerificationStatusRouteImport.update({
 const UserTypeRoute = UserTypeRouteImport.update({
   id: '/user-type',
   path: '/user-type',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TutorRoute = TutorRouteImport.update({
+  id: '/tutor',
+  path: '/tutor',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TourRoute = TourRouteImport.update({
+  id: '/tour',
+  path: '/tour',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StudentRoute = StudentRouteImport.update({
+  id: '/student',
+  path: '/student',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SplashRoute = SplashRouteImport.update({
@@ -180,6 +222,11 @@ const MessagesRoute = MessagesRouteImport.update({
 const MarketplaceRoute = MarketplaceRouteImport.update({
   id: '/marketplace',
   path: '/marketplace',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LanguageRoute = LanguageRouteImport.update({
@@ -312,15 +359,130 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TutorIndexRoute = TutorIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => TutorRoute,
+} as any)
+const StudentIndexRoute = StudentIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => StudentRoute,
+} as any)
+const JoinIndexRoute = JoinIndexRouteImport.update({
+  id: '/join/',
+  path: '/join/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AppIndexRoute = AppIndexRouteImport.update({
   id: '/app/',
   path: '/app/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TutorProfileRoute = TutorProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => TutorRoute,
+} as any)
+const TutorMessagesRoute = TutorMessagesRouteImport.update({
+  id: '/messages',
+  path: '/messages',
+  getParentRoute: () => TutorRoute,
+} as any)
+const TutorFeedRoute = TutorFeedRouteImport.update({
+  id: '/feed',
+  path: '/feed',
+  getParentRoute: () => TutorRoute,
+} as any)
+const StudentStoreRoute = StudentStoreRouteImport.update({
+  id: '/store',
+  path: '/store',
+  getParentRoute: () => StudentRoute,
+} as any)
+const StudentSearchRoute = StudentSearchRouteImport.update({
+  id: '/search',
+  path: '/search',
+  getParentRoute: () => StudentRoute,
+} as any)
+const StudentQuizzesRoute = StudentQuizzesRouteImport.update({
+  id: '/quizzes',
+  path: '/quizzes',
+  getParentRoute: () => StudentRoute,
+} as any)
+const StudentProfileRoute = StudentProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => StudentRoute,
+} as any)
+const StudentMessagesRoute = StudentMessagesRouteImport.update({
+  id: '/messages',
+  path: '/messages',
+  getParentRoute: () => StudentRoute,
+} as any)
+const StudentFeedRoute = StudentFeedRouteImport.update({
+  id: '/feed',
+  path: '/feed',
+  getParentRoute: () => StudentRoute,
+} as any)
+const StudentExploreRoute = StudentExploreRouteImport.update({
+  id: '/explore',
+  path: '/explore',
+  getParentRoute: () => StudentRoute,
+} as any)
+const QuizQuizIdRoute = QuizQuizIdRouteImport.update({
+  id: '/quiz/$quizId',
+  path: '/quiz/$quizId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QQuizIdRoute = QQuizIdRouteImport.update({
+  id: '/q/$quizId',
+  path: '/q/$quizId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JoinTutorRoute = JoinTutorRouteImport.update({
+  id: '/join/tutor',
+  path: '/join/tutor',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JoinStudentRoute = JoinStudentRouteImport.update({
+  id: '/join/student',
+  path: '/join/student',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AppScreenRoute = AppScreenRouteImport.update({
   id: '/app/$screen',
   path: '/app/$screen',
   getParentRoute: () => rootRouteImport,
+} as any)
+const TutorQuizzesIndexRoute = TutorQuizzesIndexRouteImport.update({
+  id: '/quizzes/',
+  path: '/quizzes/',
+  getParentRoute: () => TutorRoute,
+} as any)
+const TutorQuizzesNewRoute = TutorQuizzesNewRouteImport.update({
+  id: '/quizzes/new',
+  path: '/quizzes/new',
+  getParentRoute: () => TutorRoute,
+} as any)
+const TutorQuizzesQuizIdRoute = TutorQuizzesQuizIdRouteImport.update({
+  id: '/quizzes/$quizId',
+  path: '/quizzes/$quizId',
+  getParentRoute: () => TutorRoute,
+} as any)
+const StudentTutorsTutorIdRoute = StudentTutorsTutorIdRouteImport.update({
+  id: '/tutors/$tutorId',
+  path: '/tutors/$tutorId',
+  getParentRoute: () => StudentRoute,
+} as any)
+const StudentCoursesCourseIdRoute = StudentCoursesCourseIdRouteImport.update({
+  id: '/courses/$courseId',
+  path: '/courses/$courseId',
+  getParentRoute: () => StudentRoute,
+} as any)
+const StudentCheckoutCourseIdRoute = StudentCheckoutCourseIdRouteImport.update({
+  id: '/checkout/$courseId',
+  path: '/checkout/$courseId',
+  getParentRoute: () => StudentRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -350,6 +512,7 @@ export interface FileRoutesByFullPath {
   '/image-viewer': typeof ImageViewerRoute
   '/intro': typeof IntroRoute
   '/language': typeof LanguageRoute
+  '/login': typeof LoginRoute
   '/marketplace': typeof MarketplaceRoute
   '/messages': typeof MessagesRoute
   '/notifications': typeof NotificationsRoute
@@ -370,12 +533,38 @@ export interface FileRoutesByFullPath {
   '/signin': typeof SigninRoute
   '/signup': typeof SignupRoute
   '/splash': typeof SplashRoute
+  '/student': typeof StudentRouteWithChildren
+  '/tour': typeof TourRoute
+  '/tutor': typeof TutorRouteWithChildren
   '/user-type': typeof UserTypeRoute
   '/verification-status': typeof VerificationStatusRoute
   '/verification-submitted': typeof VerificationSubmittedRoute
   '/welcome': typeof WelcomeRoute
   '/app/$screen': typeof AppScreenRoute
+  '/join/student': typeof JoinStudentRoute
+  '/join/tutor': typeof JoinTutorRoute
+  '/q/$quizId': typeof QQuizIdRoute
+  '/quiz/$quizId': typeof QuizQuizIdRoute
+  '/student/explore': typeof StudentExploreRoute
+  '/student/feed': typeof StudentFeedRoute
+  '/student/messages': typeof StudentMessagesRoute
+  '/student/profile': typeof StudentProfileRoute
+  '/student/quizzes': typeof StudentQuizzesRoute
+  '/student/search': typeof StudentSearchRoute
+  '/student/store': typeof StudentStoreRoute
+  '/tutor/feed': typeof TutorFeedRoute
+  '/tutor/messages': typeof TutorMessagesRoute
+  '/tutor/profile': typeof TutorProfileRoute
   '/app/': typeof AppIndexRoute
+  '/join/': typeof JoinIndexRoute
+  '/student/': typeof StudentIndexRoute
+  '/tutor/': typeof TutorIndexRoute
+  '/student/checkout/$courseId': typeof StudentCheckoutCourseIdRoute
+  '/student/courses/$courseId': typeof StudentCoursesCourseIdRoute
+  '/student/tutors/$tutorId': typeof StudentTutorsTutorIdRoute
+  '/tutor/quizzes/$quizId': typeof TutorQuizzesQuizIdRoute
+  '/tutor/quizzes/new': typeof TutorQuizzesNewRoute
+  '/tutor/quizzes/': typeof TutorQuizzesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -404,6 +593,7 @@ export interface FileRoutesByTo {
   '/image-viewer': typeof ImageViewerRoute
   '/intro': typeof IntroRoute
   '/language': typeof LanguageRoute
+  '/login': typeof LoginRoute
   '/marketplace': typeof MarketplaceRoute
   '/messages': typeof MessagesRoute
   '/notifications': typeof NotificationsRoute
@@ -424,12 +614,36 @@ export interface FileRoutesByTo {
   '/signin': typeof SigninRoute
   '/signup': typeof SignupRoute
   '/splash': typeof SplashRoute
+  '/tour': typeof TourRoute
   '/user-type': typeof UserTypeRoute
   '/verification-status': typeof VerificationStatusRoute
   '/verification-submitted': typeof VerificationSubmittedRoute
   '/welcome': typeof WelcomeRoute
   '/app/$screen': typeof AppScreenRoute
+  '/join/student': typeof JoinStudentRoute
+  '/join/tutor': typeof JoinTutorRoute
+  '/q/$quizId': typeof QQuizIdRoute
+  '/quiz/$quizId': typeof QuizQuizIdRoute
+  '/student/explore': typeof StudentExploreRoute
+  '/student/feed': typeof StudentFeedRoute
+  '/student/messages': typeof StudentMessagesRoute
+  '/student/profile': typeof StudentProfileRoute
+  '/student/quizzes': typeof StudentQuizzesRoute
+  '/student/search': typeof StudentSearchRoute
+  '/student/store': typeof StudentStoreRoute
+  '/tutor/feed': typeof TutorFeedRoute
+  '/tutor/messages': typeof TutorMessagesRoute
+  '/tutor/profile': typeof TutorProfileRoute
   '/app': typeof AppIndexRoute
+  '/join': typeof JoinIndexRoute
+  '/student': typeof StudentIndexRoute
+  '/tutor': typeof TutorIndexRoute
+  '/student/checkout/$courseId': typeof StudentCheckoutCourseIdRoute
+  '/student/courses/$courseId': typeof StudentCoursesCourseIdRoute
+  '/student/tutors/$tutorId': typeof StudentTutorsTutorIdRoute
+  '/tutor/quizzes/$quizId': typeof TutorQuizzesQuizIdRoute
+  '/tutor/quizzes/new': typeof TutorQuizzesNewRoute
+  '/tutor/quizzes': typeof TutorQuizzesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -459,6 +673,7 @@ export interface FileRoutesById {
   '/image-viewer': typeof ImageViewerRoute
   '/intro': typeof IntroRoute
   '/language': typeof LanguageRoute
+  '/login': typeof LoginRoute
   '/marketplace': typeof MarketplaceRoute
   '/messages': typeof MessagesRoute
   '/notifications': typeof NotificationsRoute
@@ -479,12 +694,38 @@ export interface FileRoutesById {
   '/signin': typeof SigninRoute
   '/signup': typeof SignupRoute
   '/splash': typeof SplashRoute
+  '/student': typeof StudentRouteWithChildren
+  '/tour': typeof TourRoute
+  '/tutor': typeof TutorRouteWithChildren
   '/user-type': typeof UserTypeRoute
   '/verification-status': typeof VerificationStatusRoute
   '/verification-submitted': typeof VerificationSubmittedRoute
   '/welcome': typeof WelcomeRoute
   '/app/$screen': typeof AppScreenRoute
+  '/join/student': typeof JoinStudentRoute
+  '/join/tutor': typeof JoinTutorRoute
+  '/q/$quizId': typeof QQuizIdRoute
+  '/quiz/$quizId': typeof QuizQuizIdRoute
+  '/student/explore': typeof StudentExploreRoute
+  '/student/feed': typeof StudentFeedRoute
+  '/student/messages': typeof StudentMessagesRoute
+  '/student/profile': typeof StudentProfileRoute
+  '/student/quizzes': typeof StudentQuizzesRoute
+  '/student/search': typeof StudentSearchRoute
+  '/student/store': typeof StudentStoreRoute
+  '/tutor/feed': typeof TutorFeedRoute
+  '/tutor/messages': typeof TutorMessagesRoute
+  '/tutor/profile': typeof TutorProfileRoute
   '/app/': typeof AppIndexRoute
+  '/join/': typeof JoinIndexRoute
+  '/student/': typeof StudentIndexRoute
+  '/tutor/': typeof TutorIndexRoute
+  '/student/checkout/$courseId': typeof StudentCheckoutCourseIdRoute
+  '/student/courses/$courseId': typeof StudentCoursesCourseIdRoute
+  '/student/tutors/$tutorId': typeof StudentTutorsTutorIdRoute
+  '/tutor/quizzes/$quizId': typeof TutorQuizzesQuizIdRoute
+  '/tutor/quizzes/new': typeof TutorQuizzesNewRoute
+  '/tutor/quizzes/': typeof TutorQuizzesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -515,6 +756,7 @@ export interface FileRouteTypes {
     | '/image-viewer'
     | '/intro'
     | '/language'
+    | '/login'
     | '/marketplace'
     | '/messages'
     | '/notifications'
@@ -535,12 +777,38 @@ export interface FileRouteTypes {
     | '/signin'
     | '/signup'
     | '/splash'
+    | '/student'
+    | '/tour'
+    | '/tutor'
     | '/user-type'
     | '/verification-status'
     | '/verification-submitted'
     | '/welcome'
     | '/app/$screen'
+    | '/join/student'
+    | '/join/tutor'
+    | '/q/$quizId'
+    | '/quiz/$quizId'
+    | '/student/explore'
+    | '/student/feed'
+    | '/student/messages'
+    | '/student/profile'
+    | '/student/quizzes'
+    | '/student/search'
+    | '/student/store'
+    | '/tutor/feed'
+    | '/tutor/messages'
+    | '/tutor/profile'
     | '/app/'
+    | '/join/'
+    | '/student/'
+    | '/tutor/'
+    | '/student/checkout/$courseId'
+    | '/student/courses/$courseId'
+    | '/student/tutors/$tutorId'
+    | '/tutor/quizzes/$quizId'
+    | '/tutor/quizzes/new'
+    | '/tutor/quizzes/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -569,6 +837,7 @@ export interface FileRouteTypes {
     | '/image-viewer'
     | '/intro'
     | '/language'
+    | '/login'
     | '/marketplace'
     | '/messages'
     | '/notifications'
@@ -589,12 +858,36 @@ export interface FileRouteTypes {
     | '/signin'
     | '/signup'
     | '/splash'
+    | '/tour'
     | '/user-type'
     | '/verification-status'
     | '/verification-submitted'
     | '/welcome'
     | '/app/$screen'
+    | '/join/student'
+    | '/join/tutor'
+    | '/q/$quizId'
+    | '/quiz/$quizId'
+    | '/student/explore'
+    | '/student/feed'
+    | '/student/messages'
+    | '/student/profile'
+    | '/student/quizzes'
+    | '/student/search'
+    | '/student/store'
+    | '/tutor/feed'
+    | '/tutor/messages'
+    | '/tutor/profile'
     | '/app'
+    | '/join'
+    | '/student'
+    | '/tutor'
+    | '/student/checkout/$courseId'
+    | '/student/courses/$courseId'
+    | '/student/tutors/$tutorId'
+    | '/tutor/quizzes/$quizId'
+    | '/tutor/quizzes/new'
+    | '/tutor/quizzes'
   id:
     | '__root__'
     | '/'
@@ -623,6 +916,7 @@ export interface FileRouteTypes {
     | '/image-viewer'
     | '/intro'
     | '/language'
+    | '/login'
     | '/marketplace'
     | '/messages'
     | '/notifications'
@@ -643,12 +937,38 @@ export interface FileRouteTypes {
     | '/signin'
     | '/signup'
     | '/splash'
+    | '/student'
+    | '/tour'
+    | '/tutor'
     | '/user-type'
     | '/verification-status'
     | '/verification-submitted'
     | '/welcome'
     | '/app/$screen'
+    | '/join/student'
+    | '/join/tutor'
+    | '/q/$quizId'
+    | '/quiz/$quizId'
+    | '/student/explore'
+    | '/student/feed'
+    | '/student/messages'
+    | '/student/profile'
+    | '/student/quizzes'
+    | '/student/search'
+    | '/student/store'
+    | '/tutor/feed'
+    | '/tutor/messages'
+    | '/tutor/profile'
     | '/app/'
+    | '/join/'
+    | '/student/'
+    | '/tutor/'
+    | '/student/checkout/$courseId'
+    | '/student/courses/$courseId'
+    | '/student/tutors/$tutorId'
+    | '/tutor/quizzes/$quizId'
+    | '/tutor/quizzes/new'
+    | '/tutor/quizzes/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -678,6 +998,7 @@ export interface RootRouteChildren {
   ImageViewerRoute: typeof ImageViewerRoute
   IntroRoute: typeof IntroRoute
   LanguageRoute: typeof LanguageRoute
+  LoginRoute: typeof LoginRoute
   MarketplaceRoute: typeof MarketplaceRoute
   MessagesRoute: typeof MessagesRoute
   NotificationsRoute: typeof NotificationsRoute
@@ -698,12 +1019,20 @@ export interface RootRouteChildren {
   SigninRoute: typeof SigninRoute
   SignupRoute: typeof SignupRoute
   SplashRoute: typeof SplashRoute
+  StudentRoute: typeof StudentRouteWithChildren
+  TourRoute: typeof TourRoute
+  TutorRoute: typeof TutorRouteWithChildren
   UserTypeRoute: typeof UserTypeRoute
   VerificationStatusRoute: typeof VerificationStatusRoute
   VerificationSubmittedRoute: typeof VerificationSubmittedRoute
   WelcomeRoute: typeof WelcomeRoute
   AppScreenRoute: typeof AppScreenRoute
+  JoinStudentRoute: typeof JoinStudentRoute
+  JoinTutorRoute: typeof JoinTutorRoute
+  QQuizIdRoute: typeof QQuizIdRoute
+  QuizQuizIdRoute: typeof QuizQuizIdRoute
   AppIndexRoute: typeof AppIndexRoute
+  JoinIndexRoute: typeof JoinIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -734,6 +1063,27 @@ declare module '@tanstack/react-router' {
       path: '/user-type'
       fullPath: '/user-type'
       preLoaderRoute: typeof UserTypeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tutor': {
+      id: '/tutor'
+      path: '/tutor'
+      fullPath: '/tutor'
+      preLoaderRoute: typeof TutorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tour': {
+      id: '/tour'
+      path: '/tour'
+      fullPath: '/tour'
+      preLoaderRoute: typeof TourRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/student': {
+      id: '/student'
+      path: '/student'
+      fullPath: '/student'
+      preLoaderRoute: typeof StudentRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/splash': {
@@ -874,6 +1224,13 @@ declare module '@tanstack/react-router' {
       path: '/marketplace'
       fullPath: '/marketplace'
       preLoaderRoute: typeof MarketplaceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/language': {
@@ -1058,11 +1415,130 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/tutor/': {
+      id: '/tutor/'
+      path: '/'
+      fullPath: '/tutor/'
+      preLoaderRoute: typeof TutorIndexRouteImport
+      parentRoute: typeof TutorRoute
+    }
+    '/student/': {
+      id: '/student/'
+      path: '/'
+      fullPath: '/student/'
+      preLoaderRoute: typeof StudentIndexRouteImport
+      parentRoute: typeof StudentRoute
+    }
+    '/join/': {
+      id: '/join/'
+      path: '/join'
+      fullPath: '/join/'
+      preLoaderRoute: typeof JoinIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/app/': {
       id: '/app/'
       path: '/app'
       fullPath: '/app/'
       preLoaderRoute: typeof AppIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tutor/profile': {
+      id: '/tutor/profile'
+      path: '/profile'
+      fullPath: '/tutor/profile'
+      preLoaderRoute: typeof TutorProfileRouteImport
+      parentRoute: typeof TutorRoute
+    }
+    '/tutor/messages': {
+      id: '/tutor/messages'
+      path: '/messages'
+      fullPath: '/tutor/messages'
+      preLoaderRoute: typeof TutorMessagesRouteImport
+      parentRoute: typeof TutorRoute
+    }
+    '/tutor/feed': {
+      id: '/tutor/feed'
+      path: '/feed'
+      fullPath: '/tutor/feed'
+      preLoaderRoute: typeof TutorFeedRouteImport
+      parentRoute: typeof TutorRoute
+    }
+    '/student/store': {
+      id: '/student/store'
+      path: '/store'
+      fullPath: '/student/store'
+      preLoaderRoute: typeof StudentStoreRouteImport
+      parentRoute: typeof StudentRoute
+    }
+    '/student/search': {
+      id: '/student/search'
+      path: '/search'
+      fullPath: '/student/search'
+      preLoaderRoute: typeof StudentSearchRouteImport
+      parentRoute: typeof StudentRoute
+    }
+    '/student/quizzes': {
+      id: '/student/quizzes'
+      path: '/quizzes'
+      fullPath: '/student/quizzes'
+      preLoaderRoute: typeof StudentQuizzesRouteImport
+      parentRoute: typeof StudentRoute
+    }
+    '/student/profile': {
+      id: '/student/profile'
+      path: '/profile'
+      fullPath: '/student/profile'
+      preLoaderRoute: typeof StudentProfileRouteImport
+      parentRoute: typeof StudentRoute
+    }
+    '/student/messages': {
+      id: '/student/messages'
+      path: '/messages'
+      fullPath: '/student/messages'
+      preLoaderRoute: typeof StudentMessagesRouteImport
+      parentRoute: typeof StudentRoute
+    }
+    '/student/feed': {
+      id: '/student/feed'
+      path: '/feed'
+      fullPath: '/student/feed'
+      preLoaderRoute: typeof StudentFeedRouteImport
+      parentRoute: typeof StudentRoute
+    }
+    '/student/explore': {
+      id: '/student/explore'
+      path: '/explore'
+      fullPath: '/student/explore'
+      preLoaderRoute: typeof StudentExploreRouteImport
+      parentRoute: typeof StudentRoute
+    }
+    '/quiz/$quizId': {
+      id: '/quiz/$quizId'
+      path: '/quiz/$quizId'
+      fullPath: '/quiz/$quizId'
+      preLoaderRoute: typeof QuizQuizIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/q/$quizId': {
+      id: '/q/$quizId'
+      path: '/q/$quizId'
+      fullPath: '/q/$quizId'
+      preLoaderRoute: typeof QQuizIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/join/tutor': {
+      id: '/join/tutor'
+      path: '/join/tutor'
+      fullPath: '/join/tutor'
+      preLoaderRoute: typeof JoinTutorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/join/student': {
+      id: '/join/student'
+      path: '/join/student'
+      fullPath: '/join/student'
+      preLoaderRoute: typeof JoinStudentRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/app/$screen': {
@@ -1072,8 +1548,103 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppScreenRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/tutor/quizzes/': {
+      id: '/tutor/quizzes/'
+      path: '/quizzes'
+      fullPath: '/tutor/quizzes/'
+      preLoaderRoute: typeof TutorQuizzesIndexRouteImport
+      parentRoute: typeof TutorRoute
+    }
+    '/tutor/quizzes/new': {
+      id: '/tutor/quizzes/new'
+      path: '/quizzes/new'
+      fullPath: '/tutor/quizzes/new'
+      preLoaderRoute: typeof TutorQuizzesNewRouteImport
+      parentRoute: typeof TutorRoute
+    }
+    '/tutor/quizzes/$quizId': {
+      id: '/tutor/quizzes/$quizId'
+      path: '/quizzes/$quizId'
+      fullPath: '/tutor/quizzes/$quizId'
+      preLoaderRoute: typeof TutorQuizzesQuizIdRouteImport
+      parentRoute: typeof TutorRoute
+    }
+    '/student/tutors/$tutorId': {
+      id: '/student/tutors/$tutorId'
+      path: '/tutors/$tutorId'
+      fullPath: '/student/tutors/$tutorId'
+      preLoaderRoute: typeof StudentTutorsTutorIdRouteImport
+      parentRoute: typeof StudentRoute
+    }
+    '/student/courses/$courseId': {
+      id: '/student/courses/$courseId'
+      path: '/courses/$courseId'
+      fullPath: '/student/courses/$courseId'
+      preLoaderRoute: typeof StudentCoursesCourseIdRouteImport
+      parentRoute: typeof StudentRoute
+    }
+    '/student/checkout/$courseId': {
+      id: '/student/checkout/$courseId'
+      path: '/checkout/$courseId'
+      fullPath: '/student/checkout/$courseId'
+      preLoaderRoute: typeof StudentCheckoutCourseIdRouteImport
+      parentRoute: typeof StudentRoute
+    }
   }
 }
+
+interface StudentRouteChildren {
+  StudentExploreRoute: typeof StudentExploreRoute
+  StudentFeedRoute: typeof StudentFeedRoute
+  StudentMessagesRoute: typeof StudentMessagesRoute
+  StudentProfileRoute: typeof StudentProfileRoute
+  StudentQuizzesRoute: typeof StudentQuizzesRoute
+  StudentSearchRoute: typeof StudentSearchRoute
+  StudentStoreRoute: typeof StudentStoreRoute
+  StudentIndexRoute: typeof StudentIndexRoute
+  StudentCheckoutCourseIdRoute: typeof StudentCheckoutCourseIdRoute
+  StudentCoursesCourseIdRoute: typeof StudentCoursesCourseIdRoute
+  StudentTutorsTutorIdRoute: typeof StudentTutorsTutorIdRoute
+}
+
+const StudentRouteChildren: StudentRouteChildren = {
+  StudentExploreRoute: StudentExploreRoute,
+  StudentFeedRoute: StudentFeedRoute,
+  StudentMessagesRoute: StudentMessagesRoute,
+  StudentProfileRoute: StudentProfileRoute,
+  StudentQuizzesRoute: StudentQuizzesRoute,
+  StudentSearchRoute: StudentSearchRoute,
+  StudentStoreRoute: StudentStoreRoute,
+  StudentIndexRoute: StudentIndexRoute,
+  StudentCheckoutCourseIdRoute: StudentCheckoutCourseIdRoute,
+  StudentCoursesCourseIdRoute: StudentCoursesCourseIdRoute,
+  StudentTutorsTutorIdRoute: StudentTutorsTutorIdRoute,
+}
+
+const StudentRouteWithChildren =
+  StudentRoute._addFileChildren(StudentRouteChildren)
+
+interface TutorRouteChildren {
+  TutorFeedRoute: typeof TutorFeedRoute
+  TutorMessagesRoute: typeof TutorMessagesRoute
+  TutorProfileRoute: typeof TutorProfileRoute
+  TutorIndexRoute: typeof TutorIndexRoute
+  TutorQuizzesQuizIdRoute: typeof TutorQuizzesQuizIdRoute
+  TutorQuizzesNewRoute: typeof TutorQuizzesNewRoute
+  TutorQuizzesIndexRoute: typeof TutorQuizzesIndexRoute
+}
+
+const TutorRouteChildren: TutorRouteChildren = {
+  TutorFeedRoute: TutorFeedRoute,
+  TutorMessagesRoute: TutorMessagesRoute,
+  TutorProfileRoute: TutorProfileRoute,
+  TutorIndexRoute: TutorIndexRoute,
+  TutorQuizzesQuizIdRoute: TutorQuizzesQuizIdRoute,
+  TutorQuizzesNewRoute: TutorQuizzesNewRoute,
+  TutorQuizzesIndexRoute: TutorQuizzesIndexRoute,
+}
+
+const TutorRouteWithChildren = TutorRoute._addFileChildren(TutorRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
@@ -1102,6 +1673,7 @@ const rootRouteChildren: RootRouteChildren = {
   ImageViewerRoute: ImageViewerRoute,
   IntroRoute: IntroRoute,
   LanguageRoute: LanguageRoute,
+  LoginRoute: LoginRoute,
   MarketplaceRoute: MarketplaceRoute,
   MessagesRoute: MessagesRoute,
   NotificationsRoute: NotificationsRoute,
@@ -1122,12 +1694,20 @@ const rootRouteChildren: RootRouteChildren = {
   SigninRoute: SigninRoute,
   SignupRoute: SignupRoute,
   SplashRoute: SplashRoute,
+  StudentRoute: StudentRouteWithChildren,
+  TourRoute: TourRoute,
+  TutorRoute: TutorRouteWithChildren,
   UserTypeRoute: UserTypeRoute,
   VerificationStatusRoute: VerificationStatusRoute,
   VerificationSubmittedRoute: VerificationSubmittedRoute,
   WelcomeRoute: WelcomeRoute,
   AppScreenRoute: AppScreenRoute,
+  JoinStudentRoute: JoinStudentRoute,
+  JoinTutorRoute: JoinTutorRoute,
+  QQuizIdRoute: QQuizIdRoute,
+  QuizQuizIdRoute: QuizQuizIdRoute,
   AppIndexRoute: AppIndexRoute,
+  JoinIndexRoute: JoinIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

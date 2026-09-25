@@ -14,6 +14,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { AuthProvider } from "../lib/auth-context";
 import { LocaleProvider } from "../lib/i18n";
+import { AcademyProvider } from "../lib/academy/store";
 
 function NotFoundComponent() {
   return (
@@ -111,6 +112,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       {
         rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap",
+      },
+      {
+        rel: "stylesheet",
         href: "https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap",
       },
     ],
@@ -143,7 +148,9 @@ function RootComponent() {
       <LocaleProvider>
         <AuthProvider>
           {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-          <Outlet />
+          <AcademyProvider>
+            <Outlet />
+          </AcademyProvider>
           <Toaster position="top-center" richColors closeButton />
         </AuthProvider>
       </LocaleProvider>
