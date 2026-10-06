@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { motion } from "framer-motion";
+import { motion, useInView, useReducedMotion } from "framer-motion";
 import type { Variants } from "framer-motion";
 import {
   ArrowRight,
@@ -10,7 +10,7 @@ import {
   ShoppingBag,
   Users,
 } from "lucide-react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import { COURSES, PLUS_PRICE, plusAnnualSaving, TRIAL_DAYS, tutorById } from "@/lib/academy/data";
 
@@ -128,14 +128,56 @@ const COMPARE: { label: string; free: Cell; single: Cell; plus: Cell }[] = [
   { label: "Career support", free: false, single: false, plus: "Annual plan" },
 ];
 
-function CellValue({ v }: { v: Cell }) {
+const TICK_STEP = 0.11;
+
+/**
+ * A comparison cell. Ticks draw themselves in (circle pops, then the check mark is stroked)
+ * one after another in reading order once the table is on screen; `i` is the cell's position.
+ */
+function CellValue({ v, i, show }: { v: Cell; i: number; show: boolean }) {
+  const reduce = useReducedMotion();
+  const delay = 0.15 + i * TICK_STEP;
+  const on = reduce || show;
   if (v === true)
     return (
-      <Check className="mx-auto h-5 w-5 text-[#16794a]" strokeWidth={3} aria-label="Included" />
+      <span role="img" aria-label="Included" className="mx-auto inline-grid">
+        <motion.span
+          className="grid h-7 w-7 place-items-center rounded-full bg-[#16794a]/12"
+          initial={reduce ? false : { scale: 0, opacity: 0 }}
+          animate={on ? { scale: [0, 1.25, 1], opacity: 1 } : undefined}
+          transition={{ duration: 0.45, delay, times: [0, 0.6, 1] }}
+        >
+          <svg viewBox="0 0 24 24" className="h-[18px] w-[18px]" fill="none" aria-hidden="true">
+            <motion.path
+              d="M5 12.5l4.5 4.5L19 7.5"
+              stroke="#16794a"
+              strokeWidth={3.2}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              initial={reduce ? false : { pathLength: 0 }}
+              animate={on ? { pathLength: 1 } : undefined}
+              transition={{ duration: 0.35, delay: delay + 0.2, ease: "easeOut" }}
+            />
+          </svg>
+        </motion.span>
+      </span>
     );
+  const fade = {
+    initial: reduce ? false : { opacity: 0, y: 6 },
+    animate: on ? { opacity: 1, y: 0 } : undefined,
+    transition: { duration: 0.35, delay },
+  } as const;
   if (v === false)
-    return <Minus className="mx-auto h-5 w-5 text-muted-foreground/50" aria-label="Not included" />;
-  return <span className="text-sm font-semibold text-forest">{v}</span>;
+    return (
+      <motion.span {...fade} className="mx-auto inline-flex" role="img" aria-label="Not included">
+        <Minus className="h-5 w-5 text-muted-foreground/50" aria-hidden="true" />
+      </motion.span>
+    );
+  return (
+    <motion.span {...fade} className="inline-block text-sm font-semibold text-forest">
+      {v}
+    </motion.span>
+  );
 }
 
 /** Short courses are the ones a Plus subscription unlocks; full programmes stay pay-per-programme. */
@@ -143,6 +185,10 @@ const PLUS_COURSES = COURSES.filter((c) => c.kind === "Short course");
 
 export function PricingPlans() {
   const [billing, setBilling] = useState<Billing>("annual");
+  const compareMobileRef = useRef<HTMLDivElement>(null);
+  const compareTableRef = useRef<HTMLDivElement>(null);
+  const compareMobileInView = useInView(compareMobileRef, { once: true, margin: "-80px" });
+  const compareTableInView = useInView(compareTableRef, { once: true, margin: "-80px" });
 
   return (
     <>
@@ -363,13 +409,13 @@ export function PricingPlans() {
           <h2 className="text-3xl font-black tracking-tight text-forest md:text-4xl">
             Compare your options
           </h2>
-          <div className="mt-6 md:hidden">
+          <div ref={compareMobileRef} className="mt-6 md:hidden">
             <div className="grid grid-cols-3 gap-1.5 pb-2 text-center text-[11px] font-black text-muted-foreground">
               <span>Free</span>
               <span>Single</span>
               <span className="text-gold">Plus</span>
             </div>
-            {COMPARE.map((r) => (
+            {COMPARE.map((r, row) => (
               <div key={r.label} className="border-t border-border py-3">
                 <p className="mb-2 text-sm font-semibold text-foreground">{r.label}</p>
                 <div className="grid grid-cols-3 gap-1.5 text-center [&_span]:text-xs">
@@ -381,14 +427,14 @@ export function PricingPlans() {
                         k === 2 ? "bg-primary-soft" : "bg-secondary",
                       )}
                     >
-                      <CellValue v={v} />
+                      <CellValue v={v} i={row * 3 + k} show={compareMobileInView} />
                     </div>
                   ))}
                 </div>
               </div>
             ))}
           </div>
-          <div className="mt-8 hidden overflow-x-auto md:block">
+          <div ref={compareTableRef} className="mt-8 hidden overflow-x-auto md:block">
             <table className="w-full min-w-[640px] border-collapse">
               <thead>
                 <tr>
@@ -408,7 +454,7 @@ export function PricingPlans() {
                 </tr>
               </thead>
               <tbody>
-                {COMPARE.map((r) => (
+                {COMPARE.map((r, row) => (
                   <tr key={r.label} className="border-t border-border">
                     <th
                       scope="row"
@@ -417,13 +463,13 @@ export function PricingPlans() {
                       {r.label}
                     </th>
                     <td className="px-4 text-center">
-                      <CellValue v={r.free} />
+                      <CellValue v={r.free} i={row * 3} show={compareTableInView} />
                     </td>
                     <td className="px-4 text-center">
-                      <CellValue v={r.single} />
+                      <CellValue v={r.single} i={row * 3 + 1} show={compareTableInView} />
                     </td>
                     <td className="bg-primary-soft px-4 text-center">
-                      <CellValue v={r.plus} />
+                      <CellValue v={r.plus} i={row * 3 + 2} show={compareTableInView} />
                     </td>
                   </tr>
                 ))}
