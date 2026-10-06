@@ -12,6 +12,7 @@ import gsap from "gsap";
 import { PhoneFrame } from "@/components/landing/PhoneFrame";
 import { PricingPlans } from "@/components/landing/PricingPlans";
 import { BlueprintHero } from "@/components/landing/BlueprintHero";
+import { HowItWorks } from "@/components/landing/HowItWorks";
 import { FeaturesPanel } from "@/components/landing/FeaturesPanel";
 // SplashVisual removed
 // StoreBadges removed
@@ -397,56 +398,8 @@ function Landing() {
       {/* FEATURES — blueprint-ui "Our features" panel */}
       <FeaturesPanel />
 
-      {/* HOW IT WORKS */}
-      <section id="how" className="bg-forest text-forest-foreground">
-        <div className="mx-auto max-w-7xl px-6 py-24">
-          <div className="grid gap-16 lg:grid-cols-[1fr_1.2fr] lg:items-center">
-            <div>
-              <p data-animate="fade-up" className="text-xs font-bold uppercase tracking-widest text-gold">How it works</p>
-              <h2 data-animate="fade-up" className="mt-3 text-4xl font-black tracking-tight md:text-5xl">Three simple steps to start learning</h2>
-              <p data-animate="fade-up" className="mt-4 text-lg text-forest-foreground/70">Whether you're a complete beginner or upskilling, DarlTech gets you started in minutes.</p>
-              <div className="mt-10 space-y-6">
-                {[
-                  { n: "01", title: "Create your account", body: "Sign up as a student in under 2 minutes. Choose your role and set up your profile." },
-                  { n: "02", title: "Enroll in a course", body: "Browse 10 in-demand tech programs. Pay your course fee and gain instant access to all materials." },
-                  { n: "03", title: "Learn, complete & get certified", body: "Watch lessons, take quizzes, submit assignments, and download your certificate when done." },
-                ].map((s, i) => (
-                  <motion.div
-                    key={s.n}
-                    variants={fadeUp}
-                    initial="hidden"
-                    whileInView="show"
-                    viewport={{ once: true, margin: "-60px" }}
-                    transition={{ delay: i * 0.12 }}
-                    className="flex gap-5"
-                  >
-                    <div className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-gold text-gold-foreground text-lg font-black shadow-glow">{s.n}</div>
-                    <div>
-                      <h3 className="text-xl font-black">{s.title}</h3>
-                      <p className="mt-1 text-forest-foreground/70">{s.body}</p>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-            <div className="relative flex items-center justify-center">
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8, ease: "easeOut" }}
-                className="relative z-10"
-              >
-                <img 
-                  src="/ChatGPT_Image_Jul_9__2026__02_26_53_PM-removebg-preview.png" 
-                  alt="DarlTech Academy student portal on mobile"
-                  className="h-auto max-h-[1200px] w-full max-w-full object-contain drop-shadow-2xl"
-                />
-              </motion.div>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* HOW IT WORKS — blueprint-ui "/ 02" rows with popping notifications */}
+      <HowItWorks />
 
       {/* SCREENSHOTS */}
       <section id="screenshots" className="mx-auto max-w-7xl px-6 py-24">
