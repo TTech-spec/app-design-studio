@@ -52,6 +52,8 @@ export type MyAttempt = {
   at: number;
 };
 
+export type PlusPlan = { billing: "monthly" | "annual"; startedAt: number };
+
 export type ShareSettings = { cohorts: string[]; openToAll: boolean };
 
 type State = {
@@ -69,6 +71,7 @@ type State = {
   attempts: MyAttempt[];
   quizzes: Quiz[];
   shares: Record<string, ShareSettings>;
+  plus: PlusPlan | null;
 };
 
 const EMPTY: State = {
@@ -86,6 +89,7 @@ const EMPTY: State = {
   attempts: [],
   quizzes: [],
   shares: {},
+  plus: null,
 };
 
 const KEY = "darltech_app_v1";
@@ -108,6 +112,8 @@ type Actions = {
   recordAttempt: (a: Omit<MyAttempt, "id" | "at">) => MyAttempt;
   saveQuiz: (q: Quiz) => void;
   setShare: (quizId: string, s: ShareSettings) => void;
+  startTrial: (billing: PlusPlan["billing"]) => void;
+  cancelPlus: () => void;
   reset: () => void;
 };
 
@@ -232,6 +238,8 @@ export function AcademyProvider({ children }: { children: ReactNode }) {
       },
       saveQuiz: (q) => patch((s) => ({ quizzes: [q, ...s.quizzes.filter((x) => x.id !== q.id)] })),
       setShare: (id, sh) => patch((s) => ({ shares: { ...s.shares, [id]: sh } })),
+      startTrial: (billing) => patch(() => ({ plus: { billing, startedAt: now() } })),
+      cancelPlus: () => patch(() => ({ plus: null })),
       reset: () => setState(EMPTY),
     }),
     [patch],

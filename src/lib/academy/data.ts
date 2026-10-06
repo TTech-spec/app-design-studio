@@ -1037,3 +1037,173 @@ export function decodeQuiz(d: string | undefined): Quiz | undefined {
 }
 
 export const isBuiltInQuiz = (id: string) => QUIZZES.some((q) => q.id === id);
+
+/* ---------- DarlTech Plus ---------- */
+
+/** Plus prices in Naira. Leave null until the team sets them; pages then show "Coming soon". */
+export const PLUS_PRICE: { monthly: number | null; annual: number | null } = {
+  monthly: null,
+  annual: null,
+};
+export const TRIAL_DAYS = 7;
+export const plusAnnualSaving =
+  PLUS_PRICE.monthly && PLUS_PRICE.annual
+    ? Math.round((1 - PLUS_PRICE.annual / (PLUS_PRICE.monthly * 12)) * 100)
+    : null;
+export const PLUS_PERKS = [
+  "Every short course and guided project",
+  "Unlimited certificates",
+  "All course materials in the store",
+  "Live classes, tutor chat and community",
+  "Cancel anytime",
+];
+
+/* ---------- Catalogue ---------- */
+
+export type LearningType = "Programme" | "Course" | "Guided project";
+export type Subject = "Design" | "Data" | "AI" | "Security" | "Programming";
+export type CatalogItem = {
+  id: string;
+  title: string;
+  type: LearningType;
+  subject: Subject;
+  level: "Beginner" | "Intermediate";
+  length: string;
+  /** rough length in hours, used for the duration filter and sorting */
+  hours: number;
+  courseId: string;
+  tutorId: string;
+  skills: string[];
+  plus: boolean;
+};
+
+const SUBJECT_OF: Record<string, Subject> = {
+  "ui-ux-design": "Design",
+  "graphics-design": "Design",
+  "data-analysis": "Data",
+  "ai-automation": "AI",
+  cybersecurity: "Security",
+  "python-development": "Programming",
+};
+const MONTH_HOURS = 4 * 10;
+
+/** Programmes come from COURSES; short courses are included with Plus, full programmes are not. */
+export const CATALOG: CatalogItem[] = [
+  ...COURSES.map<CatalogItem>((c) => ({
+    id: c.id,
+    title: c.name,
+    type: "Programme",
+    subject: SUBJECT_OF[c.id],
+    level: "Beginner",
+    length: c.duration,
+    hours: parseInt(c.duration, 10) * MONTH_HOURS,
+    courseId: c.id,
+    tutorId: c.tutorId,
+    skills: c.skills,
+    plus: c.kind === "Short course",
+  })),
+  {
+    id: "figma-auto-layout",
+    title: "Figma Auto Layout in 2 Hours",
+    type: "Guided project",
+    subject: "Design",
+    level: "Beginner",
+    length: "2 hours",
+    hours: 2,
+    courseId: "ui-ux-design",
+    tutorId: "tunde-bakare",
+    skills: ["Figma", "Responsive design"],
+    plus: true,
+  },
+  {
+    id: "ux-portfolio",
+    title: "Build Your First UX Case Study",
+    type: "Course",
+    subject: "Design",
+    level: "Intermediate",
+    length: "3 weeks",
+    hours: 15,
+    courseId: "ui-ux-design",
+    tutorId: "tunde-bakare",
+    skills: ["Case studies", "Portfolio", "Storytelling"],
+    plus: true,
+  },
+  {
+    id: "brand-identity-basics",
+    title: "Brand Identity Basics",
+    type: "Course",
+    subject: "Design",
+    level: "Beginner",
+    length: "4 weeks",
+    hours: 20,
+    courseId: "graphics-design",
+    tutorId: "ada-nwankwo",
+    skills: ["Logo design", "Typography"],
+    plus: true,
+  },
+  {
+    id: "power-bi-dashboards",
+    title: "Power BI Dashboards",
+    type: "Course",
+    subject: "Data",
+    level: "Intermediate",
+    length: "3 weeks",
+    hours: 15,
+    courseId: "data-analysis",
+    tutorId: "seun-adeyemi",
+    skills: ["Power BI", "Data storytelling"],
+    plus: true,
+  },
+  {
+    id: "excel-for-analysis",
+    title: "Excel for Data Analysis",
+    type: "Guided project",
+    subject: "Data",
+    level: "Beginner",
+    length: "3 hours",
+    hours: 3,
+    courseId: "data-analysis",
+    tutorId: "seun-adeyemi",
+    skills: ["Excel", "Pivot tables"],
+    plus: true,
+  },
+  {
+    id: "prompting-for-business",
+    title: "Prompting for Small Businesses",
+    type: "Guided project",
+    subject: "AI",
+    level: "Beginner",
+    length: "2 hours",
+    hours: 2,
+    courseId: "ai-automation",
+    tutorId: "seun-adeyemi",
+    skills: ["Prompt engineering", "ChatGPT"],
+    plus: true,
+  },
+  {
+    id: "spot-phishing",
+    title: "Spot a Phishing Scam",
+    type: "Course",
+    subject: "Security",
+    level: "Beginner",
+    length: "1 week",
+    hours: 5,
+    courseId: "cybersecurity",
+    tutorId: "ada-nwankwo",
+    skills: ["Security awareness"],
+    plus: true,
+  },
+  {
+    id: "python-first-script",
+    title: "Write Your First Python Script",
+    type: "Guided project",
+    subject: "Programming",
+    level: "Beginner",
+    length: "2 hours",
+    hours: 2,
+    courseId: "python-development",
+    tutorId: "kemi-olatunji",
+    skills: ["Python", "Automation"],
+    plus: true,
+  },
+];

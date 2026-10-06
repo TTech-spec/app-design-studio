@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AddProductRouteImport } from './routes/add-product'
 import { Route as BusinessInfoRouteImport } from './routes/business-info'
 import { Route as BuyerProfileRouteImport } from './routes/buyer-profile'
+import { Route as CatalogRouteImport } from './routes/catalog'
 import { Route as CategoriesRouteImport } from './routes/categories'
 import { Route as ChatRouteImport } from './routes/chat'
 import { Route as ContactFarmerRouteImport } from './routes/contact-farmer'
@@ -68,6 +69,7 @@ import { Route as AppScreenRouteImport } from './routes/app.$screen'
 import { Route as JoinIndexRouteImport } from './routes/join.index'
 import { Route as JoinStudentRouteImport } from './routes/join.student'
 import { Route as JoinTutorRouteImport } from './routes/join.tutor'
+import { Route as PlusTrialRouteImport } from './routes/plus.trial'
 import { Route as QQuizIdRouteImport } from './routes/q.$quizId'
 import { Route as QuizQuizIdRouteImport } from './routes/quiz.$quizId'
 import { Route as StudentIndexRouteImport } from './routes/student.index'
@@ -107,6 +109,11 @@ const BusinessInfoRoute = BusinessInfoRouteImport.update({
 const BuyerProfileRoute = BuyerProfileRouteImport.update({
   id: '/buyer-profile',
   path: '/buyer-profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CatalogRoute = CatalogRouteImport.update({
+  id: '/catalog',
+  path: '/catalog',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CategoriesRoute = CategoriesRouteImport.update({
@@ -384,6 +391,11 @@ const JoinTutorRoute = JoinTutorRouteImport.update({
   path: '/join/tutor',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PlusTrialRoute = PlusTrialRouteImport.update({
+  id: '/plus/trial',
+  path: '/plus/trial',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const QQuizIdRoute = QQuizIdRouteImport.update({
   id: '/q/$quizId',
   path: '/q/$quizId',
@@ -490,6 +502,7 @@ export interface FileRoutesByFullPath {
   '/add-product': typeof AddProductRoute
   '/business-info': typeof BusinessInfoRoute
   '/buyer-profile': typeof BuyerProfileRoute
+  '/catalog': typeof CatalogRoute
   '/categories': typeof CategoriesRoute
   '/chat': typeof ChatRoute
   '/contact-farmer': typeof ContactFarmerRoute
@@ -543,6 +556,7 @@ export interface FileRoutesByFullPath {
   '/app/$screen': typeof AppScreenRoute
   '/join/student': typeof JoinStudentRoute
   '/join/tutor': typeof JoinTutorRoute
+  '/plus/trial': typeof PlusTrialRoute
   '/q/$quizId': typeof QQuizIdRoute
   '/quiz/$quizId': typeof QuizQuizIdRoute
   '/student/explore': typeof StudentExploreRoute
@@ -571,6 +585,7 @@ export interface FileRoutesByTo {
   '/add-product': typeof AddProductRoute
   '/business-info': typeof BusinessInfoRoute
   '/buyer-profile': typeof BuyerProfileRoute
+  '/catalog': typeof CatalogRoute
   '/categories': typeof CategoriesRoute
   '/chat': typeof ChatRoute
   '/contact-farmer': typeof ContactFarmerRoute
@@ -622,6 +637,7 @@ export interface FileRoutesByTo {
   '/app/$screen': typeof AppScreenRoute
   '/join/student': typeof JoinStudentRoute
   '/join/tutor': typeof JoinTutorRoute
+  '/plus/trial': typeof PlusTrialRoute
   '/q/$quizId': typeof QQuizIdRoute
   '/quiz/$quizId': typeof QuizQuizIdRoute
   '/student/explore': typeof StudentExploreRoute
@@ -651,6 +667,7 @@ export interface FileRoutesById {
   '/add-product': typeof AddProductRoute
   '/business-info': typeof BusinessInfoRoute
   '/buyer-profile': typeof BuyerProfileRoute
+  '/catalog': typeof CatalogRoute
   '/categories': typeof CategoriesRoute
   '/chat': typeof ChatRoute
   '/contact-farmer': typeof ContactFarmerRoute
@@ -704,6 +721,7 @@ export interface FileRoutesById {
   '/app/$screen': typeof AppScreenRoute
   '/join/student': typeof JoinStudentRoute
   '/join/tutor': typeof JoinTutorRoute
+  '/plus/trial': typeof PlusTrialRoute
   '/q/$quizId': typeof QQuizIdRoute
   '/quiz/$quizId': typeof QuizQuizIdRoute
   '/student/explore': typeof StudentExploreRoute
@@ -734,6 +752,7 @@ export interface FileRouteTypes {
     | '/add-product'
     | '/business-info'
     | '/buyer-profile'
+    | '/catalog'
     | '/categories'
     | '/chat'
     | '/contact-farmer'
@@ -787,6 +806,7 @@ export interface FileRouteTypes {
     | '/app/$screen'
     | '/join/student'
     | '/join/tutor'
+    | '/plus/trial'
     | '/q/$quizId'
     | '/quiz/$quizId'
     | '/student/explore'
@@ -815,6 +835,7 @@ export interface FileRouteTypes {
     | '/add-product'
     | '/business-info'
     | '/buyer-profile'
+    | '/catalog'
     | '/categories'
     | '/chat'
     | '/contact-farmer'
@@ -866,6 +887,7 @@ export interface FileRouteTypes {
     | '/app/$screen'
     | '/join/student'
     | '/join/tutor'
+    | '/plus/trial'
     | '/q/$quizId'
     | '/quiz/$quizId'
     | '/student/explore'
@@ -894,6 +916,7 @@ export interface FileRouteTypes {
     | '/add-product'
     | '/business-info'
     | '/buyer-profile'
+    | '/catalog'
     | '/categories'
     | '/chat'
     | '/contact-farmer'
@@ -947,6 +970,7 @@ export interface FileRouteTypes {
     | '/app/$screen'
     | '/join/student'
     | '/join/tutor'
+    | '/plus/trial'
     | '/q/$quizId'
     | '/quiz/$quizId'
     | '/student/explore'
@@ -976,6 +1000,7 @@ export interface RootRouteChildren {
   AddProductRoute: typeof AddProductRoute
   BusinessInfoRoute: typeof BusinessInfoRoute
   BuyerProfileRoute: typeof BuyerProfileRoute
+  CatalogRoute: typeof CatalogRoute
   CategoriesRoute: typeof CategoriesRoute
   ChatRoute: typeof ChatRoute
   ContactFarmerRoute: typeof ContactFarmerRoute
@@ -1029,6 +1054,7 @@ export interface RootRouteChildren {
   AppScreenRoute: typeof AppScreenRoute
   JoinStudentRoute: typeof JoinStudentRoute
   JoinTutorRoute: typeof JoinTutorRoute
+  PlusTrialRoute: typeof PlusTrialRoute
   QQuizIdRoute: typeof QQuizIdRoute
   QuizQuizIdRoute: typeof QuizQuizIdRoute
   AppIndexRoute: typeof AppIndexRoute
@@ -1063,6 +1089,13 @@ declare module '@tanstack/react-router' {
       path: '/buyer-profile'
       fullPath: '/buyer-profile'
       preLoaderRoute: typeof BuyerProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/catalog': {
+      id: '/catalog'
+      path: '/catalog'
+      fullPath: '/catalog'
+      preLoaderRoute: typeof CatalogRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/categories': {
@@ -1450,6 +1483,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof JoinTutorRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/plus/trial': {
+      id: '/plus/trial'
+      path: '/plus/trial'
+      fullPath: '/plus/trial'
+      preLoaderRoute: typeof PlusTrialRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/q/$quizId': {
       id: '/q/$quizId'
       path: '/q/$quizId'
@@ -1651,6 +1691,7 @@ const rootRouteChildren: RootRouteChildren = {
   AddProductRoute: AddProductRoute,
   BusinessInfoRoute: BusinessInfoRoute,
   BuyerProfileRoute: BuyerProfileRoute,
+  CatalogRoute: CatalogRoute,
   CategoriesRoute: CategoriesRoute,
   ChatRoute: ChatRoute,
   ContactFarmerRoute: ContactFarmerRoute,
@@ -1704,6 +1745,7 @@ const rootRouteChildren: RootRouteChildren = {
   AppScreenRoute: AppScreenRoute,
   JoinStudentRoute: JoinStudentRoute,
   JoinTutorRoute: JoinTutorRoute,
+  PlusTrialRoute: PlusTrialRoute,
   QQuizIdRoute: QQuizIdRoute,
   QuizQuizIdRoute: QuizQuizIdRoute,
   AppIndexRoute: AppIndexRoute,

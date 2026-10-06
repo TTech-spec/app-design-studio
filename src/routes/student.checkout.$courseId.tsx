@@ -1,6 +1,6 @@
 import { createFileRoute, notFound, useNavigate } from "@tanstack/react-router";
 import { Lock } from "lucide-react";
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { courseById, naira, SCHOLARSHIP_FEE } from "@/lib/academy/data";
@@ -34,6 +34,10 @@ function Checkout() {
   const [plan, setPlan] = useState<Plan>(initial);
   const [card, setCard] = useState({ name: user?.name ?? "", number: "", mm: "", yy: "", cvv: "" });
   const [errors, setErrors] = useState<Record<string, string>>({});
+  // the saved account loads after first render; fill the cardholder name once it does
+  useEffect(() => {
+    if (user?.name) setCard((c) => (c.name ? c : { ...c, name: user.name }));
+  }, [user?.name]);
   const [paying, setPaying] = useState(false);
   const amount = plan === "full" ? course.fee : SCHOLARSHIP_FEE;
 

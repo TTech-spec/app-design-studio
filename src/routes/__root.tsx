@@ -6,6 +6,7 @@ import {
   useRouter,
   HeadContent,
   Scripts,
+  type ErrorComponentProps,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 import { Toaster } from "sonner";
@@ -38,7 +39,7 @@ function NotFoundComponent() {
   );
 }
 
-function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
+function ErrorComponent({ error, reset }: ErrorComponentProps) {
   console.error(error);
   const router = useRouter();
   useEffect(() => {
@@ -82,14 +83,26 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "DarlTech Academy — Do Extraordinary Things" },
-      { name: "description", content: "Learn in-demand tech skills from expert instructors. Get certified and launch your career in tech with DarlTech Academy Nigeria." },
+      {
+        name: "description",
+        content:
+          "Learn in-demand tech skills from expert instructors. Get certified and launch your career in tech with DarlTech Academy Nigeria.",
+      },
       { name: "author", content: "DarlTech Academy" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { property: "og:title", content: "DarlTech Academy — Do Extraordinary Things" },
       { name: "twitter:title", content: "DarlTech Academy — Do Extraordinary Things" },
-      { property: "og:description", content: "Learn in-demand tech skills from expert instructors. Get certified and launch your career in tech with DarlTech Academy Nigeria." },
-      { name: "twitter:description", content: "Learn in-demand tech skills from expert instructors. Get certified and launch your career in tech with DarlTech Academy Nigeria." },
+      {
+        property: "og:description",
+        content:
+          "Learn in-demand tech skills from expert instructors. Get certified and launch your career in tech with DarlTech Academy Nigeria.",
+      },
+      {
+        name: "twitter:description",
+        content:
+          "Learn in-demand tech skills from expert instructors. Get certified and launch your career in tech with DarlTech Academy Nigeria.",
+      },
     ],
     links: [
       {

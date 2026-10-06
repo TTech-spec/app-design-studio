@@ -22,7 +22,8 @@ export const Route = createFileRoute("/student/profile")({
 });
 
 function Profile() {
-  const { user, enrollments, attempts, owned, allQuizzes, updateUser, signOut } = useAcademy();
+  const { user, enrollments, attempts, owned, allQuizzes, updateUser, signOut, plus } =
+    useAcademy();
   const navigate = useNavigate();
   const [editing, setEditing] = useState(false);
   const [bio, setBio] = useState(user?.bio ?? "");
@@ -241,6 +242,12 @@ function Profile() {
               ["Email", user.email],
               ["Phone", user.phone || "—"],
               ["Level", user.level || "—"],
+              [
+                "Plan",
+                plus
+                  ? `Plus ${plus.billing === "annual" ? "Annual" : "Monthly"} (trial)`
+                  : "Free account",
+              ],
             ].map(([k, v]) => (
               <div
                 key={k}

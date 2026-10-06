@@ -12,20 +12,10 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
-import { COURSES, tutorById } from "@/lib/academy/data";
-
-/**
- * DarlTech Plus prices in Naira. Leave as null until the team sets them —
- * the cards then show "Coming soon" instead of a made-up number.
- */
-const PLUS_PRICE = { monthly: null as number | null, annual: null as number | null };
-const TRIAL_DAYS = 7;
+import { COURSES, PLUS_PRICE, plusAnnualSaving, TRIAL_DAYS, tutorById } from "@/lib/academy/data";
 
 const naira = (n: number) => `₦${n.toLocaleString("en-NG")}`;
-const annualSaving =
-  PLUS_PRICE.monthly && PLUS_PRICE.annual
-    ? Math.round((1 - PLUS_PRICE.annual / (PLUS_PRICE.monthly * 12)) * 100)
-    : null;
+const annualSaving = plusAnnualSaving;
 
 const fadeUp: Variants = {
   hidden: { opacity: 0, y: 26 },
@@ -60,7 +50,7 @@ const PLANS: Plan[] = [
       "Certificate for that programme",
     ],
     cta: "Browse programmes",
-    href: "/student/explore",
+    href: "/catalog",
   },
   {
     id: "monthly",
@@ -76,7 +66,7 @@ const PLANS: Plan[] = [
       "Cancel anytime",
     ],
     cta: `Start ${TRIAL_DAYS}-day free trial`,
-    href: "/join",
+    href: "/plus/trial?plan=monthly",
   },
   {
     id: "annual",
@@ -95,7 +85,7 @@ const PLANS: Plan[] = [
       "Career support: CV and portfolio review",
     ],
     cta: "Get Plus Annual",
-    href: "/join",
+    href: "/plus/trial?plan=annual",
   },
 ];
 
@@ -308,7 +298,8 @@ export function PricingPlans() {
             Popular with Plus learners
           </h2>
           <Link
-            to="/student/explore"
+            to="/catalog"
+            search={{ q: "", plus: true }}
             className="inline-flex items-center gap-1.5 text-sm font-bold text-primary hover:underline"
           >
             Explore the catalogue <ArrowRight className="h-4 w-4" />
