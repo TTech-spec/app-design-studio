@@ -215,62 +215,19 @@ function Landing() {
 
       {/* splash removed */}
 
-      {/* NAVBAR — flat before scroll, floating pill after scroll */}
+      {/* NAVBAR — floating pill, always shown and sticky */}
       <div className="w-full sticky top-0 z-50">
 
-        {/* === BEFORE SCROLL: original full-width flat nav === */}
-        <motion.header
-          className="w-full"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: scrolled ? 0 : 1, y: scrolled ? -8 : 0 }}
-          transition={{ duration: 0.4, ease: "easeOut" }}
-          style={{ pointerEvents: scrolled ? "none" : "auto", position: scrolled ? "absolute" : "relative" }}
-        >
-          <div className="border-b border-white/10" style={{backgroundColor:"#0E2A54"}}>
-            <div className="mx-auto flex max-w-7xl items-center justify-between px-8 py-5">
-              <a href="/" className="flex items-center gap-2.5">
-                <img src="/PHOTO-2026-07-02-04-10-58.jpg" alt="DarlTech Academy" className="h-12 w-auto rounded-lg object-contain" />
-              </a>
-              <nav className="hidden items-center gap-8 md:flex">
-                {navLinks.map((l) => (
-                  <a key={l.href} href={l.href} className="text-sm font-semibold transition" style={{color:"rgba(255,255,255,0.85)"}} onMouseEnter={e=>(e.currentTarget.style.color="#ffffff")} onMouseLeave={e=>(e.currentTarget.style.color="rgba(255,255,255,0.85)")}>{l.label}</a>
-                ))}
-              </nav>
-              <div className="hidden items-center gap-3 md:flex">
-                <a href="#features" className="text-sm font-semibold" style={{color:"rgba(255,255,255,0.85)"}}>View Courses</a>
-                <a href="/login" className="text-sm font-semibold" style={{color:"rgba(255,255,255,0.85)"}}>Log In</a>
-                <a href="/join" className="inline-flex h-11 items-center gap-2 rounded-2xl gradient-primary px-5 text-sm font-bold text-primary-foreground shadow-glow">
-                  Get Started <ArrowRight className="h-4 w-4" />
-                </a>
-              </div>
-              <button className="md:hidden text-white" aria-label={menuOpen ? "Close menu" : "Open menu"} aria-expanded={menuOpen} onClick={() => setMenuOpen(!menuOpen)}>
-                {menuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-              </button>
-            </div>
-            {menuOpen && !scrolled && (
-              <div className="border-t border-border bg-card p-4 md:hidden">
-                <div className="space-y-1">
-                  {navLinks.map((l) => (
-                    <a key={l.href} href={l.href} onClick={() => setMenuOpen(false)} className="block rounded-xl px-4 py-3 text-sm font-semibold hover:bg-secondary">{l.label}</a>
-                  ))}
-                  <a href="/join" className="block rounded-xl px-4 py-3 text-sm font-semibold" style={{color:"#EF4136"}}>Get Started →</a>
-                  <a href="#features" className="block rounded-xl px-4 py-3 text-sm font-semibold" style={{color:"#EF4136"}}>View Courses →</a>
-                </div>
-              </div>
-            )}
-          </div>
-        </motion.header>
-
-        {/* === AFTER SCROLL: floating pill nav === */}
+        {/* === Floating pill nav === */}
         <motion.div
           className="w-full flex justify-center px-4 sm:px-6 pt-3"
           initial={{ opacity: 0, y: -24, scale: 0.97 }}
-          animate={{ opacity: scrolled ? 1 : 0, y: scrolled ? 0 : -16, scale: scrolled ? 1 : 0.97 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-          style={{ pointerEvents: scrolled ? "auto" : "none", position: "absolute", top: 0, left: 0, right: 0 }}
+          style={{ position: "relative" }}
         >
           <nav
-            className="w-full max-w-6xl flex items-center justify-between gap-3 rounded-full border py-3 px-5 shadow-xl"
+            className={`w-full max-w-6xl flex items-center justify-between gap-3 rounded-full border py-3 px-5 transition-shadow duration-300 ${scrolled ? "shadow-xl" : "shadow-md"}`}
             style={{ backgroundColor: CREAM, borderColor: "rgba(0,0,0,0.06)" }}
           >
             <a href="/" className="flex items-center gap-2 shrink-0 select-none">
@@ -311,6 +268,13 @@ function Landing() {
 
             <div className="flex items-center gap-2">
               <a
+                href="/login"
+                className="hidden sm:inline-flex items-center rounded-full px-4 py-2.5 text-sm font-semibold transition-colors duration-200 hover:bg-white/10"
+                style={{ color: "rgba(255,255,255,0.85)" }}
+              >
+                Log in
+              </a>
+              <a
                 href="/join"
                 className="hidden sm:inline-flex items-center rounded-full px-5 py-2.5 text-sm font-semibold text-white transition-all duration-200 ease-out hover:-translate-y-0.5"
                 style={{ backgroundColor: GREEN, boxShadow: "0 2px 10px rgba(239,65,54,0.3)" }}
@@ -336,7 +300,7 @@ function Landing() {
 
           {/* Pill mobile dropdown */}
           <AnimatePresence>
-            {scrolled && menuOpen && (
+            {menuOpen && (
               <motion.div
                 initial={{ opacity: 0, y: -10, scale: 0.97 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -360,6 +324,14 @@ function Landing() {
                         {link.label}
                       </motion.a>
                     ))}
+                    <a
+                      href="/login"
+                      onClick={() => setMenuOpen(false)}
+                      className="px-4 py-3 rounded-2xl text-sm font-medium transition-colors duration-200 hover:bg-white/10"
+                      style={{ color: "rgba(255,255,255,0.8)" }}
+                    >
+                      Log in
+                    </a>
                     <a
                       href="/join"
                       onClick={() => setMenuOpen(false)}
