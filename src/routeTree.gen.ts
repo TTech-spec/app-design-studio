@@ -9,344 +9,89 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as WelcomeRouteImport } from './routes/welcome'
-import { Route as VerificationSubmittedRouteImport } from './routes/verification-submitted'
-import { Route as VerificationStatusRouteImport } from './routes/verification-status'
-import { Route as UserTypeRouteImport } from './routes/user-type'
-import { Route as TutorRouteImport } from './routes/tutor'
-import { Route as TourRouteImport } from './routes/tour'
-import { Route as StudentRouteImport } from './routes/student'
-import { Route as SplashRouteImport } from './routes/splash'
-import { Route as SignupRouteImport } from './routes/signup'
-import { Route as SigninRouteImport } from './routes/signin'
-import { Route as SettingsRouteImport } from './routes/settings'
-import { Route as SeasonalRouteImport } from './routes/seasonal'
-import { Route as SearchResultsRouteImport } from './routes/search-results'
-import { Route as SearchRouteImport } from './routes/search'
-import { Route as ReviewsRouteImport } from './routes/reviews'
-import { Route as ReportIssueRouteImport } from './routes/report-issue'
-import { Route as ProfilePhotoRouteImport } from './routes/profile-photo'
-import { Route as PhotoGalleryRouteImport } from './routes/photo-gallery'
-import { Route as PersonalInfoRouteImport } from './routes/personal-info'
-import { Route as PasswordResetSuccessRouteImport } from './routes/password-reset-success'
-import { Route as OtpRouteImport } from './routes/otp'
-import { Route as Onboarding3RouteImport } from './routes/onboarding-3'
-import { Route as Onboarding2RouteImport } from './routes/onboarding-2'
-import { Route as Onboarding1RouteImport } from './routes/onboarding-1'
-import { Route as NotificationsRouteImport } from './routes/notifications'
-import { Route as MessagesRouteImport } from './routes/messages'
-import { Route as MarketplaceRouteImport } from './routes/marketplace'
-import { Route as LoginRouteImport } from './routes/login'
-import { Route as LanguageRouteImport } from './routes/language'
-import { Route as IntroRouteImport } from './routes/intro'
-import { Route as ImageViewerRouteImport } from './routes/image-viewer'
-import { Route as HomeRouteImport } from './routes/home'
-import { Route as HelpCenterRouteImport } from './routes/help-center'
-import { Route as HarvestTimelineRouteImport } from './routes/harvest-timeline'
-import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
-import { Route as FiltersRouteImport } from './routes/filters'
-import { Route as FeaturedFarmsRouteImport } from './routes/featured-farms'
-import { Route as FarmerProfileRouteImport } from './routes/farmer-profile'
-import { Route as FarmerDashboardRouteImport } from './routes/farmer-dashboard'
-import { Route as FarmProfileRouteImport } from './routes/farm-profile'
-import { Route as FarmMapRouteImport } from './routes/farm-map'
-import { Route as FarmInfoRouteImport } from './routes/farm-info'
-import { Route as DocumentUploadRouteImport } from './routes/document-upload'
-import { Route as CropDetailsRouteImport } from './routes/crop-details'
-import { Route as CreatePasswordRouteImport } from './routes/create-password'
-import { Route as ContactSupportRouteImport } from './routes/contact-support'
-import { Route as ContactInfoRouteImport } from './routes/contact-info'
-import { Route as ContactFarmerRouteImport } from './routes/contact-farmer'
-import { Route as ChatRouteImport } from './routes/chat'
-import { Route as CategoriesRouteImport } from './routes/categories'
-import { Route as BuyerProfileRouteImport } from './routes/buyer-profile'
-import { Route as BusinessInfoRouteImport } from './routes/business-info'
-import { Route as AddProductRouteImport } from './routes/add-product'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as TutorIndexRouteImport } from './routes/tutor.index'
-import { Route as StudentIndexRouteImport } from './routes/student.index'
-import { Route as JoinIndexRouteImport } from './routes/join.index'
+import { Route as AddProductRouteImport } from './routes/add-product'
+import { Route as BusinessInfoRouteImport } from './routes/business-info'
+import { Route as BuyerProfileRouteImport } from './routes/buyer-profile'
+import { Route as CategoriesRouteImport } from './routes/categories'
+import { Route as ChatRouteImport } from './routes/chat'
+import { Route as ContactFarmerRouteImport } from './routes/contact-farmer'
+import { Route as ContactInfoRouteImport } from './routes/contact-info'
+import { Route as ContactSupportRouteImport } from './routes/contact-support'
+import { Route as CreatePasswordRouteImport } from './routes/create-password'
+import { Route as CropDetailsRouteImport } from './routes/crop-details'
+import { Route as DocumentUploadRouteImport } from './routes/document-upload'
+import { Route as FarmInfoRouteImport } from './routes/farm-info'
+import { Route as FarmMapRouteImport } from './routes/farm-map'
+import { Route as FarmProfileRouteImport } from './routes/farm-profile'
+import { Route as FarmerDashboardRouteImport } from './routes/farmer-dashboard'
+import { Route as FarmerProfileRouteImport } from './routes/farmer-profile'
+import { Route as FeaturedFarmsRouteImport } from './routes/featured-farms'
+import { Route as FiltersRouteImport } from './routes/filters'
+import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
+import { Route as HarvestTimelineRouteImport } from './routes/harvest-timeline'
+import { Route as HelpCenterRouteImport } from './routes/help-center'
+import { Route as HomeRouteImport } from './routes/home'
+import { Route as ImageViewerRouteImport } from './routes/image-viewer'
+import { Route as IntroRouteImport } from './routes/intro'
+import { Route as LanguageRouteImport } from './routes/language'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as MarketplaceRouteImport } from './routes/marketplace'
+import { Route as MessagesRouteImport } from './routes/messages'
+import { Route as NotificationsRouteImport } from './routes/notifications'
+import { Route as Onboarding1RouteImport } from './routes/onboarding-1'
+import { Route as Onboarding2RouteImport } from './routes/onboarding-2'
+import { Route as Onboarding3RouteImport } from './routes/onboarding-3'
+import { Route as OtpRouteImport } from './routes/otp'
+import { Route as PasswordResetSuccessRouteImport } from './routes/password-reset-success'
+import { Route as PersonalInfoRouteImport } from './routes/personal-info'
+import { Route as PhotoGalleryRouteImport } from './routes/photo-gallery'
+import { Route as ProfilePhotoRouteImport } from './routes/profile-photo'
+import { Route as ReportIssueRouteImport } from './routes/report-issue'
+import { Route as ReviewsRouteImport } from './routes/reviews'
+import { Route as SearchRouteImport } from './routes/search'
+import { Route as SearchResultsRouteImport } from './routes/search-results'
+import { Route as SeasonalRouteImport } from './routes/seasonal'
+import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as SigninRouteImport } from './routes/signin'
+import { Route as SignupRouteImport } from './routes/signup'
+import { Route as SplashRouteImport } from './routes/splash'
+import { Route as StudentRouteImport } from './routes/student'
+import { Route as TourRouteImport } from './routes/tour'
+import { Route as TutorRouteImport } from './routes/tutor'
+import { Route as UserTypeRouteImport } from './routes/user-type'
+import { Route as VerificationStatusRouteImport } from './routes/verification-status'
+import { Route as VerificationSubmittedRouteImport } from './routes/verification-submitted'
+import { Route as WelcomeRouteImport } from './routes/welcome'
 import { Route as AppIndexRouteImport } from './routes/app.index'
-import { Route as TutorProfileRouteImport } from './routes/tutor.profile'
-import { Route as TutorMessagesRouteImport } from './routes/tutor.messages'
-import { Route as TutorFeedRouteImport } from './routes/tutor.feed'
-import { Route as StudentStoreRouteImport } from './routes/student.store'
-import { Route as StudentSearchRouteImport } from './routes/student.search'
-import { Route as StudentQuizzesRouteImport } from './routes/student.quizzes'
-import { Route as StudentProfileRouteImport } from './routes/student.profile'
-import { Route as StudentMessagesRouteImport } from './routes/student.messages'
-import { Route as StudentFeedRouteImport } from './routes/student.feed'
-import { Route as StudentExploreRouteImport } from './routes/student.explore'
-import { Route as QuizQuizIdRouteImport } from './routes/quiz.$quizId'
-import { Route as QQuizIdRouteImport } from './routes/q.$quizId'
-import { Route as JoinTutorRouteImport } from './routes/join.tutor'
-import { Route as JoinStudentRouteImport } from './routes/join.student'
 import { Route as AppScreenRouteImport } from './routes/app.$screen'
-import { Route as TutorQuizzesIndexRouteImport } from './routes/tutor.quizzes.index'
-import { Route as TutorQuizzesNewRouteImport } from './routes/tutor.quizzes.new'
-import { Route as TutorQuizzesQuizIdRouteImport } from './routes/tutor.quizzes.$quizId'
-import { Route as StudentTutorsTutorIdRouteImport } from './routes/student.tutors.$tutorId'
-import { Route as StudentCoursesCourseIdRouteImport } from './routes/student.courses.$courseId'
+import { Route as JoinIndexRouteImport } from './routes/join.index'
+import { Route as JoinStudentRouteImport } from './routes/join.student'
+import { Route as JoinTutorRouteImport } from './routes/join.tutor'
+import { Route as QQuizIdRouteImport } from './routes/q.$quizId'
+import { Route as QuizQuizIdRouteImport } from './routes/quiz.$quizId'
+import { Route as StudentIndexRouteImport } from './routes/student.index'
+import { Route as StudentExploreRouteImport } from './routes/student.explore'
+import { Route as StudentFeedRouteImport } from './routes/student.feed'
+import { Route as StudentMessagesRouteImport } from './routes/student.messages'
+import { Route as StudentProfileRouteImport } from './routes/student.profile'
+import { Route as StudentQuizzesRouteImport } from './routes/student.quizzes'
+import { Route as StudentSearchRouteImport } from './routes/student.search'
+import { Route as StudentStoreRouteImport } from './routes/student.store'
+import { Route as TutorIndexRouteImport } from './routes/tutor.index'
+import { Route as TutorFeedRouteImport } from './routes/tutor.feed'
+import { Route as TutorMessagesRouteImport } from './routes/tutor.messages'
+import { Route as TutorProfileRouteImport } from './routes/tutor.profile'
 import { Route as StudentCheckoutCourseIdRouteImport } from './routes/student.checkout.$courseId'
+import { Route as StudentCoursesCourseIdRouteImport } from './routes/student.courses.$courseId'
+import { Route as StudentTutorsTutorIdRouteImport } from './routes/student.tutors.$tutorId'
+import { Route as TutorQuizzesIndexRouteImport } from './routes/tutor.quizzes.index'
+import { Route as TutorQuizzesQuizIdRouteImport } from './routes/tutor.quizzes.$quizId'
+import { Route as TutorQuizzesNewRouteImport } from './routes/tutor.quizzes.new'
 
-const WelcomeRoute = WelcomeRouteImport.update({
-  id: '/welcome',
-  path: '/welcome',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const VerificationSubmittedRoute = VerificationSubmittedRouteImport.update({
-  id: '/verification-submitted',
-  path: '/verification-submitted',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const VerificationStatusRoute = VerificationStatusRouteImport.update({
-  id: '/verification-status',
-  path: '/verification-status',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const UserTypeRoute = UserTypeRouteImport.update({
-  id: '/user-type',
-  path: '/user-type',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const TutorRoute = TutorRouteImport.update({
-  id: '/tutor',
-  path: '/tutor',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const TourRoute = TourRouteImport.update({
-  id: '/tour',
-  path: '/tour',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const StudentRoute = StudentRouteImport.update({
-  id: '/student',
-  path: '/student',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SplashRoute = SplashRouteImport.update({
-  id: '/splash',
-  path: '/splash',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SignupRoute = SignupRouteImport.update({
-  id: '/signup',
-  path: '/signup',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SigninRoute = SigninRouteImport.update({
-  id: '/signin',
-  path: '/signin',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SettingsRoute = SettingsRouteImport.update({
-  id: '/settings',
-  path: '/settings',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SeasonalRoute = SeasonalRouteImport.update({
-  id: '/seasonal',
-  path: '/seasonal',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SearchResultsRoute = SearchResultsRouteImport.update({
-  id: '/search-results',
-  path: '/search-results',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SearchRoute = SearchRouteImport.update({
-  id: '/search',
-  path: '/search',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ReviewsRoute = ReviewsRouteImport.update({
-  id: '/reviews',
-  path: '/reviews',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ReportIssueRoute = ReportIssueRouteImport.update({
-  id: '/report-issue',
-  path: '/report-issue',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ProfilePhotoRoute = ProfilePhotoRouteImport.update({
-  id: '/profile-photo',
-  path: '/profile-photo',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PhotoGalleryRoute = PhotoGalleryRouteImport.update({
-  id: '/photo-gallery',
-  path: '/photo-gallery',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PersonalInfoRoute = PersonalInfoRouteImport.update({
-  id: '/personal-info',
-  path: '/personal-info',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PasswordResetSuccessRoute = PasswordResetSuccessRouteImport.update({
-  id: '/password-reset-success',
-  path: '/password-reset-success',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const OtpRoute = OtpRouteImport.update({
-  id: '/otp',
-  path: '/otp',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const Onboarding3Route = Onboarding3RouteImport.update({
-  id: '/onboarding-3',
-  path: '/onboarding-3',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const Onboarding2Route = Onboarding2RouteImport.update({
-  id: '/onboarding-2',
-  path: '/onboarding-2',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const Onboarding1Route = Onboarding1RouteImport.update({
-  id: '/onboarding-1',
-  path: '/onboarding-1',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const NotificationsRoute = NotificationsRouteImport.update({
-  id: '/notifications',
-  path: '/notifications',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MessagesRoute = MessagesRouteImport.update({
-  id: '/messages',
-  path: '/messages',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MarketplaceRoute = MarketplaceRouteImport.update({
-  id: '/marketplace',
-  path: '/marketplace',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LoginRoute = LoginRouteImport.update({
-  id: '/login',
-  path: '/login',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LanguageRoute = LanguageRouteImport.update({
-  id: '/language',
-  path: '/language',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const IntroRoute = IntroRouteImport.update({
-  id: '/intro',
-  path: '/intro',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ImageViewerRoute = ImageViewerRouteImport.update({
-  id: '/image-viewer',
-  path: '/image-viewer',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const HomeRoute = HomeRouteImport.update({
-  id: '/home',
-  path: '/home',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const HelpCenterRoute = HelpCenterRouteImport.update({
-  id: '/help-center',
-  path: '/help-center',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const HarvestTimelineRoute = HarvestTimelineRouteImport.update({
-  id: '/harvest-timeline',
-  path: '/harvest-timeline',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
-  id: '/forgot-password',
-  path: '/forgot-password',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const FiltersRoute = FiltersRouteImport.update({
-  id: '/filters',
-  path: '/filters',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const FeaturedFarmsRoute = FeaturedFarmsRouteImport.update({
-  id: '/featured-farms',
-  path: '/featured-farms',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const FarmerProfileRoute = FarmerProfileRouteImport.update({
-  id: '/farmer-profile',
-  path: '/farmer-profile',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const FarmerDashboardRoute = FarmerDashboardRouteImport.update({
-  id: '/farmer-dashboard',
-  path: '/farmer-dashboard',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const FarmProfileRoute = FarmProfileRouteImport.update({
-  id: '/farm-profile',
-  path: '/farm-profile',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const FarmMapRoute = FarmMapRouteImport.update({
-  id: '/farm-map',
-  path: '/farm-map',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const FarmInfoRoute = FarmInfoRouteImport.update({
-  id: '/farm-info',
-  path: '/farm-info',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DocumentUploadRoute = DocumentUploadRouteImport.update({
-  id: '/document-upload',
-  path: '/document-upload',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CropDetailsRoute = CropDetailsRouteImport.update({
-  id: '/crop-details',
-  path: '/crop-details',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CreatePasswordRoute = CreatePasswordRouteImport.update({
-  id: '/create-password',
-  path: '/create-password',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ContactSupportRoute = ContactSupportRouteImport.update({
-  id: '/contact-support',
-  path: '/contact-support',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ContactInfoRoute = ContactInfoRouteImport.update({
-  id: '/contact-info',
-  path: '/contact-info',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ContactFarmerRoute = ContactFarmerRouteImport.update({
-  id: '/contact-farmer',
-  path: '/contact-farmer',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ChatRoute = ChatRouteImport.update({
-  id: '/chat',
-  path: '/chat',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CategoriesRoute = CategoriesRouteImport.update({
-  id: '/categories',
-  path: '/categories',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const BuyerProfileRoute = BuyerProfileRouteImport.update({
-  id: '/buyer-profile',
-  path: '/buyer-profile',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const BusinessInfoRoute = BusinessInfoRouteImport.update({
-  id: '/business-info',
-  path: '/business-info',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AddProductRoute = AddProductRouteImport.update({
@@ -354,24 +99,264 @@ const AddProductRoute = AddProductRouteImport.update({
   path: '/add-product',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const BusinessInfoRoute = BusinessInfoRouteImport.update({
+  id: '/business-info',
+  path: '/business-info',
   getParentRoute: () => rootRouteImport,
 } as any)
-const TutorIndexRoute = TutorIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => TutorRoute,
+const BuyerProfileRoute = BuyerProfileRouteImport.update({
+  id: '/buyer-profile',
+  path: '/buyer-profile',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const StudentIndexRoute = StudentIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => StudentRoute,
+const CategoriesRoute = CategoriesRouteImport.update({
+  id: '/categories',
+  path: '/categories',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const JoinIndexRoute = JoinIndexRouteImport.update({
-  id: '/join/',
-  path: '/join/',
+const ChatRoute = ChatRouteImport.update({
+  id: '/chat',
+  path: '/chat',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactFarmerRoute = ContactFarmerRouteImport.update({
+  id: '/contact-farmer',
+  path: '/contact-farmer',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactInfoRoute = ContactInfoRouteImport.update({
+  id: '/contact-info',
+  path: '/contact-info',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactSupportRoute = ContactSupportRouteImport.update({
+  id: '/contact-support',
+  path: '/contact-support',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CreatePasswordRoute = CreatePasswordRouteImport.update({
+  id: '/create-password',
+  path: '/create-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CropDetailsRoute = CropDetailsRouteImport.update({
+  id: '/crop-details',
+  path: '/crop-details',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DocumentUploadRoute = DocumentUploadRouteImport.update({
+  id: '/document-upload',
+  path: '/document-upload',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FarmInfoRoute = FarmInfoRouteImport.update({
+  id: '/farm-info',
+  path: '/farm-info',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FarmMapRoute = FarmMapRouteImport.update({
+  id: '/farm-map',
+  path: '/farm-map',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FarmProfileRoute = FarmProfileRouteImport.update({
+  id: '/farm-profile',
+  path: '/farm-profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FarmerDashboardRoute = FarmerDashboardRouteImport.update({
+  id: '/farmer-dashboard',
+  path: '/farmer-dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FarmerProfileRoute = FarmerProfileRouteImport.update({
+  id: '/farmer-profile',
+  path: '/farmer-profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FeaturedFarmsRoute = FeaturedFarmsRouteImport.update({
+  id: '/featured-farms',
+  path: '/featured-farms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FiltersRoute = FiltersRouteImport.update({
+  id: '/filters',
+  path: '/filters',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HarvestTimelineRoute = HarvestTimelineRouteImport.update({
+  id: '/harvest-timeline',
+  path: '/harvest-timeline',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HelpCenterRoute = HelpCenterRouteImport.update({
+  id: '/help-center',
+  path: '/help-center',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HomeRoute = HomeRouteImport.update({
+  id: '/home',
+  path: '/home',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ImageViewerRoute = ImageViewerRouteImport.update({
+  id: '/image-viewer',
+  path: '/image-viewer',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IntroRoute = IntroRouteImport.update({
+  id: '/intro',
+  path: '/intro',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LanguageRoute = LanguageRouteImport.update({
+  id: '/language',
+  path: '/language',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MarketplaceRoute = MarketplaceRouteImport.update({
+  id: '/marketplace',
+  path: '/marketplace',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MessagesRoute = MessagesRouteImport.update({
+  id: '/messages',
+  path: '/messages',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NotificationsRoute = NotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const Onboarding1Route = Onboarding1RouteImport.update({
+  id: '/onboarding-1',
+  path: '/onboarding-1',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const Onboarding2Route = Onboarding2RouteImport.update({
+  id: '/onboarding-2',
+  path: '/onboarding-2',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const Onboarding3Route = Onboarding3RouteImport.update({
+  id: '/onboarding-3',
+  path: '/onboarding-3',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OtpRoute = OtpRouteImport.update({
+  id: '/otp',
+  path: '/otp',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PasswordResetSuccessRoute = PasswordResetSuccessRouteImport.update({
+  id: '/password-reset-success',
+  path: '/password-reset-success',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PersonalInfoRoute = PersonalInfoRouteImport.update({
+  id: '/personal-info',
+  path: '/personal-info',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PhotoGalleryRoute = PhotoGalleryRouteImport.update({
+  id: '/photo-gallery',
+  path: '/photo-gallery',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfilePhotoRoute = ProfilePhotoRouteImport.update({
+  id: '/profile-photo',
+  path: '/profile-photo',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReportIssueRoute = ReportIssueRouteImport.update({
+  id: '/report-issue',
+  path: '/report-issue',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReviewsRoute = ReviewsRouteImport.update({
+  id: '/reviews',
+  path: '/reviews',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SearchRoute = SearchRouteImport.update({
+  id: '/search',
+  path: '/search',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SearchResultsRoute = SearchResultsRouteImport.update({
+  id: '/search-results',
+  path: '/search-results',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SeasonalRoute = SeasonalRouteImport.update({
+  id: '/seasonal',
+  path: '/seasonal',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SigninRoute = SigninRouteImport.update({
+  id: '/signin',
+  path: '/signin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SignupRoute = SignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SplashRoute = SplashRouteImport.update({
+  id: '/splash',
+  path: '/splash',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StudentRoute = StudentRouteImport.update({
+  id: '/student',
+  path: '/student',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TourRoute = TourRouteImport.update({
+  id: '/tour',
+  path: '/tour',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TutorRoute = TutorRouteImport.update({
+  id: '/tutor',
+  path: '/tutor',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UserTypeRoute = UserTypeRouteImport.update({
+  id: '/user-type',
+  path: '/user-type',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VerificationStatusRoute = VerificationStatusRouteImport.update({
+  id: '/verification-status',
+  path: '/verification-status',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VerificationSubmittedRoute = VerificationSubmittedRouteImport.update({
+  id: '/verification-submitted',
+  path: '/verification-submitted',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WelcomeRoute = WelcomeRouteImport.update({
+  id: '/welcome',
+  path: '/welcome',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AppIndexRoute = AppIndexRouteImport.update({
@@ -379,69 +364,14 @@ const AppIndexRoute = AppIndexRouteImport.update({
   path: '/app/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const TutorProfileRoute = TutorProfileRouteImport.update({
-  id: '/profile',
-  path: '/profile',
-  getParentRoute: () => TutorRoute,
-} as any)
-const TutorMessagesRoute = TutorMessagesRouteImport.update({
-  id: '/messages',
-  path: '/messages',
-  getParentRoute: () => TutorRoute,
-} as any)
-const TutorFeedRoute = TutorFeedRouteImport.update({
-  id: '/feed',
-  path: '/feed',
-  getParentRoute: () => TutorRoute,
-} as any)
-const StudentStoreRoute = StudentStoreRouteImport.update({
-  id: '/store',
-  path: '/store',
-  getParentRoute: () => StudentRoute,
-} as any)
-const StudentSearchRoute = StudentSearchRouteImport.update({
-  id: '/search',
-  path: '/search',
-  getParentRoute: () => StudentRoute,
-} as any)
-const StudentQuizzesRoute = StudentQuizzesRouteImport.update({
-  id: '/quizzes',
-  path: '/quizzes',
-  getParentRoute: () => StudentRoute,
-} as any)
-const StudentProfileRoute = StudentProfileRouteImport.update({
-  id: '/profile',
-  path: '/profile',
-  getParentRoute: () => StudentRoute,
-} as any)
-const StudentMessagesRoute = StudentMessagesRouteImport.update({
-  id: '/messages',
-  path: '/messages',
-  getParentRoute: () => StudentRoute,
-} as any)
-const StudentFeedRoute = StudentFeedRouteImport.update({
-  id: '/feed',
-  path: '/feed',
-  getParentRoute: () => StudentRoute,
-} as any)
-const StudentExploreRoute = StudentExploreRouteImport.update({
-  id: '/explore',
-  path: '/explore',
-  getParentRoute: () => StudentRoute,
-} as any)
-const QuizQuizIdRoute = QuizQuizIdRouteImport.update({
-  id: '/quiz/$quizId',
-  path: '/quiz/$quizId',
+const AppScreenRoute = AppScreenRouteImport.update({
+  id: '/app/$screen',
+  path: '/app/$screen',
   getParentRoute: () => rootRouteImport,
 } as any)
-const QQuizIdRoute = QQuizIdRouteImport.update({
-  id: '/q/$quizId',
-  path: '/q/$quizId',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const JoinTutorRoute = JoinTutorRouteImport.update({
-  id: '/join/tutor',
-  path: '/join/tutor',
+const JoinIndexRoute = JoinIndexRouteImport.update({
+  id: '/join/',
+  path: '/join/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const JoinStudentRoute = JoinStudentRouteImport.update({
@@ -449,29 +379,84 @@ const JoinStudentRoute = JoinStudentRouteImport.update({
   path: '/join/student',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AppScreenRoute = AppScreenRouteImport.update({
-  id: '/app/$screen',
-  path: '/app/$screen',
+const JoinTutorRoute = JoinTutorRouteImport.update({
+  id: '/join/tutor',
+  path: '/join/tutor',
   getParentRoute: () => rootRouteImport,
 } as any)
-const TutorQuizzesIndexRoute = TutorQuizzesIndexRouteImport.update({
-  id: '/quizzes/',
-  path: '/quizzes/',
+const QQuizIdRoute = QQuizIdRouteImport.update({
+  id: '/q/$quizId',
+  path: '/q/$quizId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QuizQuizIdRoute = QuizQuizIdRouteImport.update({
+  id: '/quiz/$quizId',
+  path: '/quiz/$quizId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StudentIndexRoute = StudentIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => StudentRoute,
+} as any)
+const StudentExploreRoute = StudentExploreRouteImport.update({
+  id: '/explore',
+  path: '/explore',
+  getParentRoute: () => StudentRoute,
+} as any)
+const StudentFeedRoute = StudentFeedRouteImport.update({
+  id: '/feed',
+  path: '/feed',
+  getParentRoute: () => StudentRoute,
+} as any)
+const StudentMessagesRoute = StudentMessagesRouteImport.update({
+  id: '/messages',
+  path: '/messages',
+  getParentRoute: () => StudentRoute,
+} as any)
+const StudentProfileRoute = StudentProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => StudentRoute,
+} as any)
+const StudentQuizzesRoute = StudentQuizzesRouteImport.update({
+  id: '/quizzes',
+  path: '/quizzes',
+  getParentRoute: () => StudentRoute,
+} as any)
+const StudentSearchRoute = StudentSearchRouteImport.update({
+  id: '/search',
+  path: '/search',
+  getParentRoute: () => StudentRoute,
+} as any)
+const StudentStoreRoute = StudentStoreRouteImport.update({
+  id: '/store',
+  path: '/store',
+  getParentRoute: () => StudentRoute,
+} as any)
+const TutorIndexRoute = TutorIndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => TutorRoute,
 } as any)
-const TutorQuizzesNewRoute = TutorQuizzesNewRouteImport.update({
-  id: '/quizzes/new',
-  path: '/quizzes/new',
+const TutorFeedRoute = TutorFeedRouteImport.update({
+  id: '/feed',
+  path: '/feed',
   getParentRoute: () => TutorRoute,
 } as any)
-const TutorQuizzesQuizIdRoute = TutorQuizzesQuizIdRouteImport.update({
-  id: '/quizzes/$quizId',
-  path: '/quizzes/$quizId',
+const TutorMessagesRoute = TutorMessagesRouteImport.update({
+  id: '/messages',
+  path: '/messages',
   getParentRoute: () => TutorRoute,
 } as any)
-const StudentTutorsTutorIdRoute = StudentTutorsTutorIdRouteImport.update({
-  id: '/tutors/$tutorId',
-  path: '/tutors/$tutorId',
+const TutorProfileRoute = TutorProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => TutorRoute,
+} as any)
+const StudentCheckoutCourseIdRoute = StudentCheckoutCourseIdRouteImport.update({
+  id: '/checkout/$courseId',
+  path: '/checkout/$courseId',
   getParentRoute: () => StudentRoute,
 } as any)
 const StudentCoursesCourseIdRoute = StudentCoursesCourseIdRouteImport.update({
@@ -479,10 +464,25 @@ const StudentCoursesCourseIdRoute = StudentCoursesCourseIdRouteImport.update({
   path: '/courses/$courseId',
   getParentRoute: () => StudentRoute,
 } as any)
-const StudentCheckoutCourseIdRoute = StudentCheckoutCourseIdRouteImport.update({
-  id: '/checkout/$courseId',
-  path: '/checkout/$courseId',
+const StudentTutorsTutorIdRoute = StudentTutorsTutorIdRouteImport.update({
+  id: '/tutors/$tutorId',
+  path: '/tutors/$tutorId',
   getParentRoute: () => StudentRoute,
+} as any)
+const TutorQuizzesIndexRoute = TutorQuizzesIndexRouteImport.update({
+  id: '/quizzes/',
+  path: '/quizzes/',
+  getParentRoute: () => TutorRoute,
+} as any)
+const TutorQuizzesQuizIdRoute = TutorQuizzesQuizIdRouteImport.update({
+  id: '/quizzes/$quizId',
+  path: '/quizzes/$quizId',
+  getParentRoute: () => TutorRoute,
+} as any)
+const TutorQuizzesNewRoute = TutorQuizzesNewRouteImport.update({
+  id: '/quizzes/new',
+  path: '/quizzes/new',
+  getParentRoute: () => TutorRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -1037,368 +1037,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/welcome': {
-      id: '/welcome'
-      path: '/welcome'
-      fullPath: '/welcome'
-      preLoaderRoute: typeof WelcomeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/verification-submitted': {
-      id: '/verification-submitted'
-      path: '/verification-submitted'
-      fullPath: '/verification-submitted'
-      preLoaderRoute: typeof VerificationSubmittedRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/verification-status': {
-      id: '/verification-status'
-      path: '/verification-status'
-      fullPath: '/verification-status'
-      preLoaderRoute: typeof VerificationStatusRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/user-type': {
-      id: '/user-type'
-      path: '/user-type'
-      fullPath: '/user-type'
-      preLoaderRoute: typeof UserTypeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/tutor': {
-      id: '/tutor'
-      path: '/tutor'
-      fullPath: '/tutor'
-      preLoaderRoute: typeof TutorRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/tour': {
-      id: '/tour'
-      path: '/tour'
-      fullPath: '/tour'
-      preLoaderRoute: typeof TourRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/student': {
-      id: '/student'
-      path: '/student'
-      fullPath: '/student'
-      preLoaderRoute: typeof StudentRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/splash': {
-      id: '/splash'
-      path: '/splash'
-      fullPath: '/splash'
-      preLoaderRoute: typeof SplashRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/signup': {
-      id: '/signup'
-      path: '/signup'
-      fullPath: '/signup'
-      preLoaderRoute: typeof SignupRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/signin': {
-      id: '/signin'
-      path: '/signin'
-      fullPath: '/signin'
-      preLoaderRoute: typeof SigninRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/settings': {
-      id: '/settings'
-      path: '/settings'
-      fullPath: '/settings'
-      preLoaderRoute: typeof SettingsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/seasonal': {
-      id: '/seasonal'
-      path: '/seasonal'
-      fullPath: '/seasonal'
-      preLoaderRoute: typeof SeasonalRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/search-results': {
-      id: '/search-results'
-      path: '/search-results'
-      fullPath: '/search-results'
-      preLoaderRoute: typeof SearchResultsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/search': {
-      id: '/search'
-      path: '/search'
-      fullPath: '/search'
-      preLoaderRoute: typeof SearchRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/reviews': {
-      id: '/reviews'
-      path: '/reviews'
-      fullPath: '/reviews'
-      preLoaderRoute: typeof ReviewsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/report-issue': {
-      id: '/report-issue'
-      path: '/report-issue'
-      fullPath: '/report-issue'
-      preLoaderRoute: typeof ReportIssueRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/profile-photo': {
-      id: '/profile-photo'
-      path: '/profile-photo'
-      fullPath: '/profile-photo'
-      preLoaderRoute: typeof ProfilePhotoRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/photo-gallery': {
-      id: '/photo-gallery'
-      path: '/photo-gallery'
-      fullPath: '/photo-gallery'
-      preLoaderRoute: typeof PhotoGalleryRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/personal-info': {
-      id: '/personal-info'
-      path: '/personal-info'
-      fullPath: '/personal-info'
-      preLoaderRoute: typeof PersonalInfoRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/password-reset-success': {
-      id: '/password-reset-success'
-      path: '/password-reset-success'
-      fullPath: '/password-reset-success'
-      preLoaderRoute: typeof PasswordResetSuccessRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/otp': {
-      id: '/otp'
-      path: '/otp'
-      fullPath: '/otp'
-      preLoaderRoute: typeof OtpRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/onboarding-3': {
-      id: '/onboarding-3'
-      path: '/onboarding-3'
-      fullPath: '/onboarding-3'
-      preLoaderRoute: typeof Onboarding3RouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/onboarding-2': {
-      id: '/onboarding-2'
-      path: '/onboarding-2'
-      fullPath: '/onboarding-2'
-      preLoaderRoute: typeof Onboarding2RouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/onboarding-1': {
-      id: '/onboarding-1'
-      path: '/onboarding-1'
-      fullPath: '/onboarding-1'
-      preLoaderRoute: typeof Onboarding1RouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/notifications': {
-      id: '/notifications'
-      path: '/notifications'
-      fullPath: '/notifications'
-      preLoaderRoute: typeof NotificationsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/messages': {
-      id: '/messages'
-      path: '/messages'
-      fullPath: '/messages'
-      preLoaderRoute: typeof MessagesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/marketplace': {
-      id: '/marketplace'
-      path: '/marketplace'
-      fullPath: '/marketplace'
-      preLoaderRoute: typeof MarketplaceRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/language': {
-      id: '/language'
-      path: '/language'
-      fullPath: '/language'
-      preLoaderRoute: typeof LanguageRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/intro': {
-      id: '/intro'
-      path: '/intro'
-      fullPath: '/intro'
-      preLoaderRoute: typeof IntroRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/image-viewer': {
-      id: '/image-viewer'
-      path: '/image-viewer'
-      fullPath: '/image-viewer'
-      preLoaderRoute: typeof ImageViewerRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/home': {
-      id: '/home'
-      path: '/home'
-      fullPath: '/home'
-      preLoaderRoute: typeof HomeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/help-center': {
-      id: '/help-center'
-      path: '/help-center'
-      fullPath: '/help-center'
-      preLoaderRoute: typeof HelpCenterRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/harvest-timeline': {
-      id: '/harvest-timeline'
-      path: '/harvest-timeline'
-      fullPath: '/harvest-timeline'
-      preLoaderRoute: typeof HarvestTimelineRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/forgot-password': {
-      id: '/forgot-password'
-      path: '/forgot-password'
-      fullPath: '/forgot-password'
-      preLoaderRoute: typeof ForgotPasswordRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/filters': {
-      id: '/filters'
-      path: '/filters'
-      fullPath: '/filters'
-      preLoaderRoute: typeof FiltersRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/featured-farms': {
-      id: '/featured-farms'
-      path: '/featured-farms'
-      fullPath: '/featured-farms'
-      preLoaderRoute: typeof FeaturedFarmsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/farmer-profile': {
-      id: '/farmer-profile'
-      path: '/farmer-profile'
-      fullPath: '/farmer-profile'
-      preLoaderRoute: typeof FarmerProfileRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/farmer-dashboard': {
-      id: '/farmer-dashboard'
-      path: '/farmer-dashboard'
-      fullPath: '/farmer-dashboard'
-      preLoaderRoute: typeof FarmerDashboardRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/farm-profile': {
-      id: '/farm-profile'
-      path: '/farm-profile'
-      fullPath: '/farm-profile'
-      preLoaderRoute: typeof FarmProfileRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/farm-map': {
-      id: '/farm-map'
-      path: '/farm-map'
-      fullPath: '/farm-map'
-      preLoaderRoute: typeof FarmMapRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/farm-info': {
-      id: '/farm-info'
-      path: '/farm-info'
-      fullPath: '/farm-info'
-      preLoaderRoute: typeof FarmInfoRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/document-upload': {
-      id: '/document-upload'
-      path: '/document-upload'
-      fullPath: '/document-upload'
-      preLoaderRoute: typeof DocumentUploadRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/crop-details': {
-      id: '/crop-details'
-      path: '/crop-details'
-      fullPath: '/crop-details'
-      preLoaderRoute: typeof CropDetailsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/create-password': {
-      id: '/create-password'
-      path: '/create-password'
-      fullPath: '/create-password'
-      preLoaderRoute: typeof CreatePasswordRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/contact-support': {
-      id: '/contact-support'
-      path: '/contact-support'
-      fullPath: '/contact-support'
-      preLoaderRoute: typeof ContactSupportRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/contact-info': {
-      id: '/contact-info'
-      path: '/contact-info'
-      fullPath: '/contact-info'
-      preLoaderRoute: typeof ContactInfoRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/contact-farmer': {
-      id: '/contact-farmer'
-      path: '/contact-farmer'
-      fullPath: '/contact-farmer'
-      preLoaderRoute: typeof ContactFarmerRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/chat': {
-      id: '/chat'
-      path: '/chat'
-      fullPath: '/chat'
-      preLoaderRoute: typeof ChatRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/categories': {
-      id: '/categories'
-      path: '/categories'
-      fullPath: '/categories'
-      preLoaderRoute: typeof CategoriesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/buyer-profile': {
-      id: '/buyer-profile'
-      path: '/buyer-profile'
-      fullPath: '/buyer-profile'
-      preLoaderRoute: typeof BuyerProfileRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/business-info': {
-      id: '/business-info'
-      path: '/business-info'
-      fullPath: '/business-info'
-      preLoaderRoute: typeof BusinessInfoRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/add-product': {
@@ -1408,32 +1051,368 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AddProductRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/business-info': {
+      id: '/business-info'
+      path: '/business-info'
+      fullPath: '/business-info'
+      preLoaderRoute: typeof BusinessInfoRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/tutor/': {
-      id: '/tutor/'
-      path: '/'
-      fullPath: '/tutor/'
-      preLoaderRoute: typeof TutorIndexRouteImport
-      parentRoute: typeof TutorRoute
+    '/buyer-profile': {
+      id: '/buyer-profile'
+      path: '/buyer-profile'
+      fullPath: '/buyer-profile'
+      preLoaderRoute: typeof BuyerProfileRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/student/': {
-      id: '/student/'
-      path: '/'
-      fullPath: '/student/'
-      preLoaderRoute: typeof StudentIndexRouteImport
-      parentRoute: typeof StudentRoute
+    '/categories': {
+      id: '/categories'
+      path: '/categories'
+      fullPath: '/categories'
+      preLoaderRoute: typeof CategoriesRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/join/': {
-      id: '/join/'
-      path: '/join'
-      fullPath: '/join/'
-      preLoaderRoute: typeof JoinIndexRouteImport
+    '/chat': {
+      id: '/chat'
+      path: '/chat'
+      fullPath: '/chat'
+      preLoaderRoute: typeof ChatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact-farmer': {
+      id: '/contact-farmer'
+      path: '/contact-farmer'
+      fullPath: '/contact-farmer'
+      preLoaderRoute: typeof ContactFarmerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact-info': {
+      id: '/contact-info'
+      path: '/contact-info'
+      fullPath: '/contact-info'
+      preLoaderRoute: typeof ContactInfoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact-support': {
+      id: '/contact-support'
+      path: '/contact-support'
+      fullPath: '/contact-support'
+      preLoaderRoute: typeof ContactSupportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/create-password': {
+      id: '/create-password'
+      path: '/create-password'
+      fullPath: '/create-password'
+      preLoaderRoute: typeof CreatePasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/crop-details': {
+      id: '/crop-details'
+      path: '/crop-details'
+      fullPath: '/crop-details'
+      preLoaderRoute: typeof CropDetailsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/document-upload': {
+      id: '/document-upload'
+      path: '/document-upload'
+      fullPath: '/document-upload'
+      preLoaderRoute: typeof DocumentUploadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/farm-info': {
+      id: '/farm-info'
+      path: '/farm-info'
+      fullPath: '/farm-info'
+      preLoaderRoute: typeof FarmInfoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/farm-map': {
+      id: '/farm-map'
+      path: '/farm-map'
+      fullPath: '/farm-map'
+      preLoaderRoute: typeof FarmMapRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/farm-profile': {
+      id: '/farm-profile'
+      path: '/farm-profile'
+      fullPath: '/farm-profile'
+      preLoaderRoute: typeof FarmProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/farmer-dashboard': {
+      id: '/farmer-dashboard'
+      path: '/farmer-dashboard'
+      fullPath: '/farmer-dashboard'
+      preLoaderRoute: typeof FarmerDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/farmer-profile': {
+      id: '/farmer-profile'
+      path: '/farmer-profile'
+      fullPath: '/farmer-profile'
+      preLoaderRoute: typeof FarmerProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/featured-farms': {
+      id: '/featured-farms'
+      path: '/featured-farms'
+      fullPath: '/featured-farms'
+      preLoaderRoute: typeof FeaturedFarmsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/filters': {
+      id: '/filters'
+      path: '/filters'
+      fullPath: '/filters'
+      preLoaderRoute: typeof FiltersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/forgot-password': {
+      id: '/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof ForgotPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/harvest-timeline': {
+      id: '/harvest-timeline'
+      path: '/harvest-timeline'
+      fullPath: '/harvest-timeline'
+      preLoaderRoute: typeof HarvestTimelineRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/help-center': {
+      id: '/help-center'
+      path: '/help-center'
+      fullPath: '/help-center'
+      preLoaderRoute: typeof HelpCenterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/home': {
+      id: '/home'
+      path: '/home'
+      fullPath: '/home'
+      preLoaderRoute: typeof HomeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/image-viewer': {
+      id: '/image-viewer'
+      path: '/image-viewer'
+      fullPath: '/image-viewer'
+      preLoaderRoute: typeof ImageViewerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/intro': {
+      id: '/intro'
+      path: '/intro'
+      fullPath: '/intro'
+      preLoaderRoute: typeof IntroRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/language': {
+      id: '/language'
+      path: '/language'
+      fullPath: '/language'
+      preLoaderRoute: typeof LanguageRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/marketplace': {
+      id: '/marketplace'
+      path: '/marketplace'
+      fullPath: '/marketplace'
+      preLoaderRoute: typeof MarketplaceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/messages': {
+      id: '/messages'
+      path: '/messages'
+      fullPath: '/messages'
+      preLoaderRoute: typeof MessagesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/notifications': {
+      id: '/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof NotificationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/onboarding-1': {
+      id: '/onboarding-1'
+      path: '/onboarding-1'
+      fullPath: '/onboarding-1'
+      preLoaderRoute: typeof Onboarding1RouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/onboarding-2': {
+      id: '/onboarding-2'
+      path: '/onboarding-2'
+      fullPath: '/onboarding-2'
+      preLoaderRoute: typeof Onboarding2RouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/onboarding-3': {
+      id: '/onboarding-3'
+      path: '/onboarding-3'
+      fullPath: '/onboarding-3'
+      preLoaderRoute: typeof Onboarding3RouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/otp': {
+      id: '/otp'
+      path: '/otp'
+      fullPath: '/otp'
+      preLoaderRoute: typeof OtpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/password-reset-success': {
+      id: '/password-reset-success'
+      path: '/password-reset-success'
+      fullPath: '/password-reset-success'
+      preLoaderRoute: typeof PasswordResetSuccessRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/personal-info': {
+      id: '/personal-info'
+      path: '/personal-info'
+      fullPath: '/personal-info'
+      preLoaderRoute: typeof PersonalInfoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/photo-gallery': {
+      id: '/photo-gallery'
+      path: '/photo-gallery'
+      fullPath: '/photo-gallery'
+      preLoaderRoute: typeof PhotoGalleryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile-photo': {
+      id: '/profile-photo'
+      path: '/profile-photo'
+      fullPath: '/profile-photo'
+      preLoaderRoute: typeof ProfilePhotoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/report-issue': {
+      id: '/report-issue'
+      path: '/report-issue'
+      fullPath: '/report-issue'
+      preLoaderRoute: typeof ReportIssueRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reviews': {
+      id: '/reviews'
+      path: '/reviews'
+      fullPath: '/reviews'
+      preLoaderRoute: typeof ReviewsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/search': {
+      id: '/search'
+      path: '/search'
+      fullPath: '/search'
+      preLoaderRoute: typeof SearchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/search-results': {
+      id: '/search-results'
+      path: '/search-results'
+      fullPath: '/search-results'
+      preLoaderRoute: typeof SearchResultsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/seasonal': {
+      id: '/seasonal'
+      path: '/seasonal'
+      fullPath: '/seasonal'
+      preLoaderRoute: typeof SeasonalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/signin': {
+      id: '/signin'
+      path: '/signin'
+      fullPath: '/signin'
+      preLoaderRoute: typeof SigninRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/splash': {
+      id: '/splash'
+      path: '/splash'
+      fullPath: '/splash'
+      preLoaderRoute: typeof SplashRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/student': {
+      id: '/student'
+      path: '/student'
+      fullPath: '/student'
+      preLoaderRoute: typeof StudentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tour': {
+      id: '/tour'
+      path: '/tour'
+      fullPath: '/tour'
+      preLoaderRoute: typeof TourRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tutor': {
+      id: '/tutor'
+      path: '/tutor'
+      fullPath: '/tutor'
+      preLoaderRoute: typeof TutorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/user-type': {
+      id: '/user-type'
+      path: '/user-type'
+      fullPath: '/user-type'
+      preLoaderRoute: typeof UserTypeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/verification-status': {
+      id: '/verification-status'
+      path: '/verification-status'
+      fullPath: '/verification-status'
+      preLoaderRoute: typeof VerificationStatusRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/verification-submitted': {
+      id: '/verification-submitted'
+      path: '/verification-submitted'
+      fullPath: '/verification-submitted'
+      preLoaderRoute: typeof VerificationSubmittedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/welcome': {
+      id: '/welcome'
+      path: '/welcome'
+      fullPath: '/welcome'
+      preLoaderRoute: typeof WelcomeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/app/': {
@@ -1443,95 +1422,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/tutor/profile': {
-      id: '/tutor/profile'
-      path: '/profile'
-      fullPath: '/tutor/profile'
-      preLoaderRoute: typeof TutorProfileRouteImport
-      parentRoute: typeof TutorRoute
-    }
-    '/tutor/messages': {
-      id: '/tutor/messages'
-      path: '/messages'
-      fullPath: '/tutor/messages'
-      preLoaderRoute: typeof TutorMessagesRouteImport
-      parentRoute: typeof TutorRoute
-    }
-    '/tutor/feed': {
-      id: '/tutor/feed'
-      path: '/feed'
-      fullPath: '/tutor/feed'
-      preLoaderRoute: typeof TutorFeedRouteImport
-      parentRoute: typeof TutorRoute
-    }
-    '/student/store': {
-      id: '/student/store'
-      path: '/store'
-      fullPath: '/student/store'
-      preLoaderRoute: typeof StudentStoreRouteImport
-      parentRoute: typeof StudentRoute
-    }
-    '/student/search': {
-      id: '/student/search'
-      path: '/search'
-      fullPath: '/student/search'
-      preLoaderRoute: typeof StudentSearchRouteImport
-      parentRoute: typeof StudentRoute
-    }
-    '/student/quizzes': {
-      id: '/student/quizzes'
-      path: '/quizzes'
-      fullPath: '/student/quizzes'
-      preLoaderRoute: typeof StudentQuizzesRouteImport
-      parentRoute: typeof StudentRoute
-    }
-    '/student/profile': {
-      id: '/student/profile'
-      path: '/profile'
-      fullPath: '/student/profile'
-      preLoaderRoute: typeof StudentProfileRouteImport
-      parentRoute: typeof StudentRoute
-    }
-    '/student/messages': {
-      id: '/student/messages'
-      path: '/messages'
-      fullPath: '/student/messages'
-      preLoaderRoute: typeof StudentMessagesRouteImport
-      parentRoute: typeof StudentRoute
-    }
-    '/student/feed': {
-      id: '/student/feed'
-      path: '/feed'
-      fullPath: '/student/feed'
-      preLoaderRoute: typeof StudentFeedRouteImport
-      parentRoute: typeof StudentRoute
-    }
-    '/student/explore': {
-      id: '/student/explore'
-      path: '/explore'
-      fullPath: '/student/explore'
-      preLoaderRoute: typeof StudentExploreRouteImport
-      parentRoute: typeof StudentRoute
-    }
-    '/quiz/$quizId': {
-      id: '/quiz/$quizId'
-      path: '/quiz/$quizId'
-      fullPath: '/quiz/$quizId'
-      preLoaderRoute: typeof QuizQuizIdRouteImport
+    '/app/$screen': {
+      id: '/app/$screen'
+      path: '/app/$screen'
+      fullPath: '/app/$screen'
+      preLoaderRoute: typeof AppScreenRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/q/$quizId': {
-      id: '/q/$quizId'
-      path: '/q/$quizId'
-      fullPath: '/q/$quizId'
-      preLoaderRoute: typeof QQuizIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/join/tutor': {
-      id: '/join/tutor'
-      path: '/join/tutor'
-      fullPath: '/join/tutor'
-      preLoaderRoute: typeof JoinTutorRouteImport
+    '/join/': {
+      id: '/join/'
+      path: '/join'
+      fullPath: '/join/'
+      preLoaderRoute: typeof JoinIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/join/student': {
@@ -1541,39 +1443,116 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof JoinStudentRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/app/$screen': {
-      id: '/app/$screen'
-      path: '/app/$screen'
-      fullPath: '/app/$screen'
-      preLoaderRoute: typeof AppScreenRouteImport
+    '/join/tutor': {
+      id: '/join/tutor'
+      path: '/join/tutor'
+      fullPath: '/join/tutor'
+      preLoaderRoute: typeof JoinTutorRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/tutor/quizzes/': {
-      id: '/tutor/quizzes/'
+    '/q/$quizId': {
+      id: '/q/$quizId'
+      path: '/q/$quizId'
+      fullPath: '/q/$quizId'
+      preLoaderRoute: typeof QQuizIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/quiz/$quizId': {
+      id: '/quiz/$quizId'
+      path: '/quiz/$quizId'
+      fullPath: '/quiz/$quizId'
+      preLoaderRoute: typeof QuizQuizIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/student/': {
+      id: '/student/'
+      path: '/'
+      fullPath: '/student/'
+      preLoaderRoute: typeof StudentIndexRouteImport
+      parentRoute: typeof StudentRoute
+    }
+    '/student/explore': {
+      id: '/student/explore'
+      path: '/explore'
+      fullPath: '/student/explore'
+      preLoaderRoute: typeof StudentExploreRouteImport
+      parentRoute: typeof StudentRoute
+    }
+    '/student/feed': {
+      id: '/student/feed'
+      path: '/feed'
+      fullPath: '/student/feed'
+      preLoaderRoute: typeof StudentFeedRouteImport
+      parentRoute: typeof StudentRoute
+    }
+    '/student/messages': {
+      id: '/student/messages'
+      path: '/messages'
+      fullPath: '/student/messages'
+      preLoaderRoute: typeof StudentMessagesRouteImport
+      parentRoute: typeof StudentRoute
+    }
+    '/student/profile': {
+      id: '/student/profile'
+      path: '/profile'
+      fullPath: '/student/profile'
+      preLoaderRoute: typeof StudentProfileRouteImport
+      parentRoute: typeof StudentRoute
+    }
+    '/student/quizzes': {
+      id: '/student/quizzes'
       path: '/quizzes'
-      fullPath: '/tutor/quizzes/'
-      preLoaderRoute: typeof TutorQuizzesIndexRouteImport
+      fullPath: '/student/quizzes'
+      preLoaderRoute: typeof StudentQuizzesRouteImport
+      parentRoute: typeof StudentRoute
+    }
+    '/student/search': {
+      id: '/student/search'
+      path: '/search'
+      fullPath: '/student/search'
+      preLoaderRoute: typeof StudentSearchRouteImport
+      parentRoute: typeof StudentRoute
+    }
+    '/student/store': {
+      id: '/student/store'
+      path: '/store'
+      fullPath: '/student/store'
+      preLoaderRoute: typeof StudentStoreRouteImport
+      parentRoute: typeof StudentRoute
+    }
+    '/tutor/': {
+      id: '/tutor/'
+      path: '/'
+      fullPath: '/tutor/'
+      preLoaderRoute: typeof TutorIndexRouteImport
       parentRoute: typeof TutorRoute
     }
-    '/tutor/quizzes/new': {
-      id: '/tutor/quizzes/new'
-      path: '/quizzes/new'
-      fullPath: '/tutor/quizzes/new'
-      preLoaderRoute: typeof TutorQuizzesNewRouteImport
+    '/tutor/feed': {
+      id: '/tutor/feed'
+      path: '/feed'
+      fullPath: '/tutor/feed'
+      preLoaderRoute: typeof TutorFeedRouteImport
       parentRoute: typeof TutorRoute
     }
-    '/tutor/quizzes/$quizId': {
-      id: '/tutor/quizzes/$quizId'
-      path: '/quizzes/$quizId'
-      fullPath: '/tutor/quizzes/$quizId'
-      preLoaderRoute: typeof TutorQuizzesQuizIdRouteImport
+    '/tutor/messages': {
+      id: '/tutor/messages'
+      path: '/messages'
+      fullPath: '/tutor/messages'
+      preLoaderRoute: typeof TutorMessagesRouteImport
       parentRoute: typeof TutorRoute
     }
-    '/student/tutors/$tutorId': {
-      id: '/student/tutors/$tutorId'
-      path: '/tutors/$tutorId'
-      fullPath: '/student/tutors/$tutorId'
-      preLoaderRoute: typeof StudentTutorsTutorIdRouteImport
+    '/tutor/profile': {
+      id: '/tutor/profile'
+      path: '/profile'
+      fullPath: '/tutor/profile'
+      preLoaderRoute: typeof TutorProfileRouteImport
+      parentRoute: typeof TutorRoute
+    }
+    '/student/checkout/$courseId': {
+      id: '/student/checkout/$courseId'
+      path: '/checkout/$courseId'
+      fullPath: '/student/checkout/$courseId'
+      preLoaderRoute: typeof StudentCheckoutCourseIdRouteImport
       parentRoute: typeof StudentRoute
     }
     '/student/courses/$courseId': {
@@ -1583,12 +1562,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StudentCoursesCourseIdRouteImport
       parentRoute: typeof StudentRoute
     }
-    '/student/checkout/$courseId': {
-      id: '/student/checkout/$courseId'
-      path: '/checkout/$courseId'
-      fullPath: '/student/checkout/$courseId'
-      preLoaderRoute: typeof StudentCheckoutCourseIdRouteImport
+    '/student/tutors/$tutorId': {
+      id: '/student/tutors/$tutorId'
+      path: '/tutors/$tutorId'
+      fullPath: '/student/tutors/$tutorId'
+      preLoaderRoute: typeof StudentTutorsTutorIdRouteImport
       parentRoute: typeof StudentRoute
+    }
+    '/tutor/quizzes/': {
+      id: '/tutor/quizzes/'
+      path: '/quizzes'
+      fullPath: '/tutor/quizzes/'
+      preLoaderRoute: typeof TutorQuizzesIndexRouteImport
+      parentRoute: typeof TutorRoute
+    }
+    '/tutor/quizzes/$quizId': {
+      id: '/tutor/quizzes/$quizId'
+      path: '/quizzes/$quizId'
+      fullPath: '/tutor/quizzes/$quizId'
+      preLoaderRoute: typeof TutorQuizzesQuizIdRouteImport
+      parentRoute: typeof TutorRoute
+    }
+    '/tutor/quizzes/new': {
+      id: '/tutor/quizzes/new'
+      path: '/quizzes/new'
+      fullPath: '/tutor/quizzes/new'
+      preLoaderRoute: typeof TutorQuizzesNewRouteImport
+      parentRoute: typeof TutorRoute
     }
   }
 }
