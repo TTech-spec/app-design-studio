@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import {
   Sprout, ShieldCheck, MessageCircle, TrendingUp, MapPin, Sparkles, Search, Users,
-  BarChart3, ArrowRight, Check, Star, Phone, Mail, ChevronDown, Menu, X,
+  BarChart3, ArrowRight, Star, Phone, Mail, ChevronDown, Menu, X,
   Facebook, Twitter, Instagram, Linkedin, Youtube, Play,
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
@@ -11,6 +11,7 @@ import type { Variants } from "framer-motion";
 import gsap from "gsap";
 // SCREEN_COMPONENTS removed (PhonePreview no longer used)
 import { PhoneFrame } from "@/components/landing/PhoneFrame";
+import { PricingPlans } from "@/components/landing/PricingPlans";
 // SplashVisual removed
 // StoreBadges removed
 import { cn } from "@/lib/utils";
@@ -669,53 +670,8 @@ function Landing() {
         </div>
       </section>
 
-      {/* PRICING */}
-      <section id="pricing" className="mx-auto max-w-7xl px-6 py-24">
-        <div className="mx-auto max-w-2xl text-center">
-          <p className="text-xs font-bold uppercase tracking-widest text-primary">Pricing</p>
-          <h2 className="mt-3 text-4xl font-black tracking-tight text-forest md:text-5xl">Simple, transparent pricing</h2>
-          <p className="mt-4 text-lg text-muted-foreground">Enroll in one course or apply for a scholarship. No hidden fees.</p>
-        </div>
-        <div className="mt-14 grid gap-6 md:grid-cols-3">
-          {[
-            { name: "Short Courses", price: "₦150,000", period: "–₦250,000", body: "Perfect for focused skill-building.", features: ["AI Automation (3 months)", "UI/UX Design (4 months)", "Graphics Design (4 months)", "Course certificate", "Student portal access"], cta: "Enroll Now", highlight: false },
-            { name: "Full Programs", price: "₦300,000", period: "–₦800,000", body: "8-month deep-dive professional programs.", features: ["Data Analysis, Cybersecurity & more", "All 8-month courses", "Expert instructors", "Progress dashboard", "Industry certificate"], cta: "Browse Courses", highlight: true },
-            { name: "Scholarship", price: "₦30,000", period: " acceptance fee", body: "Apply for financial aid on any course.", features: ["Choose any course", "Submit eligibility details", "Admin review", "Enrolled if approved", "Full course access"], cta: "Apply Now", highlight: false },
-          ].map((p, i) => (
-            <motion.div
-              key={p.name}
-              variants={fadeUp}
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true, margin: "-60px" }}
-              transition={{ delay: i * 0.1 }}
-              className={`relative rounded-3xl border-2 p-8 ${p.highlight ? "border-primary bg-card shadow-pop" : "border-border bg-card shadow-soft"}`}
-            >
-              {p.highlight && <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full gradient-primary px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-primary-foreground shadow-glow">Most popular</span>}
-              <h3 className="text-xl font-black text-forest">{p.name}</h3>
-              <p className="mt-2 text-sm text-muted-foreground">{p.body}</p>
-              <div className="mt-6 flex items-baseline gap-1">
-                <span className="text-4xl font-black text-forest">{p.price}</span>
-                {p.period && <span className="text-sm text-muted-foreground">{p.period}</span>}
-              </div>
-              <ul className="mt-6 space-y-3">
-                {p.features.map((f) => (
-                  <li key={f} className="flex items-start gap-2 text-sm">
-                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" strokeWidth={3} />
-                    <span className="text-foreground">{f}</span>
-                  </li>
-                ))}
-              </ul>
-              <a
-                href="/join"
-                className={`mt-8 flex h-12 w-full items-center justify-center rounded-2xl text-sm font-bold ${p.highlight ? "gradient-primary text-primary-foreground shadow-glow" : "border-2 border-forest text-forest hover:bg-secondary"}`}
-              >
-                {p.cta}
-              </a>
-            </motion.div>
-          ))}
-        </div>
-      </section>
+      {/* PRICING · Choose how you want to learn, what’s included, popular with Plus, compare */}
+      <PricingPlans />
 
       {/* FAQ */}
       <section id="faq" className="bg-card">
