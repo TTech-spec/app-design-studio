@@ -1,8 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import {
-  Sprout, ShieldCheck, MessageCircle, TrendingUp, MapPin, Sparkles, Search, Users,
-  BarChart3, ArrowRight, Star, Phone, Mail, ChevronDown, Menu, X,
-  Facebook, Twitter, Instagram, Linkedin, Youtube, Play,
+  MapPin, ArrowRight, Star, Phone, Mail, ChevronDown, Menu, X,
+  Facebook, Twitter, Instagram, Linkedin, Youtube,
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import type { ReactNode } from "react";
@@ -12,6 +11,8 @@ import gsap from "gsap";
 // SCREEN_COMPONENTS removed (PhonePreview no longer used)
 import { PhoneFrame } from "@/components/landing/PhoneFrame";
 import { PricingPlans } from "@/components/landing/PricingPlans";
+import { BlueprintHero } from "@/components/landing/BlueprintHero";
+import { FeaturesPanel } from "@/components/landing/FeaturesPanel";
 // SplashVisual removed
 // StoreBadges removed
 import { cn } from "@/lib/utils";
@@ -23,32 +24,6 @@ const fadeUp: Variants = {
 };
 
 
-const HERO_SLIDES = [
-  {
-    type: "image" as const,
-    image: "/ChatGPT_Image_Jul_9__2026__02_11_45_PM-removebg-preview.png",
-    heading: "Do Extraordinary Things",
-    subheading: "Learn in-demand tech skills from expert instructors. Get certified, build real projects, and launch your career in tech — from anywhere in Nigeria.",
-  },
-  {
-    type: "image" as const,
-    image: "/ChatGPT_Image_Jul_9__2026__02_26_53_PM-removebg-preview.png",
-    heading: "Start Your Learning Journey Today.",
-    subheading: "Join a community of builders, creators and problem solvers. Pick a course, enroll, and go from beginner to job-ready.",
-  },
-  {
-    type: "image" as const,
-    image: "/ChatGPT_Image_Jul_9__2026__02_11_45_PM-removebg-preview.png",
-    heading: "Get Industry-Recognized Certificates",
-    subheading: "Complete your course and earn a certificate you can proudly share on LinkedIn and use in job applications across Nigeria and beyond.",
-  },
-  {
-    type: "image" as const,
-    image: "/Stylish_Image_Of_Lady_On_Purple___Yellow_Shirts__Holding_A_PowerBank___Pointing_Towards_Her_Right_-removebg-preview.png",
-    heading: "Stuck on Where to Start? We've Got You.",
-    subheading: "Confused about where to start or what to learn next? We've got you covered — with clear paths, real projects, and support every step of the way.",
-  },
-];
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -181,7 +156,6 @@ function Landing() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [showSplash] = useState(false);
-  const [heroImageIndex, setHeroImageIndex] = useState(0);
   const [navMounted, setNavMounted] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeHref, setActiveHref] = useState("#features");
@@ -196,14 +170,6 @@ function Landing() {
   const GREEN_DARK = "#c73229";
 
   // splash removed
-
-  // Cycle hero images every 3.5 seconds
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setHeroImageIndex((prev) => (prev + 1) % HERO_SLIDES.length);
-    }, 3500);
-    return () => clearInterval(interval);
-  }, []);
 
   // Navbar mount + scroll
   useEffect(() => {
@@ -221,7 +187,6 @@ function Landing() {
     if (el) setIndicator({ left: el.offsetLeft, width: el.offsetWidth, opacity: 1 });
   }, [hoveredIdx]);
 
-  const activeSlide = HERO_SLIDES[heroImageIndex];
 
   const navLinks = [
     { label: "Courses", href: "#features" },
@@ -323,7 +288,7 @@ function Landing() {
                 return (
                   <a
                     key={link.href}
-                    ref={(el) => (linkRefs.current[idx] = el)}
+                    ref={(el) => { linkRefs.current[idx] = el; }}
                     href={link.href}
                     onMouseEnter={() => setHoveredIdx(idx)}
                     onClick={() => setActiveHref(link.href)}
@@ -406,114 +371,8 @@ function Landing() {
       </div>
 
     <div className="min-h-screen bg-surface">
-      {/* HERO */}
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-0 gradient-mesh" />
-        <div className="relative mx-auto grid max-w-7xl gap-12 px-6 pb-20 pt-14 lg:grid-cols-[1.1fr_1fr] lg:gap-16 lg:pt-24 lg:pb-32">
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: "easeOut" }}
-          >
-            <span className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-3 py-1.5 text-xs font-bold text-white">
-              <span className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" />
-              🎓 Now live · Nigeria's Leading Tech Academy
-            </span>
-            <AnimatePresence mode="wait">
-              <motion.h1
-                key={activeSlide.heading}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.45, ease: "easeOut" }}
-                className="mt-6 text-5xl font-black leading-[1.05] tracking-tight text-white md:text-6xl lg:text-7xl"
-              >
-                {activeSlide.heading}
-              </motion.h1>
-            </AnimatePresence>
-            <AnimatePresence mode="wait">
-              <motion.p
-                key={activeSlide.subheading}
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -16 }}
-                transition={{ duration: 0.45, ease: "easeOut", delay: 0.08 }}
-                className="mt-6 max-w-xl text-lg leading-relaxed text-white/80"
-              >
-                {activeSlide.subheading}
-              </motion.p>
-            </AnimatePresence>
-            <div className="mt-8 flex flex-wrap items-center gap-3">
-              <a href="/student/explore" className="inline-flex h-13 min-h-[52px] items-center gap-2 rounded-2xl gradient-primary px-6 text-sm font-bold text-primary-foreground shadow-glow">
-                Browse Courses <ArrowRight className="h-4 w-4" />
-              </a>
-              <a href="/join/student" className="inline-flex h-13 min-h-[52px] items-center gap-2 rounded-2xl border-2 border-white bg-transparent px-6 text-sm font-bold text-white hover:bg-white/10">
-                Apply for Scholarship <ArrowRight className="h-4 w-4" />
-              </a>
-            </div>
-            <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4 text-xs text-white/75">
-              <div className="flex items-center gap-2"><ShieldCheck className="h-4 w-4 text-primary" /> 10+ Tech Courses</div>
-              <div className="flex items-center gap-2"><Sparkles className="h-4 w-4 text-primary" /> Industry Certificates</div>
-              <div className="flex items-center gap-2"><MessageCircle className="h-4 w-4 text-primary" /> Expert Instructors</div>
-            </div>
-
-            <div className="mt-10 flex items-center gap-6">
-              <div className="flex -space-x-3">
-                {["#c98a1a", "#2f7d3a", "#8b5a2b", "#1f6b5e"].map((c, i) => (
-                  <div key={i} className="grid h-10 w-10 place-items-center rounded-full ring-4 ring-surface text-xs font-bold text-white" style={{ background: c }}>
-                    {["AD", "FA", "CK", "MI"][i]}
-                  </div>
-                ))}
-              </div>
-              <div>
-                <div className="flex items-center gap-1">
-                  {[1,2,3,4,5].map((i) => <Star key={i} className="h-3.5 w-3.5 fill-gold text-gold" />)}
-                  <span className="ml-1 text-sm font-bold text-white">4.9</span>
-                </div>
-                <p className="text-xs text-white/70">from 1,800+ student reviews</p>
-              </div>
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, scale: 0.94 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, ease: "easeOut", delay: 0.15 }}
-            className="relative flex items-center justify-center"
-          >
-            <div className="relative z-10">
-              <AnimatePresence mode="wait">
-                {activeSlide.type === "video" ? (
-                  <motion.video
-                    key={activeSlide.video}
-                    src={activeSlide.video}
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    className="h-auto max-h-[850px] w-full max-w-3xl object-contain drop-shadow-2xl rounded-3xl"
-                    initial={{ opacity: 0, scale: 0.96, x: 30 }}
-                    animate={{ opacity: 1, scale: 1, x: 0 }}
-                    exit={{ opacity: 0, scale: 0.96, x: -30 }}
-                    transition={{ duration: 0.6, ease: "easeInOut" }}
-                  />
-                ) : (
-                  <motion.img
-                    key={activeSlide.image}
-                    src={activeSlide.image}
-                    alt="DarlTech Academy student portal screens"
-                    className="h-auto max-h-[850px] w-full max-w-3xl object-contain drop-shadow-2xl"
-                    initial={{ opacity: 0, scale: 0.96, x: 30 }}
-                    animate={{ opacity: 1, scale: 1, x: 0 }}
-                    exit={{ opacity: 0, scale: 0.96, x: -30 }}
-                    transition={{ duration: 0.6, ease: "easeInOut" }}
-                  />
-                )}
-              </AnimatePresence>
-            </div>
-          </motion.div>
-        </div>
-      </section>
+      {/* HERO — blueprint-ui style */}
+      <BlueprintHero />
 
       {/* Trust / logo strip — auto-scrolling marquee */}
       <section className="border-y border-border bg-card py-8">
@@ -530,39 +389,8 @@ function Landing() {
         </div>
       </section>
 
-      {/* FEATURES */}
-      <section id="features" className="mx-auto max-w-7xl px-6 py-24">
-        <div className="mx-auto max-w-2xl text-center">
-          <p className="text-xs font-bold uppercase tracking-widest text-primary">Features</p>
-          <h2 className="mt-3 text-4xl font-black tracking-tight text-forest md:text-5xl">Why Choose DarlTech Academy?</h2>
-          <p className="mt-4 text-lg text-muted-foreground">Every feature is designed around your success — from enrollment to certification.</p>
-        </div>
-        <div className="mt-14 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {[
-            { icon: <ShieldCheck className="h-6 w-6" />, title: "Expert Instructors", body: "Learn directly from industry practitioners with real-world experience in their field." },
-            { icon: <Search className="h-6 w-6" />, title: "Structured Curriculum", body: "Every course follows a focused, module-by-module structure designed to take you from zero to job-ready." },
-            { icon: <MessageCircle className="h-6 w-6" />, title: "Industry Certificates", body: "Earn a recognized DarlTech Academy certificate upon completion — downloadable and shareable on LinkedIn." },
-            { icon: <TrendingUp className="h-6 w-6" />, title: "Progress Dashboard", body: "Track your completion, upcoming deadlines, and quiz scores all from one clean student dashboard." },
-            { icon: <MapPin className="h-6 w-6" />, title: "Discussion Threads", body: "Ask questions, share ideas, and collaborate with fellow students through in-course discussion boards." },
-            { icon: <BarChart3 className="h-6 w-6" />, title: "Scholarship Program", body: "Apply for financial aid on any course. Pay a ₦30,000 acceptance fee and let our team review your application." },
-          ].map((f, i) => (
-            <motion.div
-              key={f.title}
-              variants={fadeUp}
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true, margin: "-60px" }}
-              transition={{ delay: (i % 3) * 0.08 }}
-              whileHover={{ y: -4 }}
-              className="rounded-3xl border border-border bg-card p-6 shadow-soft transition hover:shadow-card"
-            >
-              <div className="grid h-12 w-12 place-items-center rounded-2xl gradient-primary text-primary-foreground shadow-glow">{f.icon}</div>
-              <h3 className="mt-5 text-lg font-black text-forest">{f.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{f.body}</p>
-            </motion.div>
-          ))}
-        </div>
-      </section>
+      {/* FEATURES — blueprint-ui "Our features" panel */}
+      <FeaturesPanel />
 
       {/* HOW IT WORKS */}
       <section id="how" className="bg-forest text-forest-foreground">
