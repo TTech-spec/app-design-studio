@@ -1,9 +1,11 @@
 import { ChevronLeft, Eye, EyeOff } from "lucide-react";
+import { motion, useReducedMotion } from "framer-motion";
 import { useState, type InputHTMLAttributes, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { Avatar, Logo, SuccessArt } from "./ui";
 
 export function AuthLayout({ children }: { children: ReactNode }) {
+  const reduceMotion = useReducedMotion();
   return (
     <div className="academy flex min-h-screen bg-white">
       <aside className="hidden w-[42%] max-w-[600px] shrink-0 flex-col bg-primary px-14 py-12 text-white lg:flex">
@@ -30,7 +32,14 @@ export function AuthLayout({ children }: { children: ReactNode }) {
         </figure>
       </aside>
       <main className="flex flex-1 justify-center px-6 pb-8 pt-6 lg:items-center lg:py-10">
-        <div className="flex w-full max-w-[440px] flex-col">{children}</div>
+        <motion.div
+          initial={reduceMotion ? false : { opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.45, ease: "easeOut" }}
+          className="flex w-full max-w-[440px] flex-col"
+        >
+          {children}
+        </motion.div>
       </main>
     </div>
   );

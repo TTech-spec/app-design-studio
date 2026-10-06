@@ -16,6 +16,7 @@ import { FeaturesPanel } from "@/components/landing/FeaturesPanel";
 // SplashVisual removed
 // StoreBadges removed
 import { cn } from "@/lib/utils";
+import { useScrollAnimations } from "@/lib/use-scroll-animations";
 
 /** Reveal-on-scroll variant shared across sections below. */
 const fadeUp: Variants = {
@@ -153,6 +154,8 @@ function Marquee<T>({
 }
 
 function Landing() {
+  // GSAP ScrollTrigger reveals for every element marked data-animate / data-parallax
+  useScrollAnimations();
   const [menuOpen, setMenuOpen] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [showSplash] = useState(false);
@@ -239,7 +242,7 @@ function Landing() {
                   Get Started <ArrowRight className="h-4 w-4" />
                 </a>
               </div>
-              <button className="md:hidden" onClick={() => setMenuOpen(!menuOpen)}>
+              <button className="md:hidden text-white" aria-label={menuOpen ? "Close menu" : "Open menu"} aria-expanded={menuOpen} onClick={() => setMenuOpen(!menuOpen)}>
                 {menuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
               </button>
             </div>
@@ -293,7 +296,7 @@ function Landing() {
                     onMouseEnter={() => setHoveredIdx(idx)}
                     onClick={() => setActiveHref(link.href)}
                     className="relative z-10 px-4 py-2 text-sm font-medium rounded-full transition-colors duration-200"
-                    style={{ color: isActive ? INK : "#5B5F58" }}
+                    style={{ color: hoveredIdx === idx ? INK : isActive ? "#FFFFFF" : "rgba(255,255,255,0.8)" }}
                   >
                     {link.label}
                     <span
@@ -318,8 +321,10 @@ function Landing() {
               <button
                 type="button"
                 onClick={() => setMenuOpen((v) => !v)}
+                aria-label={menuOpen ? "Close menu" : "Open menu"}
+                aria-expanded={menuOpen}
                 className="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-full transition-transform duration-200 active:scale-90"
-                style={{ backgroundColor: PILL_BG, color: INK }}
+                style={{ backgroundColor: PILL_BG, color: "#FFFFFF" }}
               >
                 <span style={{ transform: menuOpen ? "rotate(90deg)" : "rotate(0deg)", display: "inline-flex", transition: "transform 0.3s" }}>
                   {menuOpen ? <X size={18} /> : <Menu size={18} />}
@@ -348,8 +353,8 @@ function Landing() {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: idx * 0.04 }}
                         onClick={() => { setActiveHref(link.href); setMenuOpen(false); }}
-                        className="px-4 py-3 rounded-2xl text-sm font-medium transition-colors duration-200 hover:bg-black/5"
-                        style={{ color: activeHref === link.href ? INK : "#5B5F58" }}
+                        className="px-4 py-3 rounded-2xl text-sm font-medium transition-colors duration-200 hover:bg-white/10"
+                        style={{ color: activeHref === link.href ? "#FFFFFF" : "rgba(255,255,255,0.8)" }}
                       >
                         {link.label}
                       </motion.a>
@@ -376,7 +381,7 @@ function Landing() {
 
       {/* Trust / logo strip — auto-scrolling marquee */}
       <section className="border-y border-border bg-card py-8">
-        <p className="text-center text-xs font-bold uppercase tracking-widest text-muted-foreground">Our graduates work at top companies across Nigeria</p>
+        <p data-animate="fade-up" className="text-center text-xs font-bold uppercase tracking-widest text-muted-foreground">Our graduates work at top companies across Nigeria</p>
         <div className="mt-6">
           <Marquee
             items={["Google", "Microsoft", "Andela", "Paystack", "Flutterwave", "Kuda Bank", "Access Bank", "MTN Nigeria", "Jumia", "Sterling Bank"]}
@@ -397,9 +402,9 @@ function Landing() {
         <div className="mx-auto max-w-7xl px-6 py-24">
           <div className="grid gap-16 lg:grid-cols-[1fr_1.2fr] lg:items-center">
             <div>
-              <p className="text-xs font-bold uppercase tracking-widest text-gold">How it works</p>
-              <h2 className="mt-3 text-4xl font-black tracking-tight md:text-5xl">Three simple steps to start learning</h2>
-              <p className="mt-4 text-lg text-forest-foreground/70">Whether you're a complete beginner or upskilling, DarlTech gets you started in minutes.</p>
+              <p data-animate="fade-up" className="text-xs font-bold uppercase tracking-widest text-gold">How it works</p>
+              <h2 data-animate="fade-up" className="mt-3 text-4xl font-black tracking-tight md:text-5xl">Three simple steps to start learning</h2>
+              <p data-animate="fade-up" className="mt-4 text-lg text-forest-foreground/70">Whether you're a complete beginner or upskilling, DarlTech gets you started in minutes.</p>
               <div className="mt-10 space-y-6">
                 {[
                   { n: "01", title: "Create your account", body: "Sign up as a student in under 2 minutes. Choose your role and set up your profile." },
@@ -445,7 +450,7 @@ function Landing() {
 
       {/* SCREENSHOTS */}
       <section id="screenshots" className="mx-auto max-w-7xl px-6 py-24">
-        <div className="mx-auto max-w-2xl text-center">
+        <div data-animate="stagger" className="mx-auto max-w-2xl text-center">
           <p className="text-xs font-bold uppercase tracking-widest text-primary">Screenshots</p>
           <h2 className="mt-3 text-4xl font-black tracking-tight text-forest md:text-5xl">A closer look at your student portal</h2>
           <p className="mt-4 text-lg text-muted-foreground">Every screen is designed with clarity and ease of use in mind. Explore the full learning experience.</p>
@@ -461,7 +466,7 @@ function Landing() {
       {/* TESTIMONIALS */}
       <section className="bg-primary-soft/40">
         <div className="mx-auto max-w-7xl px-6 py-24">
-          <div className="mx-auto max-w-2xl text-center">
+          <div data-animate="stagger" className="mx-auto max-w-2xl text-center">
             <p className="text-xs font-bold uppercase tracking-widest text-primary">Testimonials</p>
             <h2 className="mt-3 text-4xl font-black tracking-tight text-forest md:text-5xl">Loved by students across Nigeria</h2>
           </div>
@@ -504,7 +509,7 @@ function Landing() {
       {/* FAQ */}
       <section id="faq" className="bg-card">
         <div className="mx-auto max-w-4xl px-6 py-24">
-          <div className="text-center">
+          <div data-animate="stagger" className="text-center">
             <p className="text-xs font-bold uppercase tracking-widest text-primary">FAQ</p>
             <h2 className="mt-3 text-4xl font-black tracking-tight text-forest md:text-5xl">Frequently asked questions</h2>
           </div>
@@ -533,8 +538,8 @@ function Landing() {
       <section id="contact" className="mx-auto max-w-7xl px-6 py-24">
         <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
           <div>
-            <p className="text-xs font-bold uppercase tracking-widest text-primary">Contact</p>
-            <h2 className="mt-3 text-4xl font-black tracking-tight text-forest md:text-5xl">Talk to our team</h2>
+            <p data-animate="fade-up" className="text-xs font-bold uppercase tracking-widest text-primary">Contact</p>
+            <h2 data-animate="fade-up" className="mt-3 text-4xl font-black tracking-tight text-forest md:text-5xl">Talk to our team</h2>
             <p className="mt-4 text-lg text-muted-foreground">Questions about courses, scholarships, or enrollment? We'd love to hear from you.</p>
             <div className="mt-8 space-y-4">
               {[
@@ -588,7 +593,7 @@ function Landing() {
         </div>
 
         {/* Newsletter */}
-        <div id="download" className="mt-24 overflow-hidden rounded-[36px] gradient-primary p-6 sm:p-10 md:p-16 text-primary-foreground shadow-glow">
+        <div id="download" data-animate="scale-in" className="mt-24 overflow-hidden rounded-[36px] gradient-primary p-6 sm:p-10 md:p-16 text-primary-foreground shadow-glow">
           <div className="grid gap-8 md:gap-10 md:grid-cols-2 md:items-center">
             <div>
               <h2 className="text-2xl font-black tracking-tight sm:text-3xl md:text-4xl">Get started. Learn with DarlTech Academy.</h2>

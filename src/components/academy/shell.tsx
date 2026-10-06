@@ -14,6 +14,7 @@ import {
   User,
   type LucideIcon,
 } from "lucide-react";
+import { motion, useReducedMotion } from "framer-motion";
 import { useState, type FormEvent, type ReactNode } from "react";
 import type { FileRouteTypes } from "@/routeTree.gen";
 import { cn } from "@/lib/utils";
@@ -71,6 +72,7 @@ export function AppShell({ role, children }: { role: Role; children: ReactNode }
   const path = useLocation({ select: (l) => l.pathname });
   const navigate = useNavigate();
   const [q, setQ] = useState("");
+  const reduceMotion = useReducedMotion();
   const nav = role === "student" ? STUDENT_NAV : TUTOR_NAV;
   const tabs = role === "student" ? STUDENT_TABS : TUTOR_TABS;
   const name = user?.name ?? (role === "student" ? "Guest" : "Tutor");
@@ -206,7 +208,15 @@ export function AppShell({ role, children }: { role: Role; children: ReactNode }
         )}
 
         <main className="mx-auto w-full max-w-[1280px] px-4 pb-28 pt-5 md:px-8 md:pt-7 lg:pb-12">
-          {children}
+          {/* Framer page transition: each page rises in as you move around the portal */}
+          <motion.div
+            key={path}
+            initial={reduceMotion ? false : { opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.35, ease: "easeOut" }}
+          >
+            {children}
+          </motion.div>
         </main>
       </div>
 

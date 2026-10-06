@@ -148,7 +148,7 @@ export function PricingPlans() {
     <>
       {/* CHOOSE HOW YOU WANT TO LEARN */}
       <section id="pricing" className="mx-auto max-w-7xl px-6 py-24">
-        <div className="mx-auto max-w-2xl text-center">
+        <div data-animate="stagger" className="mx-auto max-w-2xl text-center">
           <p className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-primary">
             <InfinityIcon className="h-4 w-4" /> Pricing · DarlTech Plus
           </p>
@@ -261,7 +261,7 @@ export function PricingPlans() {
       {/* WHAT'S INCLUDED */}
       <section className="bg-primary-soft/40">
         <div className="mx-auto max-w-7xl px-6 py-20">
-          <div className="max-w-2xl">
+          <div data-animate="stagger" className="max-w-2xl">
             <p className="text-xs font-bold uppercase tracking-widest text-primary">
               DarlTech Plus
             </p>
@@ -293,7 +293,7 @@ export function PricingPlans() {
 
       {/* POPULAR WITH PLUS LEARNERS */}
       <section className="mx-auto max-w-7xl px-6 py-20">
-        <div className="flex flex-wrap items-end justify-between gap-4">
+        <div data-animate="fade-up" className="flex flex-wrap items-end justify-between gap-4">
           <h2 className="text-3xl font-black tracking-tight text-forest md:text-4xl">
             Popular with Plus learners
           </h2>

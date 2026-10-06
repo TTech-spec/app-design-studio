@@ -77,15 +77,25 @@ export function FeaturesPanel() {
       <div className="relative overflow-hidden rounded-[18px] bg-[#e8edf5] px-6 py-9 text-[#0E2A54] md:rounded-3xl md:px-14 md:py-20">
         {/* angled background shapes */}
         <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
-          <span className="absolute -right-60 top-[120px] h-[900px] w-[340px] -skew-y-[20deg] rounded-[48px] bg-[#c9d4ea] opacity-60 md:-right-40 md:h-[440px]" />
-          <span className="absolute right-[120px] top-[360px] h-[440px] w-[340px] -skew-y-[20deg] rounded-[48px] bg-[#c9d4ea] opacity-60 md:right-[205px] md:top-[215px]" />
-          <span className="absolute right-10 top-[70px] h-[440px] w-[180px] skew-y-[20deg] rounded-[48px] bg-[#f5b5ae] opacity-30 md:right-[225px]" />
+          <div data-parallax="0.25" className="absolute inset-0">
+            <span className="absolute -right-60 top-[120px] h-[900px] w-[340px] -skew-y-[20deg] rounded-[48px] bg-[#c9d4ea] opacity-60 md:-right-40 md:h-[440px]" />
+          </div>
+          <div data-parallax="0.12" className="absolute inset-0">
+            <span className="absolute right-[120px] top-[360px] h-[440px] w-[340px] -skew-y-[20deg] rounded-[48px] bg-[#c9d4ea] opacity-60 md:right-[205px] md:top-[215px]" />
+          </div>
+          <div data-parallax="0.4" className="absolute inset-0">
+            <span className="absolute right-10 top-[70px] h-[440px] w-[180px] skew-y-[20deg] rounded-[48px] bg-[#f5b5ae] opacity-30 md:right-[225px]" />
+          </div>
         </div>
 
-        <span className="relative inline-flex items-center gap-1.5 rounded-md bg-[#EF4136]/12 px-2.5 py-1 text-[11px] font-semibold tracking-wide text-[#5a6a8a]">
+        <span
+          data-animate="fade-up"
+          className="relative inline-flex items-center gap-1.5 rounded-md bg-[#EF4136]/12 px-2.5 py-1 text-[11px] font-semibold tracking-wide text-[#5a6a8a]"
+        >
           <span className="h-1.5 w-1.5 rounded-full bg-[#EF4136]" /> OUR FEATURES
         </span>
         <h2
+          data-animate="fade-up"
           id="features-title"
           className="relative mb-8 mt-5 font-display text-[25px] font-bold tracking-tight md:mb-14 md:mt-6 md:text-[34px]"
         >
