@@ -78,6 +78,8 @@ export function AppShell({ role, children }: { role: Role; children: ReactNode }
   const name = user?.name ?? (role === "student" ? "Guest" : "Tutor");
   const initials = user ? initialsOf(user.name) : "G";
   const color = role === "student" ? "#EF4136" : "#1a3d72";
+  // On desktop the student dashboard brings its own sidebar and top bar (the portal design).
+  const portalPage = role === "student" && (path === "/student" || path === "/student/");
 
   const onSearch = (e: FormEvent) => {
     e.preventDefault();
@@ -85,11 +87,14 @@ export function AppShell({ role, children }: { role: Role; children: ReactNode }
   };
 
   return (
-    <div className="academy min-h-screen bg-surface">
+    <div className={cn("academy min-h-screen bg-surface", portalPage && "lg:bg-white")}>
       {/* Desktop sidebar */}
       <nav
         aria-label="Main"
-        className="fixed inset-y-0 left-0 z-30 hidden w-[248px] flex-col bg-primary px-4 py-6 text-white lg:flex"
+        className={cn(
+          "fixed inset-y-0 left-0 z-30 hidden w-[248px] flex-col bg-primary px-4 py-6 text-white",
+          !portalPage && "lg:flex",
+        )}
       >
         <Link to={role === "student" ? "/student" : "/tutor"} className="px-2 pb-7">
           <Logo light />
@@ -145,9 +150,14 @@ export function AppShell({ role, children }: { role: Role; children: ReactNode }
         </div>
       </nav>
 
-      <div className="lg:pl-[248px]">
+      <div className={cn(!portalPage && "lg:pl-[248px]")}>
         {/* Top bar */}
-        <header className="sticky top-0 z-20 flex h-16 items-center gap-3 border-b border-border bg-white px-4 md:h-[72px] md:px-8">
+        <header
+          className={cn(
+            "sticky top-0 z-20 flex h-16 items-center gap-3 border-b border-border bg-white px-4 md:h-[72px] md:px-8",
+            portalPage && "lg:hidden",
+          )}
+        >
           <Link to={role === "student" ? "/student" : "/tutor"} className="lg:hidden">
             <Logo />
           </Link>
@@ -199,7 +209,12 @@ export function AppShell({ role, children }: { role: Role; children: ReactNode }
         </header>
 
         {!user && (
-          <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 bg-primary-soft px-4 py-2.5 text-center text-sm">
+          <div
+            className={cn(
+              "flex flex-wrap items-center justify-center gap-x-3 gap-y-1 bg-primary-soft px-4 py-2.5 text-center text-sm",
+              portalPage && "lg:hidden",
+            )}
+          >
             <span>You’re looking around as a guest.</span>
             <Link to="/join" className="font-bold text-[#D7372C] hover:underline">
               Create a free account
@@ -207,7 +222,12 @@ export function AppShell({ role, children }: { role: Role; children: ReactNode }
           </div>
         )}
 
-        <main className="mx-auto w-full max-w-[1280px] px-4 pb-28 pt-5 md:px-8 md:pt-7 lg:pb-12">
+        <main
+          className={cn(
+            "mx-auto w-full max-w-[1280px] px-4 pb-28 pt-5 md:px-8 md:pt-7 lg:pb-12",
+            portalPage && "lg:max-w-none lg:p-0",
+          )}
+        >
           {/* Framer page transition: each page rises in as you move around the portal */}
           <motion.div
             key={path}

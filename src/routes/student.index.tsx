@@ -15,6 +15,7 @@ import {
 import { cn } from "@/lib/utils";
 import { COURSES, POSTS, TUTORS, courseById, tutorById } from "@/lib/academy/data";
 import { firstName, useAcademy } from "@/lib/academy/store";
+import { PortalDashboard } from "@/components/academy/portal-dashboard";
 import {
   Avatar,
   btn,
@@ -35,7 +36,16 @@ export const Route = createFileRoute("/student/")({
 
 function Dashboard() {
   const { enrollments } = useAcademy();
-  return enrollments.length ? <LearningDashboard /> : <NewDashboard />;
+  return (
+    <>
+      <div className="hidden lg:block">
+        <PortalDashboard />
+      </div>
+      <div className="lg:hidden">
+        {enrollments.length ? <LearningDashboard /> : <NewDashboard />}
+      </div>
+    </>
+  );
 }
 
 function CheckItem({
