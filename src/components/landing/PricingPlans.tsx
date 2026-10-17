@@ -41,7 +41,7 @@ const PLANS: Plan[] = [
     name: "Single programme",
     price: "From ₦150,000",
     period: "one-off",
-    note: "Or apply for a scholarship with a ₦30,000 acceptance fee",
+    note: "Or apply for the Cohort 2 scholarship (₦50,000 commitment fee)",
     features: [
       "Short courses: ₦150,000 – ₦250,000",
       "Full programmes: ₦300,000 – ₦800,000",

@@ -62,7 +62,7 @@ const STEPS: Step[] = [
     notes: [
       { icon: CreditCard, title: "Payment received", body: "UI/UX Design · ₦150,000", tone: "green" },
       { icon: BookOpen, title: "You're enrolled!", body: "7 modules unlocked. Start lesson 1.", tone: "red" },
-      { icon: Bell, title: "Message from your tutor", body: "Welcome to Cohort 5, see you Monday!", tone: "navy" },
+      { icon: Bell, title: "Message from your tutor", body: "Welcome to Cohort 2, see you Monday!", tone: "navy" },
     ],
   },
   {

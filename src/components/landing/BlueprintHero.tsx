@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { motion, useReducedMotion } from "framer-motion";
 import gsap from "gsap";
-import { ArrowRight, BookOpen, ClipboardCheck, GraduationCap, Play, Star } from "lucide-react";
+import { ArrowRight, BookOpen, Check, ClipboardCheck, GraduationCap, Laptop, Play } from "lucide-react";
 import { Fragment, useEffect, useLayoutEffect, useRef, type ReactNode } from "react";
 import student from "@/assets/hero-student.webp";
 
@@ -17,16 +17,9 @@ import student from "@/assets/hero-student.webp";
 
 const useIsoLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
-const AVATARS = [
-  { init: "AO", color: "#0E2A54" },
-  { init: "FA", color: "#EF4136" },
-  { init: "CN", color: "#1a3d72" },
-  { init: "MI", color: "#1f6b5e" },
-];
-
 const HEADLINE: string[][] = [
-  ["Do", "Extraordinary", "Things", "with"],
-  ["In‑Demand", "Tech", "Skills"],
+  ["Your", "future", "in", "tech"],
+  ["starts", "with", "what", "you", "build."],
 ];
 
 const pill =
@@ -129,8 +122,8 @@ export function BlueprintHero() {
             data-hero="eyebrow"
             className="inline-flex items-center gap-1.5 rounded-md bg-[#e8edf5] px-2.5 py-1 text-[11px] font-semibold tracking-wide text-[#5a6a8a]"
           >
-            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[#EF4136]" /> LEARN · BUILD ·
-            GET HIRED
+            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[#EF4136]" /> COHORT 2 ·
+            APPLICATIONS
           </span>
           <h1
             id="hero-title"
@@ -156,17 +149,17 @@ export function BlueprintHero() {
             data-hero="copy"
             className="mx-auto max-w-[620px] text-sm leading-[1.9] text-[#5a6a8a] md:text-base"
           >
-            Learn from expert instructors, build real projects and earn certificates you can share —
-            from anywhere in Nigeria.
+            Learn in-demand technology skills, work on practical projects, and develop the confidence
+            to grow in the digital economy.
           </p>
           <div data-hero="actions" className="mt-7 flex flex-wrap justify-center gap-3">
             <motion.a
-              href="/join"
+              href="/join/student"
               whileHover={{ y: -2 }}
               whileTap={{ scale: 0.97 }}
               className={`${pill} bg-[#D7372C] text-white shadow-[0_10px_24px_-10px_rgba(215,55,44,0.7)] hover:bg-[#b52d24]`}
             >
-              Get started free <ArrowRight className="h-4 w-4" />
+              Explore Cohort 2 <ArrowRight className="h-4 w-4" />
             </motion.a>
             <motion.div whileHover={{ y: -2 }} whileTap={{ scale: 0.97 }}>
               <Link
@@ -174,7 +167,7 @@ export function BlueprintHero() {
                 search={{ q: "" }}
                 className={`${pill} border border-[#dde3ef] bg-[#f3f6fb] text-[#0E2A54] hover:bg-[#e8edf5]`}
               >
-                Browse courses
+                Explore courses
                 <span className="flex h-5 w-5 items-center justify-center rounded-full border border-[#0E2A54]/40">
                   <Play className="h-2.5 w-2.5" />
                 </span>
@@ -183,23 +176,14 @@ export function BlueprintHero() {
           </div>
           <div
             data-hero="proof"
-            className="mt-6 flex items-center justify-center gap-2.5 text-xs text-[#5a6a8a] md:text-[13px]"
+            className="mt-6 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs font-medium text-[#5a6a8a] md:text-[13px]"
           >
-            <div className="flex pl-1.5">
-              {AVATARS.map((a) => (
-                <span
-                  key={a.init}
-                  aria-hidden="true"
-                  className="-ml-1.5 grid h-7 w-7 place-items-center rounded-full border-2 border-white text-[9px] font-bold text-white"
-                  style={{ background: a.color }}
-                >
-                  {a.init}
-                </span>
-              ))}
-            </div>
-            <span>
-              Rated <b className="text-[#0E2A54]">4.9</b> from 1,800+ student reviews
-            </span>
+            {["100% online learning", "Practical projects", "Multiple technology tracks"].map((t) => (
+              <span key={t} className="inline-flex items-center gap-1.5">
+                <Check className="h-3.5 w-3.5 text-[#D7372C]" strokeWidth={3} aria-hidden="true" />
+                {t}
+              </span>
+            ))}
           </div>
         </div>
 
@@ -239,29 +223,12 @@ export function BlueprintHero() {
             className="left-0 top-[250px] sm:left-[20px] sm:top-[330px] md:left-[74px] md:top-[379px]"
           >
             <div className="flex items-center gap-2 px-2 py-1.5 md:px-3 md:py-2">
-              <span className="grid h-7 w-7 place-items-center rounded-lg bg-[#0E2A54] text-sm font-black text-white md:h-9 md:w-9 md:text-lg">
-                D
+              <span className="grid h-7 w-7 place-items-center rounded-lg bg-[#0E2A54] text-white md:h-9 md:w-9">
+                <Laptop className="h-4 w-4 md:h-5 md:w-5" strokeWidth={1.8} aria-hidden="true" />
               </span>
               <span className="flex flex-col">
-                <span className="flex text-[#c98a1a]" aria-hidden="true">
-                  {[0, 1, 2, 3, 4].map((i) => (
-                    <motion.span
-                      key={i}
-                      initial={reduce ? false : { scale: 0, rotate: -40 }}
-                      animate={{ scale: 1, rotate: 0 }}
-                      transition={{
-                        type: "spring",
-                        stiffness: 400,
-                        damping: 14,
-                        delay: CARD_DELAYS[1] + 0.25 + i * 0.08,
-                      }}
-                    >
-                      <Star className="h-2.5 w-2.5 fill-current md:h-3 md:w-3" />
-                    </motion.span>
-                  ))}
-                </span>
-                <span className="text-[8px] text-[#5a6a8a] md:text-[10px]">Student reviews</span>
-                <strong className="text-[9px] md:text-xs">4.9 average rating</strong>
+                <span className="text-[8px] text-[#5a6a8a] md:text-[10px]">Learn from anywhere</span>
+                <strong className="text-[9px] md:text-xs">100% online</strong>
               </span>
             </div>
           </PopCard>

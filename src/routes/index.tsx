@@ -31,9 +31,9 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "DarlTech Academy — Do Extraordinary Things" },
-      { name: "description", content: "Learn in-demand tech skills from expert instructors. Get certified and launch your career in tech with DarlTech Academy." },
+      { name: "description", content: "DarlTech Academy is an online technology academy. Learn in-demand tech skills, build practical projects and apply for Cohort 2." },
       { property: "og:title", content: "DarlTech Academy — Do Extraordinary Things" },
-      { property: "og:description", content: "Nigeria's leading tech academy. Expert instructors, structured courses, and industry-recognized certificates." },
+      { property: "og:description", content: "Your future in tech starts with what you build. 100% online learning, practical projects and multiple technology tracks." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -440,12 +440,15 @@ function Landing() {
           </div>
           <div className="mt-12 space-y-3">
             {[
-              { q: "How do I enroll in a course?", a: "Browse our course catalog, select your preferred course, create an account, and complete payment to gain immediate access to your learning portal." },
-              { q: "What is the scholarship program?", a: "Our scholarship program provides financial aid for eligible students. You apply for a specific course, pay a ₦30,000 acceptance fee to confirm your application, and our admin team reviews and approves or declines your application." },
-              { q: "Is the ₦30,000 acceptance fee refundable?", a: "This is currently an open question being finalized by the DarlTech Academy team. Contact us for the latest policy." },
-              { q: "What certificate do I get?", a: "Upon completing a course, you receive an industry-recognized DarlTech Academy completion certificate that you can download and share on LinkedIn." },
-              { q: "Can I learn at my own pace?", a: "Yes — all course content is accessible 24/7 through your student portal. Progress through lessons, quizzes, and assignments at your own schedule." },
-              { q: "How is DarlTech different from other platforms?", a: "We're the only platform combining structured Nigerian tech education, scholarship access, a real student portal with progress tracking, and industry-recognized certificates — all in one place." },
+              { q: "Who can apply for Cohort 2?", a: "Cohort 2 is open to learners across Nigeria who want to build in-demand technology skills. Create a free account, choose your track and submit a scholarship application — our admin team reviews every application." },
+              { q: "What does the scholarship cover?", a: "The Cohort 2 scholarship provides financial aid towards your chosen programme. Contact us for the full coverage details of your track before you apply." },
+              { q: "When is the ₦50,000 commitment fee paid?", a: "You pay the ₦50,000 Cohort 2 commitment fee when you submit your scholarship application. It confirms your application so our team can review it." },
+              { q: "Is the commitment fee refundable?", a: "The refund policy is being finalised by the DarlTech Academy team. Please contact us for the latest policy before you pay." },
+              { q: "Does paying the fee guarantee selection?", a: "No. Paying the commitment fee confirms your application; our admin team then reviews it and approves or declines it." },
+              { q: "Are classes live, self-paced, or a combination?", a: "Learning is 100% online. Lessons, quizzes and assignments are available 24/7 in your student portal, so you can progress at your own pace." },
+              { q: "What equipment and internet access do I need?", a: "A laptop or smartphone with a reliable internet connection. If you're unsure whether your setup suits a particular track, contact us before you apply." },
+              { q: "Will I receive a certificate?", a: "Yes. When you complete your course you receive a DarlTech Academy completion certificate that you can download and share on LinkedIn." },
+              { q: "How will I receive updates after applying?", a: "We'll keep you updated by email and through notifications in your student portal." },
             ].map((f, i) => (
               <div key={i} className="overflow-hidden rounded-2xl border border-border bg-surface">
                 <button onClick={() => setOpenFaq(openFaq === i ? null : i)} className="flex w-full items-center justify-between gap-4 p-5 text-left">
@@ -470,7 +473,7 @@ function Landing() {
               {[
                 { icon: <Phone className="h-5 w-5" />, label: "Call us", value: "+234 708 116 4457", href: "tel:+2347081164457" },
                 { icon: <Mail className="h-5 w-5" />, label: "Email", value: "darltechacademy@gmail.com", href: "mailto:darltechacademy@gmail.com" },
-                { icon: <MapPin className="h-5 w-5" />, label: "Head office", value: "DarlTech Academy, Lagos, Nigeria" },
+                { icon: <MapPin className="h-5 w-5" />, label: "Where we are", value: "Online academy serving learners across Nigeria" },
               ].map((c) => (
                 <div key={c.label} className="flex items-center gap-4">
                   <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-primary-soft text-primary">{c.icon}</div>

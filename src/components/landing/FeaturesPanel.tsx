@@ -33,14 +33,14 @@ const FEATURES: { icon: LucideIcon; title: string; body: string; cta: string; hr
   {
     icon: BookOpen,
     title: "Structured Curriculum",
-    body: "Every course follows a focused, module-by-module structure designed to take you from zero to job-ready.",
+    body: "Every course follows a focused, module-by-module structure designed to take you from beginner to building real projects.",
     cta: "See the catalogue",
     href: "/catalog",
   },
   {
     icon: Award,
-    title: "Industry Certificates",
-    body: "Earn a recognized DarlTech Academy certificate upon completion — downloadable and shareable on LinkedIn.",
+    title: "Completion Certificates",
+    body: "Earn a DarlTech Academy certificate when you complete your course — downloadable and shareable on LinkedIn.",
     cta: "Get started",
     href: "/join",
   },
@@ -60,9 +60,9 @@ const FEATURES: { icon: LucideIcon; title: string; body: string; cta: string; hr
   },
   {
     icon: GraduationCap,
-    title: "Scholarship Program",
-    body: "Apply for financial aid on any course. Pay a ₦30,000 acceptance fee and let our team review your application.",
-    cta: "Apply now",
+    title: "Cohort 2 Scholarship",
+    body: "Apply for the Cohort 2 scholarship. A ₦50,000 commitment fee confirms your application, then our team reviews it.",
+    cta: "Explore Cohort 2",
     href: "/join/student",
   },
 ];
