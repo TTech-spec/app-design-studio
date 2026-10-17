@@ -179,7 +179,8 @@
 
 .academy-login {
   display: grid;
-  min-height: 100svh;
+  height: 100svh;
+  overflow: hidden;
   place-items: center;
   background: var(--portal-white);
   font-family: "Poppins", sans-serif;
@@ -188,10 +189,10 @@
 .academy-login__layout {
   position: relative;
   display: grid;
-  width: min(100vw, 80rem);
-  height: min(100svh, 50rem);
-  min-height: 40rem;
-  grid-template-columns: 1fr 1fr;
+  width: 80rem;
+  height: 50rem;
+  /* The artwork keeps its 4:5 shape; extra window width goes to the form side */
+  grid-template-columns: calc(var(--login-height, 50rem) * 0.8) 1fr;
   overflow: hidden;
   background: var(--portal-white);
 }
@@ -380,14 +381,15 @@
 .academy-login__arrow {
   position: absolute;
   top: 50%;
-  left: 50%;
+  left: calc(var(--login-height, 50rem) * 0.8);
   z-index: 1;
   display: grid;
-  width: 7.5rem;
+  /* Sized against the artwork height (120px and 12px at the 800px design) so it lines up */
+  width: calc(var(--login-height, 50rem) * 0.15);
   aspect-ratio: 1;
   transform: translate(-50%, -50%);
   place-items: center;
-  border: 0.75rem solid var(--portal-white);
+  border: calc(var(--login-height, 50rem) * 0.015) solid var(--portal-white);
   border-radius: 50%;
   background: linear-gradient(
     135deg,
@@ -397,8 +399,8 @@
 }
 
 .academy-login__arrow-icon {
-  width: 2.375rem;
-  height: 2.375rem;
+  width: 32%;
+  height: 32%;
   color: var(--portal-white);
   stroke-width: 1.5;
 }
@@ -453,9 +455,9 @@
 }
 .portal {
   display: grid;
-  min-height: 100svh;
+  height: 100svh;
   place-items: center;
-  overflow-x: auto;
+  overflow: hidden;
   background: var(--portal-white);
   color: var(--portal-ink);
   font-family: "Poppins", sans-serif;
@@ -469,7 +471,7 @@
 .portal__canvas {
   display: grid;
   width: 80rem;
-  min-height: 50rem;
+  height: 50rem;
   padding: 3.625rem 3.5625rem 3.5rem;
   grid-template-columns: 19.875rem 2.0625rem 13.625rem 2.25rem 13.625rem 2.3125rem 19.125rem;
   grid-template-rows: 2.75rem 0.6875rem 1.5rem 8.5rem 2rem 11.25rem 1.9375rem 14.25rem;
@@ -1057,9 +1059,3 @@
   border-color: var(--portal-red);
 }
 
-/* Small desktops: shrink the 1280px dashboard to fit */
-@media (min-width: 64rem) and (max-width: 79.99rem) {
-  .portal__canvas {
-    zoom: 0.8;
-  }
-}

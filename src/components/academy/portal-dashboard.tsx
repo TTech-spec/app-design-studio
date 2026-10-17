@@ -5,6 +5,7 @@ import academyLogo from "@/assets/portal/darltech-academy-logo.png";
 import learningIllustration from "@/assets/portal/learning-illustration.png";
 import { courseById, initialsOf } from "@/lib/academy/data";
 import { firstName, useAcademy } from "@/lib/academy/store";
+import { useFitScale } from "@/hooks/use-fit-scale";
 import { Avatar } from "./ui";
 
 /*
@@ -35,6 +36,8 @@ export function PortalDashboard() {
   const { user, enrollments, signOut } = useAcademy();
   const navigate = useNavigate();
   const [q, setQ] = useState("");
+  // The 1280x800 design shrinks to fit the window, so the page never scrolls.
+  const { scale } = useFitScale(1280, 800);
   const name = user ? firstName(user) : "Guest";
 
   // Show the student's latest course when they have one, otherwise the design's sample course.
@@ -64,7 +67,7 @@ export function PortalDashboard() {
 
   return (
     <div className="portal">
-      <div className="portal__canvas">
+      <div className="portal__canvas" style={{ zoom: scale }}>
         <aside className="portal__sidebar" aria-label="Main navigation">
           <Link to="/student" aria-label="DarlTech Academy dashboard">
             <img className="portal__logo" src={academyLogo} alt="" />

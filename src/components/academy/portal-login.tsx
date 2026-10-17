@@ -1,8 +1,9 @@
 import { ArrowRight } from "lucide-react";
-import { useState, type FormEvent } from "react";
+import { useState, type CSSProperties, type FormEvent } from "react";
 import academyLogo from "@/assets/portal/darltech-academy-logo.png";
 import welcomeArtwork from "@/assets/portal/student-portal-panel.jpg";
 import { Checkbox } from "@/components/ui/checkbox";
+import { useFitScale } from "@/hooks/use-fit-scale";
 
 /* Desktop student sign-in, built to the DarlTech "Student portal" design. */
 export function PortalLogin({
@@ -22,10 +23,24 @@ export function PortalLogin({
 }) {
   const [rememberMe, setRememberMe] = useState(false);
   const [message, setMessage] = useState("");
+  // The 1280x800 design shrinks to fit the window, so the page never scrolls,
+  // and stretches to fill the whole window.
+  const { scale, viewportWidth, viewportHeight } = useFitScale(1280, 800);
 
   return (
     <main className="academy-login">
-      <section className="academy-login__layout" aria-label="Student portal sign in">
+      <section
+        className="academy-login__layout"
+        aria-label="Student portal sign in"
+        style={
+          {
+            zoom: scale,
+            width: Math.max(1280, viewportWidth),
+            height: Math.max(800, viewportHeight),
+            "--login-height": `${Math.max(800, viewportHeight)}px`,
+          } as CSSProperties
+        }
+      >
         <div className="academy-login__artwork-panel">
           <img
             className="academy-login__artwork"
