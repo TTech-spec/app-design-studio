@@ -4,6 +4,7 @@ import { useState, type ChangeEvent, type FormEvent } from "react";
 import { cn } from "@/lib/utils";
 import { COURSES } from "@/lib/academy/data";
 import { useAcademy } from "@/lib/academy/store";
+import { academySignUp } from "@/lib/academy/auth";
 import {
   AuthLayout,
   emailOk,
@@ -30,6 +31,10 @@ function StudentSignUp() {
   const [interests, setInterests] = useState<string[]>([]);
   const [level, setLevel] = useState("Beginner");
 
+  const [loading, setLoading] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [needsConfirm, setNeedsConfirm] = useState(false);
+
   const set = (k: keyof typeof form) => (e: ChangeEvent<HTMLInputElement>) =>
     setForm((f) => ({ ...f, [k]: e.target.value }));
 
@@ -44,9 +49,10 @@ function StudentSignUp() {
     if (Object.keys(err).length === 0) setStep(2);
   };
 
-  const finish = () => {
-    signUp({
-      role: "student",
+  const finish = async () => {
+    if (loading) return;
+    const user = {
+      role: "student" as const,
       name: form.name.trim(),
       email: form.email.trim(),
       phone: `+234 ${form.phone.trim()}`,
@@ -54,8 +60,19 @@ function StudentSignUp() {
       level,
       bio: "",
       skills: [],
-    });
-    setStep(3);
+    };
+    setLoading(true);
+    setSubmitError(null);
+    try {
+      const { needsConfirmation } = await academySignUp(user, form.password);
+      signUp(user);
+      setNeedsConfirm(needsConfirmation);
+      setStep(3);
+    } catch (error) {
+      setSubmitError(error instanceof Error ? error.message : "Could not create your account.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (step === 3) {
@@ -72,6 +89,12 @@ function StudentSignUp() {
               Your free account is ready. Browse courses, materials and the tech feed. You only pay
               when you enroll in a course.
             </p>
+            {needsConfirm && (
+              <p className="text-sm font-semibold text-[#0E2A54]">
+                We sent a confirmation link to {form.email} — confirm it before logging in next
+                time.
+              </p>
+            )}
           </div>
         </div>
         <button type="button" className={btn.big} onClick={() => navigate({ to: "/tour" })}>
@@ -151,12 +174,18 @@ function StudentSignUp() {
             </button>
           ))}
         </div>
-        <button type="button" className={cn(btn.big, "mt-8")} onClick={finish}>
-          Create my free account
+        {submitError && (
+          <p role="alert" className="mt-4 text-center text-xs font-semibold text-[#D7372C]">
+            {submitError}
+          </p>
+        )}
+        <button type="button" className={cn(btn.big, "mt-8")} onClick={finish} disabled={loading}>
+          {loading ? "Creating account…" : "Create my free account"}
         </button>
         <button
           type="button"
           onClick={finish}
+          disabled={loading}
           className="mt-2 h-11 text-[13px] text-muted-foreground"
         >
           Not sure yet? <span className="font-bold text-[#D7372C]">Skip this step</span>

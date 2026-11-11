@@ -1,6 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState, type FormEvent } from "react";
 import { useAcademy } from "@/lib/academy/store";
+import { academyLogIn } from "@/lib/academy/auth";
 import { AuthLayout, emailOk, Field, StepHeader } from "@/components/academy/auth";
 import { PortalLogin } from "@/components/academy/portal-login";
 import { btn } from "@/components/academy/ui";
@@ -11,20 +12,30 @@ export const Route = createFileRoute("/login")({
 });
 
 function Login() {
-  const { logIn } = useAcademy();
+  const { setUser } = useAcademy();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const submit = (e: FormEvent) => {
+  const [loading, setLoading] = useState(false);
+  const submit = async (e: FormEvent) => {
     e.preventDefault();
     const err: Record<string, string> = {};
     if (!emailOk(email)) err.email = "Enter a valid email address.";
     if (!password) err.password = "Enter your password.";
     setErrors(err);
     if (Object.keys(err).length) return;
-    const role = logIn(email.trim());
-    navigate({ to: role === "tutor" ? "/tutor" : "/student" });
+    if (loading) return;
+    setLoading(true);
+    try {
+      const user = await academyLogIn(email.trim(), password);
+      setUser(user);
+      navigate({ to: user.role === "tutor" ? "/tutor" : "/student" });
+    } catch (error) {
+      setErrors({ password: error instanceof Error ? error.message : "Could not log in." });
+    } finally {
+      setLoading(false);
+    }
   };
   return (
     <>
@@ -70,8 +81,8 @@ function Login() {
               />
             </div>
             <div className="min-h-8 flex-1" />
-            <button type="submit" className={btn.big}>
-              Log in
+            <button type="submit" className={btn.big} disabled={loading}>
+              {loading ? "Logging in…" : "Log in"}
             </button>
             <p className="mt-3.5 text-center text-[13px] text-muted-foreground">
               New here?{" "}

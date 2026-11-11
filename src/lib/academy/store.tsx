@@ -97,6 +97,8 @@ const KEY = "darltech_app_v1";
 type Actions = {
   signUp: (u: AcademyUser) => void;
   logIn: (email: string) => Role;
+  /** Hydrate the signed-in user from the backend without wiping local progress. */
+  setUser: (u: AcademyUser) => void;
   updateUser: (patch: Partial<AcademyUser>) => void;
   signOut: () => void;
   completeTour: () => void;
@@ -187,6 +189,12 @@ export function AcademyProvider({ children }: { children: ReactNode }) {
         });
         return role;
       },
+      setUser: (u) =>
+        patch((s) =>
+          s.user && s.user.email.toLowerCase() === u.email.toLowerCase()
+            ? { user: { ...s.user, ...u }, tourDone: true }
+            : { ...EMPTY, user: u, tourDone: true },
+        ),
       updateUser: (p) =>
         patch((s) => ({ user: s.user ? { ...s.user, ...p } : s.user, profileDone: true })),
       signOut: () => setState(EMPTY),

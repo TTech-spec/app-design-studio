@@ -4,6 +4,7 @@ import { useState, type ChangeEvent, type FormEvent } from "react";
 import { cn } from "@/lib/utils";
 import { COURSES } from "@/lib/academy/data";
 import { useAcademy } from "@/lib/academy/store";
+import { academySignUp } from "@/lib/academy/auth";
 import {
   AuthLayout,
   emailOk,
@@ -98,6 +99,10 @@ function TutorSignUp() {
   const [days, setDays] = useState<string[]>([]);
   const [agree, setAgree] = useState(false);
 
+  const [loading, setLoading] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [needsConfirm, setNeedsConfirm] = useState(false);
+
   const set = (k: keyof typeof form) => (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
     setForm((f) => ({ ...f, [k]: e.target.value }));
 
@@ -120,7 +125,7 @@ function TutorSignUp() {
     setErrors(err);
     if (!Object.keys(err).length) setStep(3);
   };
-  const submit = (e: FormEvent) => {
+  const submit = async (e: FormEvent) => {
     e.preventDefault();
     const err: Record<string, string> = {};
     if (!cv) err.cv = "Upload your CV.";
@@ -128,9 +133,9 @@ function TutorSignUp() {
     if (!days.length) err.days = "Pick at least one day.";
     if (!agree) err.agree = "Please accept the tutor terms.";
     setErrors(err);
-    if (Object.keys(err).length) return;
-    signUp({
-      role: "tutor",
+    if (Object.keys(err).length || loading) return;
+    const user = {
+      role: "tutor" as const,
       name: form.name.trim(),
       email: form.email.trim(),
       phone: `+234 ${form.phone.trim()}`,
@@ -141,9 +146,20 @@ function TutorSignUp() {
       experience: years,
       link: form.link.trim(),
       availability: days,
-      status: "pending",
-    });
-    setStep(4);
+      status: "pending" as const,
+    };
+    setLoading(true);
+    setSubmitError(null);
+    try {
+      const { needsConfirmation } = await academySignUp(user, form.password);
+      signUp(user);
+      setNeedsConfirm(needsConfirmation);
+      setStep(4);
+    } catch (error) {
+      setSubmitError(error instanceof Error ? error.message : "Could not submit your application.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (step === 4)
@@ -158,6 +174,11 @@ function TutorSignUp() {
               Our team reviews every tutor application. We’ll email {form.email} once you’re
               approved. Meanwhile you can explore your tutor dashboard.
             </p>
+            {needsConfirm && (
+              <p className="text-sm font-semibold text-[#0E2A54]">
+                Please confirm your email via the link we just sent before logging in.
+              </p>
+            )}
           </div>
         </div>
         <button type="button" className={btn.big} onClick={() => navigate({ to: "/tutor" })}>
@@ -226,8 +247,13 @@ function TutorSignUp() {
             )}
           </div>
           <div className="min-h-8 flex-1" />
-          <button type="submit" className={btn.big}>
-            Submit application
+          {submitError && (
+            <p role="alert" className="mt-4 text-center text-xs font-semibold text-[#D7372C]">
+              {submitError}
+            </p>
+          )}
+          <button type="submit" className={btn.big} disabled={loading}>
+            {loading ? "Submitting…" : "Submit application"}
           </button>
         </form>
       </AuthLayout>
