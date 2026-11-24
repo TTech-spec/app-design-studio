@@ -65,6 +65,14 @@ import { Route as UserTypeRouteImport } from './routes/user-type'
 import { Route as VerificationStatusRouteImport } from './routes/verification-status'
 import { Route as VerificationSubmittedRouteImport } from './routes/verification-submitted'
 import { Route as WelcomeRouteImport } from './routes/welcome'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as AdminApplicationsRouteImport } from './routes/admin.applications'
+import { Route as AdminCoursesRouteImport } from './routes/admin.courses'
+import { Route as AdminPaymentsRouteImport } from './routes/admin.payments'
+import { Route as AdminReportsRouteImport } from './routes/admin.reports'
+import { Route as AdminScholarshipsRouteImport } from './routes/admin.scholarships'
+import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
+import { Route as AdminUsersRouteImport } from './routes/admin.users'
 import { Route as AppIndexRouteImport } from './routes/app.index'
 import { Route as AppScreenRouteImport } from './routes/app.$screen'
 import { Route as JoinIndexRouteImport } from './routes/join.index'
@@ -373,6 +381,46 @@ const WelcomeRoute = WelcomeRouteImport.update({
   path: '/welcome',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminApplicationsRoute = AdminApplicationsRouteImport.update({
+  id: '/applications',
+  path: '/applications',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminCoursesRoute = AdminCoursesRouteImport.update({
+  id: '/courses',
+  path: '/courses',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminPaymentsRoute = AdminPaymentsRouteImport.update({
+  id: '/payments',
+  path: '/payments',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminReportsRoute = AdminReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminScholarshipsRoute = AdminScholarshipsRouteImport.update({
+  id: '/scholarships',
+  path: '/scholarships',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminSettingsRoute = AdminSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminUsersRoute = AdminUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AppIndexRoute = AppIndexRouteImport.update({
   id: '/app/',
   path: '/app/',
@@ -512,7 +560,7 @@ const TutorQuizzesNewRoute = TutorQuizzesNewRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/add-product': typeof AddProductRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/business-info': typeof BusinessInfoRoute
   '/buyer-profile': typeof BuyerProfileRoute
   '/catalog': typeof CatalogRoute
@@ -566,6 +614,13 @@ export interface FileRoutesByFullPath {
   '/verification-status': typeof VerificationStatusRoute
   '/verification-submitted': typeof VerificationSubmittedRoute
   '/welcome': typeof WelcomeRoute
+  '/admin/applications': typeof AdminApplicationsRoute
+  '/admin/courses': typeof AdminCoursesRoute
+  '/admin/payments': typeof AdminPaymentsRoute
+  '/admin/reports': typeof AdminReportsRoute
+  '/admin/scholarships': typeof AdminScholarshipsRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/admin/users': typeof AdminUsersRoute
   '/app/$screen': typeof AppScreenRoute
   '/join/student': typeof JoinStudentRoute
   '/join/tutor': typeof JoinTutorRoute
@@ -583,6 +638,7 @@ export interface FileRoutesByFullPath {
   '/tutor/feed': typeof TutorFeedRoute
   '/tutor/messages': typeof TutorMessagesRoute
   '/tutor/profile': typeof TutorProfileRoute
+  '/admin/': typeof AdminIndexRoute
   '/app/': typeof AppIndexRoute
   '/join/': typeof JoinIndexRoute
   '/student/': typeof StudentIndexRoute
@@ -597,7 +653,6 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/add-product': typeof AddProductRoute
-  '/admin': typeof AdminRoute
   '/business-info': typeof BusinessInfoRoute
   '/buyer-profile': typeof BuyerProfileRoute
   '/catalog': typeof CatalogRoute
@@ -649,6 +704,13 @@ export interface FileRoutesByTo {
   '/verification-status': typeof VerificationStatusRoute
   '/verification-submitted': typeof VerificationSubmittedRoute
   '/welcome': typeof WelcomeRoute
+  '/admin/applications': typeof AdminApplicationsRoute
+  '/admin/courses': typeof AdminCoursesRoute
+  '/admin/payments': typeof AdminPaymentsRoute
+  '/admin/reports': typeof AdminReportsRoute
+  '/admin/scholarships': typeof AdminScholarshipsRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/admin/users': typeof AdminUsersRoute
   '/app/$screen': typeof AppScreenRoute
   '/join/student': typeof JoinStudentRoute
   '/join/tutor': typeof JoinTutorRoute
@@ -666,6 +728,7 @@ export interface FileRoutesByTo {
   '/tutor/feed': typeof TutorFeedRoute
   '/tutor/messages': typeof TutorMessagesRoute
   '/tutor/profile': typeof TutorProfileRoute
+  '/admin': typeof AdminIndexRoute
   '/app': typeof AppIndexRoute
   '/join': typeof JoinIndexRoute
   '/student': typeof StudentIndexRoute
@@ -681,7 +744,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/add-product': typeof AddProductRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/business-info': typeof BusinessInfoRoute
   '/buyer-profile': typeof BuyerProfileRoute
   '/catalog': typeof CatalogRoute
@@ -735,6 +798,13 @@ export interface FileRoutesById {
   '/verification-status': typeof VerificationStatusRoute
   '/verification-submitted': typeof VerificationSubmittedRoute
   '/welcome': typeof WelcomeRoute
+  '/admin/applications': typeof AdminApplicationsRoute
+  '/admin/courses': typeof AdminCoursesRoute
+  '/admin/payments': typeof AdminPaymentsRoute
+  '/admin/reports': typeof AdminReportsRoute
+  '/admin/scholarships': typeof AdminScholarshipsRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/admin/users': typeof AdminUsersRoute
   '/app/$screen': typeof AppScreenRoute
   '/join/student': typeof JoinStudentRoute
   '/join/tutor': typeof JoinTutorRoute
@@ -752,6 +822,7 @@ export interface FileRoutesById {
   '/tutor/feed': typeof TutorFeedRoute
   '/tutor/messages': typeof TutorMessagesRoute
   '/tutor/profile': typeof TutorProfileRoute
+  '/admin/': typeof AdminIndexRoute
   '/app/': typeof AppIndexRoute
   '/join/': typeof JoinIndexRoute
   '/student/': typeof StudentIndexRoute
@@ -822,6 +893,13 @@ export interface FileRouteTypes {
     | '/verification-status'
     | '/verification-submitted'
     | '/welcome'
+    | '/admin/applications'
+    | '/admin/courses'
+    | '/admin/payments'
+    | '/admin/reports'
+    | '/admin/scholarships'
+    | '/admin/settings'
+    | '/admin/users'
     | '/app/$screen'
     | '/join/student'
     | '/join/tutor'
@@ -839,6 +917,7 @@ export interface FileRouteTypes {
     | '/tutor/feed'
     | '/tutor/messages'
     | '/tutor/profile'
+    | '/admin/'
     | '/app/'
     | '/join/'
     | '/student/'
@@ -853,7 +932,6 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/add-product'
-    | '/admin'
     | '/business-info'
     | '/buyer-profile'
     | '/catalog'
@@ -905,6 +983,13 @@ export interface FileRouteTypes {
     | '/verification-status'
     | '/verification-submitted'
     | '/welcome'
+    | '/admin/applications'
+    | '/admin/courses'
+    | '/admin/payments'
+    | '/admin/reports'
+    | '/admin/scholarships'
+    | '/admin/settings'
+    | '/admin/users'
     | '/app/$screen'
     | '/join/student'
     | '/join/tutor'
@@ -922,6 +1007,7 @@ export interface FileRouteTypes {
     | '/tutor/feed'
     | '/tutor/messages'
     | '/tutor/profile'
+    | '/admin'
     | '/app'
     | '/join'
     | '/student'
@@ -990,6 +1076,13 @@ export interface FileRouteTypes {
     | '/verification-status'
     | '/verification-submitted'
     | '/welcome'
+    | '/admin/applications'
+    | '/admin/courses'
+    | '/admin/payments'
+    | '/admin/reports'
+    | '/admin/scholarships'
+    | '/admin/settings'
+    | '/admin/users'
     | '/app/$screen'
     | '/join/student'
     | '/join/tutor'
@@ -1007,6 +1100,7 @@ export interface FileRouteTypes {
     | '/tutor/feed'
     | '/tutor/messages'
     | '/tutor/profile'
+    | '/admin/'
     | '/app/'
     | '/join/'
     | '/student/'
@@ -1022,7 +1116,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AddProductRoute: typeof AddProductRoute
-  AdminRoute: typeof AdminRoute
+  AdminRoute: typeof AdminRouteWithChildren
   BusinessInfoRoute: typeof BusinessInfoRoute
   BuyerProfileRoute: typeof BuyerProfileRoute
   CatalogRoute: typeof CatalogRoute
@@ -1480,6 +1574,62 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WelcomeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/applications': {
+      id: '/admin/applications'
+      path: '/applications'
+      fullPath: '/admin/applications'
+      preLoaderRoute: typeof AdminApplicationsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/courses': {
+      id: '/admin/courses'
+      path: '/courses'
+      fullPath: '/admin/courses'
+      preLoaderRoute: typeof AdminCoursesRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/payments': {
+      id: '/admin/payments'
+      path: '/payments'
+      fullPath: '/admin/payments'
+      preLoaderRoute: typeof AdminPaymentsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/reports': {
+      id: '/admin/reports'
+      path: '/reports'
+      fullPath: '/admin/reports'
+      preLoaderRoute: typeof AdminReportsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/scholarships': {
+      id: '/admin/scholarships'
+      path: '/scholarships'
+      fullPath: '/admin/scholarships'
+      preLoaderRoute: typeof AdminScholarshipsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/settings': {
+      id: '/admin/settings'
+      path: '/settings'
+      fullPath: '/admin/settings'
+      preLoaderRoute: typeof AdminSettingsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/users': {
+      id: '/admin/users'
+      path: '/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AdminUsersRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/app/': {
       id: '/app/'
       path: '/app'
@@ -1672,6 +1822,30 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AdminRouteChildren {
+  AdminApplicationsRoute: typeof AdminApplicationsRoute
+  AdminCoursesRoute: typeof AdminCoursesRoute
+  AdminPaymentsRoute: typeof AdminPaymentsRoute
+  AdminReportsRoute: typeof AdminReportsRoute
+  AdminScholarshipsRoute: typeof AdminScholarshipsRoute
+  AdminSettingsRoute: typeof AdminSettingsRoute
+  AdminUsersRoute: typeof AdminUsersRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminApplicationsRoute: AdminApplicationsRoute,
+  AdminCoursesRoute: AdminCoursesRoute,
+  AdminPaymentsRoute: AdminPaymentsRoute,
+  AdminReportsRoute: AdminReportsRoute,
+  AdminScholarshipsRoute: AdminScholarshipsRoute,
+  AdminSettingsRoute: AdminSettingsRoute,
+  AdminUsersRoute: AdminUsersRoute,
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
 interface StudentRouteChildren {
   StudentCommunityRoute: typeof StudentCommunityRoute
   StudentExploreRoute: typeof StudentExploreRoute
@@ -1730,7 +1904,7 @@ const TutorRouteWithChildren = TutorRoute._addFileChildren(TutorRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AddProductRoute: AddProductRoute,
-  AdminRoute: AdminRoute,
+  AdminRoute: AdminRouteWithChildren,
   BusinessInfoRoute: BusinessInfoRoute,
   BuyerProfileRoute: BuyerProfileRoute,
   CatalogRoute: CatalogRoute,
