@@ -492,7 +492,7 @@ function Header() {
           >
             <Search className="h-5 w-5" />
           </a>
-          <PrimaryBtn href="/join" className="h-10">
+          <PrimaryBtn href="/apply" className="h-10">
             Apply for Cohort 2
           </PrimaryBtn>
         </div>
@@ -513,7 +513,7 @@ function Header() {
                 {l.label}
               </a>
             ))}
-            <PrimaryBtn href="/join" className="mt-2">
+            <PrimaryBtn href="/apply" className="mt-2">
               Apply for Cohort 2
             </PrimaryBtn>
           </Container>
@@ -571,7 +571,7 @@ function Hero() {
             })}
           </div>
           <div className="mt-8 flex flex-wrap gap-3">
-            <PrimaryBtn href="/join">
+            <PrimaryBtn href="/apply">
               Explore Cohort 2 <ArrowRight className="h-4 w-4" />
             </PrimaryBtn>
             <OutlineBtn href="#tracks" light>
@@ -811,7 +811,7 @@ function Scholarship() {
             </div>
           </div>
           <a
-            href="/join"
+            href="/apply"
             className="flex items-center gap-4 self-end rounded-xl border border-slate-200 bg-slate-50 p-5 transition hover:shadow-md"
           >
             <span
@@ -860,7 +860,7 @@ function Steps() {
           ))}
         </div>
         <div className="mt-10 text-center">
-          <PrimaryBtn href="/join" className="px-10">
+          <PrimaryBtn href="/apply" className="px-10">
             Apply for Cohort 2 <ArrowRight className="h-4 w-4" />
           </PrimaryBtn>
         </div>
@@ -980,7 +980,7 @@ function CohortBanner() {
               Join DarlTech Academy and get started on your journey to becoming a skilled tech
               professional.
             </p>
-            <PrimaryBtn href="/join" className="mt-7">
+            <PrimaryBtn href="/apply" className="mt-7">
               Apply Now <ArrowRight className="h-4 w-4" />
             </PrimaryBtn>
           </div>
@@ -1072,7 +1072,7 @@ function FinalCta() {
               a successful career in tech.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
-              <PrimaryBtn href="/join">
+              <PrimaryBtn href="/apply">
                 Apply for Cohort 2 <ArrowRight className="h-4 w-4" />
               </PrimaryBtn>
               <OutlineBtn href="#tracks">Browse All Courses</OutlineBtn>

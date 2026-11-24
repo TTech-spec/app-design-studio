@@ -656,7 +656,7 @@ export function StudentDash() {
               </a>
             </p>
           </div>
-          <RedBtn to="/join">
+          <RedBtn to="/apply">
             Apply Now <ArrowRight className="h-4 w-4" />
           </RedBtn>
         </motion.div>

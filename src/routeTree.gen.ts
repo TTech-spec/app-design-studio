@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AddProductRouteImport } from './routes/add-product'
 import { Route as AdminRouteImport } from './routes/admin'
+import { Route as ApplyRouteImport } from './routes/apply'
 import { Route as BusinessInfoRouteImport } from './routes/business-info'
 import { Route as BuyerProfileRouteImport } from './routes/buyer-profile'
 import { Route as CatalogRouteImport } from './routes/catalog'
@@ -114,6 +115,11 @@ const AddProductRoute = AddProductRouteImport.update({
 const AdminRoute = AdminRouteImport.update({
   id: '/admin',
   path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApplyRoute = ApplyRouteImport.update({
+  id: '/apply',
+  path: '/apply',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BusinessInfoRoute = BusinessInfoRouteImport.update({
@@ -561,6 +567,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/add-product': typeof AddProductRoute
   '/admin': typeof AdminRouteWithChildren
+  '/apply': typeof ApplyRoute
   '/business-info': typeof BusinessInfoRoute
   '/buyer-profile': typeof BuyerProfileRoute
   '/catalog': typeof CatalogRoute
@@ -653,6 +660,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/add-product': typeof AddProductRoute
+  '/apply': typeof ApplyRoute
   '/business-info': typeof BusinessInfoRoute
   '/buyer-profile': typeof BuyerProfileRoute
   '/catalog': typeof CatalogRoute
@@ -745,6 +753,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/add-product': typeof AddProductRoute
   '/admin': typeof AdminRouteWithChildren
+  '/apply': typeof ApplyRoute
   '/business-info': typeof BusinessInfoRoute
   '/buyer-profile': typeof BuyerProfileRoute
   '/catalog': typeof CatalogRoute
@@ -840,6 +849,7 @@ export interface FileRouteTypes {
     | '/'
     | '/add-product'
     | '/admin'
+    | '/apply'
     | '/business-info'
     | '/buyer-profile'
     | '/catalog'
@@ -932,6 +942,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/add-product'
+    | '/apply'
     | '/business-info'
     | '/buyer-profile'
     | '/catalog'
@@ -1023,6 +1034,7 @@ export interface FileRouteTypes {
     | '/'
     | '/add-product'
     | '/admin'
+    | '/apply'
     | '/business-info'
     | '/buyer-profile'
     | '/catalog'
@@ -1117,6 +1129,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AddProductRoute: typeof AddProductRoute
   AdminRoute: typeof AdminRouteWithChildren
+  ApplyRoute: typeof ApplyRoute
   BusinessInfoRoute: typeof BusinessInfoRoute
   BuyerProfileRoute: typeof BuyerProfileRoute
   CatalogRoute: typeof CatalogRoute
@@ -1201,6 +1214,13 @@ declare module '@tanstack/react-router' {
       path: '/admin'
       fullPath: '/admin'
       preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/apply': {
+      id: '/apply'
+      path: '/apply'
+      fullPath: '/apply'
+      preLoaderRoute: typeof ApplyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/business-info': {
@@ -1905,6 +1925,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AddProductRoute: AddProductRoute,
   AdminRoute: AdminRouteWithChildren,
+  ApplyRoute: ApplyRoute,
   BusinessInfoRoute: BusinessInfoRoute,
   BuyerProfileRoute: BuyerProfileRoute,
   CatalogRoute: CatalogRoute,
