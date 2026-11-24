@@ -15,7 +15,7 @@ import {
 import { cn } from "@/lib/utils";
 import { COURSES, POSTS, TUTORS, courseById, tutorById } from "@/lib/academy/data";
 import { firstName, useAcademy } from "@/lib/academy/store";
-import { PortalDashboard } from "@/components/academy/portal-dashboard";
+import { StudentDash } from "@/components/academy/dash";
 import {
   Avatar,
   btn,
@@ -39,7 +39,7 @@ function Dashboard() {
   return (
     <>
       <div className="hidden lg:block">
-        <PortalDashboard />
+        <StudentDash />
       </div>
       <div className="lg:hidden">
         {enrollments.length ? <LearningDashboard /> : <NewDashboard />}

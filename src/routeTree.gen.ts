@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AddProductRouteImport } from './routes/add-product'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as BusinessInfoRouteImport } from './routes/business-info'
 import { Route as BuyerProfileRouteImport } from './routes/buyer-profile'
 import { Route as CatalogRouteImport } from './routes/catalog'
@@ -73,6 +74,7 @@ import { Route as PlusTrialRouteImport } from './routes/plus.trial'
 import { Route as QQuizIdRouteImport } from './routes/q.$quizId'
 import { Route as QuizQuizIdRouteImport } from './routes/quiz.$quizId'
 import { Route as StudentIndexRouteImport } from './routes/student.index'
+import { Route as StudentCommunityRouteImport } from './routes/student.community'
 import { Route as StudentExploreRouteImport } from './routes/student.explore'
 import { Route as StudentFeedRouteImport } from './routes/student.feed'
 import { Route as StudentMessagesRouteImport } from './routes/student.messages'
@@ -99,6 +101,11 @@ const IndexRoute = IndexRouteImport.update({
 const AddProductRoute = AddProductRouteImport.update({
   id: '/add-product',
   path: '/add-product',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BusinessInfoRoute = BusinessInfoRouteImport.update({
@@ -411,6 +418,11 @@ const StudentIndexRoute = StudentIndexRouteImport.update({
   path: '/',
   getParentRoute: () => StudentRoute,
 } as any)
+const StudentCommunityRoute = StudentCommunityRouteImport.update({
+  id: '/community',
+  path: '/community',
+  getParentRoute: () => StudentRoute,
+} as any)
 const StudentExploreRoute = StudentExploreRouteImport.update({
   id: '/explore',
   path: '/explore',
@@ -500,6 +512,7 @@ const TutorQuizzesNewRoute = TutorQuizzesNewRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/add-product': typeof AddProductRoute
+  '/admin': typeof AdminRoute
   '/business-info': typeof BusinessInfoRoute
   '/buyer-profile': typeof BuyerProfileRoute
   '/catalog': typeof CatalogRoute
@@ -559,6 +572,7 @@ export interface FileRoutesByFullPath {
   '/plus/trial': typeof PlusTrialRoute
   '/q/$quizId': typeof QQuizIdRoute
   '/quiz/$quizId': typeof QuizQuizIdRoute
+  '/student/community': typeof StudentCommunityRoute
   '/student/explore': typeof StudentExploreRoute
   '/student/feed': typeof StudentFeedRoute
   '/student/messages': typeof StudentMessagesRoute
@@ -583,6 +597,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/add-product': typeof AddProductRoute
+  '/admin': typeof AdminRoute
   '/business-info': typeof BusinessInfoRoute
   '/buyer-profile': typeof BuyerProfileRoute
   '/catalog': typeof CatalogRoute
@@ -640,6 +655,7 @@ export interface FileRoutesByTo {
   '/plus/trial': typeof PlusTrialRoute
   '/q/$quizId': typeof QQuizIdRoute
   '/quiz/$quizId': typeof QuizQuizIdRoute
+  '/student/community': typeof StudentCommunityRoute
   '/student/explore': typeof StudentExploreRoute
   '/student/feed': typeof StudentFeedRoute
   '/student/messages': typeof StudentMessagesRoute
@@ -665,6 +681,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/add-product': typeof AddProductRoute
+  '/admin': typeof AdminRoute
   '/business-info': typeof BusinessInfoRoute
   '/buyer-profile': typeof BuyerProfileRoute
   '/catalog': typeof CatalogRoute
@@ -724,6 +741,7 @@ export interface FileRoutesById {
   '/plus/trial': typeof PlusTrialRoute
   '/q/$quizId': typeof QQuizIdRoute
   '/quiz/$quizId': typeof QuizQuizIdRoute
+  '/student/community': typeof StudentCommunityRoute
   '/student/explore': typeof StudentExploreRoute
   '/student/feed': typeof StudentFeedRoute
   '/student/messages': typeof StudentMessagesRoute
@@ -750,6 +768,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/add-product'
+    | '/admin'
     | '/business-info'
     | '/buyer-profile'
     | '/catalog'
@@ -809,6 +828,7 @@ export interface FileRouteTypes {
     | '/plus/trial'
     | '/q/$quizId'
     | '/quiz/$quizId'
+    | '/student/community'
     | '/student/explore'
     | '/student/feed'
     | '/student/messages'
@@ -833,6 +853,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/add-product'
+    | '/admin'
     | '/business-info'
     | '/buyer-profile'
     | '/catalog'
@@ -890,6 +911,7 @@ export interface FileRouteTypes {
     | '/plus/trial'
     | '/q/$quizId'
     | '/quiz/$quizId'
+    | '/student/community'
     | '/student/explore'
     | '/student/feed'
     | '/student/messages'
@@ -914,6 +936,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/add-product'
+    | '/admin'
     | '/business-info'
     | '/buyer-profile'
     | '/catalog'
@@ -973,6 +996,7 @@ export interface FileRouteTypes {
     | '/plus/trial'
     | '/q/$quizId'
     | '/quiz/$quizId'
+    | '/student/community'
     | '/student/explore'
     | '/student/feed'
     | '/student/messages'
@@ -998,6 +1022,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AddProductRoute: typeof AddProductRoute
+  AdminRoute: typeof AdminRoute
   BusinessInfoRoute: typeof BusinessInfoRoute
   BuyerProfileRoute: typeof BuyerProfileRoute
   CatalogRoute: typeof CatalogRoute
@@ -1075,6 +1100,13 @@ declare module '@tanstack/react-router' {
       path: '/add-product'
       fullPath: '/add-product'
       preLoaderRoute: typeof AddProductRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/business-info': {
@@ -1511,6 +1543,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StudentIndexRouteImport
       parentRoute: typeof StudentRoute
     }
+    '/student/community': {
+      id: '/student/community'
+      path: '/community'
+      fullPath: '/student/community'
+      preLoaderRoute: typeof StudentCommunityRouteImport
+      parentRoute: typeof StudentRoute
+    }
     '/student/explore': {
       id: '/student/explore'
       path: '/explore'
@@ -1634,6 +1673,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface StudentRouteChildren {
+  StudentCommunityRoute: typeof StudentCommunityRoute
   StudentExploreRoute: typeof StudentExploreRoute
   StudentFeedRoute: typeof StudentFeedRoute
   StudentMessagesRoute: typeof StudentMessagesRoute
@@ -1648,6 +1688,7 @@ interface StudentRouteChildren {
 }
 
 const StudentRouteChildren: StudentRouteChildren = {
+  StudentCommunityRoute: StudentCommunityRoute,
   StudentExploreRoute: StudentExploreRoute,
   StudentFeedRoute: StudentFeedRoute,
   StudentMessagesRoute: StudentMessagesRoute,
@@ -1689,6 +1730,7 @@ const TutorRouteWithChildren = TutorRoute._addFileChildren(TutorRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AddProductRoute: AddProductRoute,
+  AdminRoute: AdminRoute,
   BusinessInfoRoute: BusinessInfoRoute,
   BuyerProfileRoute: BuyerProfileRoute,
   CatalogRoute: CatalogRoute,

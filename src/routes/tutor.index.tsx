@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { TutorDash } from "@/components/academy/dash";
 import {
   BarChart3,
   ClipboardCheck,
@@ -26,8 +27,21 @@ import {
 
 export const Route = createFileRoute("/tutor/")({
   head: () => ({ meta: [{ title: "Tutor dashboard · DarlTech Academy" }] }),
-  component: TutorDashboard,
+  component: TutorHome,
 });
+
+function TutorHome() {
+  return (
+    <>
+      <div className="hidden lg:block">
+        <TutorDash />
+      </div>
+      <div className="lg:hidden">
+        <TutorDashboard />
+      </div>
+    </>
+  );
+}
 
 const NUDGE = [
   {

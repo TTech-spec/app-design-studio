@@ -79,7 +79,10 @@ export function AppShell({ role, children }: { role: Role; children: ReactNode }
   const initials = user ? initialsOf(user.name) : "G";
   const color = role === "student" ? "#EF4136" : "#1a3d72";
   // On desktop the student dashboard brings its own sidebar and top bar (the portal design).
-  const portalPage = role === "student" && (path === "/student" || path === "/student/");
+  const clean = path.replace(/\/$/, "");
+  const portalPage =
+    clean === "/tutor" ||
+    (role === "student" && (clean === "/student" || clean === "/student/community"));
 
   const onSearch = (e: FormEvent) => {
     e.preventDefault();

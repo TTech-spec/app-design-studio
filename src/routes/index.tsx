@@ -1,5 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import type { ReactNode } from "react";
 import {
   ArrowRight,
@@ -260,9 +263,65 @@ const FAQS = [
   },
 ];
 
+function useLandingAnimations(root: React.RefObject<HTMLDivElement | null>) {
+  useEffect(() => {
+    const el = root.current;
+    if (!el || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    gsap.registerPlugin(ScrollTrigger);
+    const ctx = gsap.context(() => {
+      // Hero entrance
+      gsap
+        .timeline({ defaults: { ease: "power3.out" } })
+        .from("[data-hero-img]", { scale: 1.15, opacity: 0, duration: 1.6 })
+        .from("[data-hero] > *", { y: 40, opacity: 0, duration: 0.8, stagger: 0.12 }, 0.2);
+      // Slow parallax on the hero photo
+      gsap.to("[data-hero-img]", {
+        yPercent: 12,
+        ease: "none",
+        scrollTrigger: {
+          trigger: "[data-hero-img]",
+          start: "top top",
+          end: "bottom top",
+          scrub: true,
+        },
+      });
+      // Section headings and grids reveal on scroll
+      gsap.utils.toArray<HTMLElement>("main section").forEach((sec) => {
+        const kids = sec.querySelectorAll(".grid > *, h2, [data-reveal]");
+        if (!kids.length || sec.querySelector("[data-hero]")) return;
+        gsap.from(kids, {
+          y: 36,
+          opacity: 0,
+          duration: 0.7,
+          stagger: 0.06,
+          ease: "power2.out",
+          scrollTrigger: { trigger: sec, start: "top 80%", once: true },
+        });
+      });
+      // Big money figure counts up
+      const fee = el.querySelector<HTMLElement>("[data-count]");
+      if (fee) {
+        const o = { n: 0 };
+        gsap.to(o, {
+          n: 50000,
+          duration: 1.5,
+          ease: "power2.out",
+          scrollTrigger: { trigger: fee, start: "top 85%", once: true },
+          onUpdate: () => {
+            fee.textContent = `₦${Math.round(o.n).toLocaleString()}`;
+          },
+        });
+      }
+    }, el);
+    return () => ctx.revert();
+  }, [root]);
+}
+
 function Landing() {
+  const root = useRef<HTMLDivElement>(null);
+  useLandingAnimations(root);
   return (
-    <div className="min-h-screen bg-white text-slate-900 antialiased">
+    <div ref={root} className="min-h-screen bg-white text-slate-900 antialiased">
       <Header />
       <main>
         <Hero />
@@ -372,7 +431,15 @@ function Logo({ light = false }: { light?: boolean }) {
 
 function Script({ className = "" }: { className?: string }) {
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0, rotate: -8, scale: 0.8 }}
+      whileInView={{ opacity: 1, rotate: -4, scale: 1 }}
+      animate={{ y: [0, -8, 0] }}
+      transition={{
+        y: { repeat: Infinity, duration: 4, ease: "easeInOut" },
+        default: { duration: 0.8 },
+      }}
+      viewport={{ once: true }}
       className={`font-serif italic leading-tight text-white drop-shadow ${className}`}
       style={{ fontFamily: "'Brush Script MT', 'Segoe Script', cursive" }}
     >
@@ -381,8 +448,15 @@ function Script({ className = "" }: { className?: string }) {
       &nbsp;&nbsp;Build
       <br />
       &nbsp;&nbsp;&nbsp;&nbsp;Grow
-      <div className="mt-1 h-1 w-16 rounded-full" style={{ backgroundColor: RED }} />
-    </div>
+      <motion.div
+        initial={{ scaleX: 0 }}
+        whileInView={{ scaleX: 1 }}
+        viewport={{ once: true }}
+        transition={{ delay: 0.6, duration: 0.6 }}
+        className="mt-1 h-1 w-16 origin-left rounded-full"
+        style={{ backgroundColor: RED }}
+      />
+    </motion.div>
   );
 }
 
@@ -391,7 +465,12 @@ function Script({ className = "" }: { className?: string }) {
 function Header() {
   const [open, setOpen] = useState(false);
   return (
-    <header className="sticky top-0 z-50 border-b border-slate-100 bg-white/95 backdrop-blur">
+    <motion.header
+      initial={{ y: -64 }}
+      animate={{ y: 0 }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
+      className="sticky top-0 z-50 border-b border-slate-100 bg-white/95 backdrop-blur"
+    >
       <Container className="flex h-16 items-center justify-between gap-4">
         <Logo />
         <nav className="hidden items-center gap-7 lg:flex">
@@ -440,7 +519,7 @@ function Header() {
           </Container>
         </div>
       )}
-    </header>
+    </motion.header>
   );
 }
 
@@ -450,6 +529,7 @@ function Hero() {
   return (
     <section className="relative overflow-hidden" style={{ backgroundColor: NAVY }}>
       <img
+        data-hero-img
         src={IMG.hero}
         alt="Student learning on a laptop"
         className="absolute inset-0 h-full w-full object-cover object-right opacity-90"
@@ -461,7 +541,7 @@ function Hero() {
         }}
       />
       <Container className="relative grid min-h-[560px] items-center py-16 lg:grid-cols-2">
-        <div className="max-w-xl text-white">
+        <div data-hero className="max-w-xl text-white">
           <span
             className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-bold uppercase tracking-wide"
             style={{ backgroundColor: RED }}
@@ -691,7 +771,7 @@ function Scholarship() {
                 <p className="text-xs font-bold uppercase" style={{ color: RED }}>
                   Commitment Fee
                 </p>
-                <p className="mt-1 text-4xl font-extrabold" style={{ color: RED }}>
+                <p data-count className="mt-1 text-4xl font-extrabold" style={{ color: RED }}>
                   ₦50,000
                 </p>
                 <p className="mt-2 text-xs text-slate-500">
@@ -803,8 +883,12 @@ function Testimonials() {
         <H2>What Our Students Say</H2>
         <div className="mt-10 grid gap-5 md:grid-cols-3">
           {shown.map((t) => (
-            <figure
+            <motion.figure
               key={t.name}
+              initial={{ opacity: 0, x: 30 }}
+              animate={{ opacity: 1, x: 0 }}
+              whileHover={{ y: -6 }}
+              transition={{ duration: 0.4 }}
               className="flex flex-col rounded-xl border border-slate-200 bg-white p-6"
             >
               <span
@@ -828,7 +912,7 @@ function Testimonials() {
                   ))}
                 </div>
               </figcaption>
-            </figure>
+            </motion.figure>
           ))}
         </div>
         {pages > 1 && (
@@ -931,7 +1015,19 @@ function Faq() {
                     className={`h-4 w-4 shrink-0 transition ${open === i ? "rotate-45" : ""}`}
                   />
                 </button>
-                {open === i && <p className="px-5 pb-4 text-sm text-slate-600">{f.a}</p>}
+                <AnimatePresence initial={false}>
+                  {open === i && (
+                    <motion.p
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.25 }}
+                      className="overflow-hidden px-5 pb-4 text-sm text-slate-600"
+                    >
+                      {f.a}
+                    </motion.p>
+                  )}
+                </AnimatePresence>
               </div>
             ))}
           </div>
