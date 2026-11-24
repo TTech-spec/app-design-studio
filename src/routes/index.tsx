@@ -1,39 +1,61 @@
 import { createFileRoute } from "@tanstack/react-router";
-import {
-  MapPin, ArrowRight, Star, Phone, Mail, ChevronDown, Menu, X,
-  Facebook, Twitter, Instagram, Linkedin, Youtube,
-} from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import type { ReactNode } from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import type { Variants } from "framer-motion";
-import gsap from "gsap";
-// SCREEN_COMPONENTS removed (PhonePreview no longer used)
-import { PhoneFrame } from "@/components/landing/PhoneFrame";
-import { PricingPlans } from "@/components/landing/PricingPlans";
-import { BlueprintHero } from "@/components/landing/BlueprintHero";
-import { HowItWorks } from "@/components/landing/HowItWorks";
-import { FeaturesPanel } from "@/components/landing/FeaturesPanel";
-// SplashVisual removed
-// StoreBadges removed
-import { cn } from "@/lib/utils";
-import { useScrollAnimations } from "@/lib/use-scroll-animations";
-
-/** Reveal-on-scroll variant shared across sections below. */
-const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 26 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.55, ease: "easeOut" } },
-};
-
-
+import {
+  ArrowRight,
+  BarChart3,
+  Bot,
+  Briefcase,
+  CheckCircle2,
+  ChevronLeft,
+  ChevronRight,
+  Cloud,
+  Code2,
+  Database,
+  FileText,
+  FolderKanban,
+  Globe2,
+  GraduationCap,
+  HeartHandshake,
+  Instagram,
+  Laptop,
+  Linkedin,
+  Menu,
+  MessageCircle,
+  MessageSquare,
+  Monitor,
+  Palette,
+  PenTool,
+  Play,
+  Plus,
+  Search,
+  Server,
+  ShieldCheck,
+  Star,
+  Terminal,
+  Users,
+  UserCheck,
+  Award,
+  X,
+  Cpu,
+} from "lucide-react";
+import heroStudent from "@/assets/hero-student.webp";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "DarlTech Academy — Do Extraordinary Things" },
-      { name: "description", content: "Learn in-demand tech skills from expert instructors. Get certified and launch your career in tech with DarlTech Academy." },
-      { property: "og:title", content: "DarlTech Academy — Do Extraordinary Things" },
-      { property: "og:description", content: "Nigeria's leading tech academy. Expert instructors, structured courses, and industry-recognized certificates." },
+      {
+        name: "description",
+        content:
+          "DarlTech Academy provides practical, hands-on tech education to help you gain real skills, build projects, and unlock new opportunities in the digital economy.",
+      },
+      { property: "og:title", content: "DarlTech Academy — Build In-Demand Tech Skills" },
+      {
+        property: "og:description",
+        content:
+          "Apply for Cohort 2. Expert mentors, project-based learning and certificates of completion.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -41,568 +63,979 @@ export const Route = createFileRoute("/")({
   component: Landing,
 });
 
-// PhonePreview removed (no longer used)
+const RED = "#E1251B";
+const NAVY = "#0B1F4D";
 
-const SCREENSHOT_IMAGES = [
-  "/ChatGPT Image Jul 14, 2026, 07_21_16 AM.png",
-  "/ChatGPT Image Jul 14, 2026, 07_25_47 AM.png",
-  "/ChatGPT Image Jul 14, 2026, 07_29_52 AM.png",
-  "/ChatGPT Image Jul 20, 2026, 08_09_10 AM.png",
-  "/ChatGPT Image Jul 20, 2026, 03_22_23 PM.png",
-  "/ChatGPT Image Jul 14, 2026, 07_21_16 AM.png",
-  "/ChatGPT Image Jul 14, 2026, 07_25_47 AM.png",
-  "/ChatGPT Image Jul 14, 2026, 07_29_52 AM.png",
+const IMG = {
+  hero: heroStudent,
+  why: "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=900&q=70",
+  scholarship:
+    "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&w=900&q=70",
+  cohort:
+    "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1400&q=70",
+};
+
+const NAV = [
+  { label: "Home", href: "/" },
+  { label: "Courses", href: "#tracks" },
+  { label: "Scholarship", href: "#scholarship" },
+  { label: "About", href: "#why" },
+  { label: "Resources", href: "#faq" },
+  { label: "Contact", href: "#contact" },
 ];
 
-function ScreenshotMarquee() {
-  const trackRef = useRef<HTMLDivElement | null>(null);
-  const tweenRef = useRef<gsap.core.Tween | null>(null);
+const TRACKS = [
+  {
+    icon: Code2,
+    title: "Web Development",
+    desc: "Build modern websites and web applications.",
+    level: "Beginner",
+    weeks: 12,
+  },
+  {
+    icon: Server,
+    title: "Backend Development",
+    desc: "Develop scalable server-side applications.",
+    level: "Intermediate",
+    weeks: 12,
+  },
+  {
+    icon: PenTool,
+    title: "UI/UX Design",
+    desc: "Design intuitive and beautiful user experiences.",
+    level: "Beginner",
+    weeks: 10,
+  },
+  {
+    icon: BarChart3,
+    title: "Data Analytics",
+    desc: "Turn data into actionable insights.",
+    level: "Beginner",
+    weeks: 10,
+  },
+  {
+    icon: Database,
+    title: "Data Science",
+    desc: "Build models and solve real-world problems.",
+    level: "Intermediate",
+    weeks: 12,
+  },
+  {
+    icon: Cpu,
+    title: "AI Automation",
+    desc: "Automate tasks with AI tools and workflows.",
+    level: "Intermediate",
+    weeks: 10,
+  },
+  {
+    icon: Cloud,
+    title: "DevOps & Cloud Computing",
+    desc: "Deploy, manage and scale apps in the cloud.",
+    level: "Intermediate",
+    weeks: 12,
+  },
+  {
+    icon: ShieldCheck,
+    title: "Cyber Security",
+    desc: "Protect systems and defend against threats.",
+    level: "Intermediate",
+    weeks: 12,
+  },
+  {
+    icon: Terminal,
+    title: "Python Development",
+    desc: "Build versatile applications with Python.",
+    level: "Beginner",
+    weeks: 10,
+  },
+  {
+    icon: FolderKanban,
+    title: "Product Management",
+    desc: "Turn ideas into successful products.",
+    level: "Intermediate",
+    weeks: 10,
+  },
+  {
+    icon: Palette,
+    title: "Graphics Design",
+    desc: "Create stunning visual content and brands.",
+    level: "Beginner",
+    weeks: 8,
+  },
+  {
+    icon: Bot,
+    title: "Robotics Engineering",
+    desc: "Build and program robotic systems.",
+    level: "Advanced",
+    weeks: 12,
+  },
+];
 
-  useEffect(() => {
-    if (!trackRef.current) return;
-    const tween = gsap.to(trackRef.current, {
-      xPercent: -50,
-      duration: 36,
-      ease: "none",
-      repeat: -1,
-    });
-    tweenRef.current = tween;
-    return () => {
-      tween.kill();
-    };
-  }, []);
+const ADVANTAGES = [
+  {
+    icon: Briefcase,
+    title: "Practical, Project-Based Learning",
+    desc: "Work on real-world projects from day one.",
+  },
+  {
+    icon: UserCheck,
+    title: "Expert-Led Training",
+    desc: "Learn from experienced industry professionals.",
+  },
+  { icon: Globe2, title: "Flexible Learning", desc: "Study at your own pace, from anywhere." },
+  {
+    icon: HeartHandshake,
+    title: "Mentorship & Support",
+    desc: "Get guidance and feedback at every step.",
+  },
+  {
+    icon: Users,
+    title: "Community Access",
+    desc: "Join a growing network of learners and alumni.",
+  },
+  {
+    icon: FileText,
+    title: "Career Support",
+    desc: "Get help with your CV, portfolio and job readiness.",
+  },
+];
 
-  const slides = [...SCREENSHOT_IMAGES, ...SCREENSHOT_IMAGES];
+const STEPS = [
+  { title: "Choose a Track", desc: "Explore our courses and pick the one that fits your goals." },
+  {
+    title: "Apply or Enrol",
+    desc: "Complete the application and make your commitment payment (if eligible).",
+  },
+  { title: "Learn & Build", desc: "Access your courses, join live sessions and work on projects." },
+  { title: "Get Certified", desc: "Complete the programme and receive your certificate." },
+];
 
-  return (
-    <div
-      className="mt-12 -mx-6 overflow-hidden px-6 pb-4"
-      onMouseEnter={() => tweenRef.current?.pause()}
-      onMouseLeave={() => tweenRef.current?.play()}
-    >
-      <div ref={trackRef} className="flex w-max gap-8">
-        {slides.map((src, i) => (
-          <div key={i} className="shrink-0">
-            <PhoneFrame width={300} height={620}>
-              <div className="h-full w-full overflow-hidden rounded-[42px]">
-                <img
-                  src={src}
-                  alt="DarlTech Academy screen"
-                  className="h-full w-full object-cover"
-                  loading="lazy"
-                />
-              </div>
-            </PhoneFrame>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
+const TESTIMONIALS = [
+  {
+    name: "Emmanuel Okafor",
+    role: "Web Development Graduate",
+    quote:
+      "DarlTech Academy gave me the confidence and skills I needed to switch careers. The hands-on projects and mentor support were game changers!",
+  },
+  {
+    name: "Aisha Bello",
+    role: "Data Analytics Graduate",
+    quote:
+      "The learning experience is well structured and easy to follow. I went from a beginner to building real projects in just a few months!",
+  },
+  {
+    name: "Samuel Adeyemi",
+    role: "Cybersecurity Graduate",
+    quote:
+      "The tutors are amazing and always available to help. I'm now working on real-world projects and feel ready for the job market!",
+  },
+  {
+    name: "Chiamaka Eze",
+    role: "UI/UX Design Graduate",
+    quote:
+      "I built a full portfolio during the programme and landed my first freelance clients before I even graduated.",
+  },
+];
 
-/** Generic gsap-driven infinite scroller — duplicates `items` once so the loop is seamless. */
-function Marquee<T>({
-  items,
-  renderItem,
-  direction = "left",
-  speed = 34,
-  gapClassName = "gap-6",
-  className,
-}: {
-  items: T[];
-  renderItem: (item: T, index: number) => ReactNode;
-  direction?: "left" | "right";
-  speed?: number;
-  gapClassName?: string;
-  className?: string;
-}) {
-  const trackRef = useRef<HTMLDivElement | null>(null);
-  const tweenRef = useRef<gsap.core.Tween | null>(null);
-
-  useEffect(() => {
-    if (!trackRef.current) return;
-    if (direction === "right") {
-      gsap.set(trackRef.current, { xPercent: -50 });
-      tweenRef.current = gsap.to(trackRef.current, { xPercent: 0, duration: speed, ease: "none", repeat: -1 });
-    } else {
-      tweenRef.current = gsap.to(trackRef.current, { xPercent: -50, duration: speed, ease: "none", repeat: -1 });
-    }
-    return () => {
-      tweenRef.current?.kill();
-    };
-  }, [direction, speed]);
-
-  const doubled = [...items, ...items];
-
-  return (
-    <div
-      className={cn(
-        "overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_6%,black_94%,transparent)]",
-        className
-      )}
-      onMouseEnter={() => tweenRef.current?.pause()}
-      onMouseLeave={() => tweenRef.current?.play()}
-    >
-      <div ref={trackRef} className={cn("flex w-max", gapClassName)}>
-        {doubled.map((item, i) => (
-          <div key={i} className="shrink-0">
-            {renderItem(item, i % items.length)}
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
+const FAQS = [
+  {
+    q: "Can I apply if I have no prior tech experience?",
+    a: "Yes. Many of our tracks are beginner-friendly and start from the fundamentals.",
+  },
+  {
+    q: "What is the duration of each course?",
+    a: "Most tracks run between 8 and 12 weeks, depending on the track and level.",
+  },
+  {
+    q: "How much does the Cohort 2 scholarship cost?",
+    a: "Scholarship recipients pay a ₦50,000 commitment fee. The scholarship covers your tuition for the selected track.",
+  },
+  {
+    q: "Is the ₦50,000 commitment fee refundable?",
+    a: "No. The commitment fee is non-refundable and secures your slot in the programme.",
+  },
+  {
+    q: "Do you provide certificates?",
+    a: "Yes. You receive a certificate of completion after finishing the programme and its projects.",
+  },
+];
 
 function Landing() {
-  // GSAP ScrollTrigger reveals for every element marked data-animate / data-parallax
-  useScrollAnimations();
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [openFaq, setOpenFaq] = useState<number | null>(0);
-  const [showSplash] = useState(false);
-  const [navMounted, setNavMounted] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-  const [activeHref, setActiveHref] = useState("#features");
-  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
-  const [indicator, setIndicator] = useState({ left: 0, width: 0, opacity: 0 });
-  const linkRefs = useRef<Array<HTMLAnchorElement | null>>([]);
-
-  const INK = "#0E2A54";
-  const CREAM = "#0E2A54";
-  const PILL_BG = "#1a3d72";
-  const GREEN = "#EF4136";
-  const GREEN_DARK = "#c73229";
-
-  // splash removed
-
-  // Navbar mount + scroll
-  useEffect(() => {
-    const raf = requestAnimationFrame(() => setNavMounted(true));
-    const onScroll = () => setScrolled(window.scrollY > 8);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => { cancelAnimationFrame(raf); window.removeEventListener("scroll", onScroll); };
-  }, []);
-
-  // Hover indicator position
-  useEffect(() => {
-    if (hoveredIdx === null) { setIndicator((p) => ({ ...p, opacity: 0 })); return; }
-    const el = linkRefs.current[hoveredIdx];
-    if (el) setIndicator({ left: el.offsetLeft, width: el.offsetWidth, opacity: 1 });
-  }, [hoveredIdx]);
-
-
-  const navLinks = [
-    { label: "Courses", href: "#features" },
-    { label: "How it works", href: "#how" },
-    { label: "Pricing", href: "#pricing" },
-    { label: "FAQ", href: "#faq" },
-    { label: "Contact", href: "#contact" },
-  ];
-
   return (
-    <>
-      <style>{`
-        @keyframes navFadeSlideDown {
-          from { opacity: 0; transform: translateY(-18px); }
-          to   { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes mobileLinkIn {
-          from { opacity: 0; transform: translateY(-6px); }
-          to   { opacity: 1; transform: translateY(0); }
-        }
-      `}</style>
+    <div className="min-h-screen bg-white text-slate-900 antialiased">
+      <Header />
+      <main>
+        <Hero />
+        <TrustBar />
+        <Tracks />
+        <Why />
+        <Scholarship />
+        <Steps />
+        <Testimonials />
+        <CohortBanner />
+        <Faq />
+        <FinalCta />
+      </main>
+      <Footer />
+    </div>
+  );
+}
 
-      {/* splash removed */}
+/* ---------- shared bits ---------- */
 
-      {/* NAVBAR — floating pill, always shown and sticky */}
-      <div className="w-full sticky top-0 z-50">
+function Container({ children, className = "" }: { children: ReactNode; className?: string }) {
+  return (
+    <div className={`mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 ${className}`}>{children}</div>
+  );
+}
 
-        {/* === Floating pill nav === */}
-        <motion.div
-          className="w-full flex justify-center px-4 sm:px-6 pt-3"
-          initial={{ opacity: 0, y: -24, scale: 0.97 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-          style={{ position: "relative" }}
-        >
-          <nav
-            className={`w-full max-w-6xl flex items-center justify-between gap-3 rounded-full border py-3 px-5 transition-shadow duration-300 ${scrolled ? "shadow-xl" : "shadow-md"}`}
-            style={{ backgroundColor: CREAM, borderColor: "rgba(0,0,0,0.06)" }}
-          >
-            <a href="/" className="flex items-center gap-2 shrink-0 select-none">
-              <img src="/PHOTO-2026-07-02-04-10-58.jpg" alt="DarlTech Academy" className="h-10 w-auto rounded-lg object-contain" />
-            </a>
+function Eyebrow({ children }: { children: ReactNode }) {
+  return (
+    <p className="text-xs font-bold uppercase tracking-wider" style={{ color: RED }}>
+      {children}
+    </p>
+  );
+}
 
-            {/* Center link pill */}
-            <div
-              className="hidden md:flex relative items-center rounded-full px-1.5 py-1.5"
-              style={{ backgroundColor: PILL_BG }}
-              onMouseLeave={() => setHoveredIdx(null)}
+function H2({ children, className = "" }: { children: ReactNode; className?: string }) {
+  return (
+    <h2 className={`mt-2 text-2xl font-extrabold sm:text-3xl ${className}`} style={{ color: NAVY }}>
+      {children}
+    </h2>
+  );
+}
+
+function PrimaryBtn({
+  href,
+  children,
+  className = "",
+}: {
+  href: string;
+  children: ReactNode;
+  className?: string;
+}) {
+  return (
+    <a
+      href={href}
+      className={`inline-flex h-11 items-center justify-center gap-2 rounded-lg px-6 text-sm font-semibold text-white shadow-sm transition hover:brightness-110 ${className}`}
+      style={{ backgroundColor: RED }}
+    >
+      {children}
+    </a>
+  );
+}
+
+function OutlineBtn({
+  href,
+  children,
+  light = false,
+}: {
+  href: string;
+  children: ReactNode;
+  light?: boolean;
+}) {
+  return (
+    <a
+      href={href}
+      className={`inline-flex h-11 items-center justify-center gap-2 rounded-lg border px-6 text-sm font-semibold transition ${light ? "border-white/60 text-white hover:bg-white/10" : "border-[#0B1F4D] text-[#0B1F4D] hover:bg-slate-50"}`}
+    >
+      {children}
+    </a>
+  );
+}
+
+function Logo({ light = false }: { light?: boolean }) {
+  return (
+    <a href="/" className="flex items-center gap-2 shrink-0">
+      <span
+        className="grid h-9 w-9 place-items-center rounded-full text-sm font-black text-white"
+        style={{ backgroundColor: RED }}
+      >
+        DT
+      </span>
+      <span
+        className={`text-sm font-extrabold leading-tight ${light ? "text-white" : ""}`}
+        style={light ? undefined : { color: NAVY }}
+      >
+        DarlTech
+        <br />
+        Academy
+      </span>
+      <span
+        className={`ml-2 hidden border-l pl-3 text-xs sm:inline ${light ? "border-white/30 text-white/70" : "border-slate-200 text-slate-500"}`}
+      >
+        Do Extraordinary Things
+      </span>
+    </a>
+  );
+}
+
+function Script({ className = "" }: { className?: string }) {
+  return (
+    <div
+      className={`font-serif italic leading-tight text-white drop-shadow ${className}`}
+      style={{ fontFamily: "'Brush Script MT', 'Segoe Script', cursive" }}
+    >
+      Learn
+      <br />
+      &nbsp;&nbsp;Build
+      <br />
+      &nbsp;&nbsp;&nbsp;&nbsp;Grow
+      <div className="mt-1 h-1 w-16 rounded-full" style={{ backgroundColor: RED }} />
+    </div>
+  );
+}
+
+/* ---------- header ---------- */
+
+function Header() {
+  const [open, setOpen] = useState(false);
+  return (
+    <header className="sticky top-0 z-50 border-b border-slate-100 bg-white/95 backdrop-blur">
+      <Container className="flex h-16 items-center justify-between gap-4">
+        <Logo />
+        <nav className="hidden items-center gap-7 lg:flex">
+          {NAV.map((l, i) => (
+            <a
+              key={l.label}
+              href={l.href}
+              className={`text-sm font-medium transition hover:text-[#E1251B] ${i === 0 ? "text-[#E1251B] underline decoration-2 underline-offset-8" : "text-slate-700"}`}
             >
-              <span
-                className="absolute top-1.5 bottom-1.5 rounded-full transition-all duration-300 ease-out pointer-events-none"
-                style={{ left: indicator.left, width: indicator.width, opacity: indicator.opacity, backgroundColor: "#FFFFFF", boxShadow: "0 1px 4px rgba(0,0,0,0.08)" }}
-              />
-              {navLinks.map((link, idx) => {
-                const isActive = activeHref === link.href;
-                return (
-                  <a
-                    key={link.href}
-                    ref={(el) => { linkRefs.current[idx] = el; }}
-                    href={link.href}
-                    onMouseEnter={() => setHoveredIdx(idx)}
-                    onClick={() => setActiveHref(link.href)}
-                    className="relative z-10 px-4 py-2 text-sm font-medium rounded-full transition-colors duration-200"
-                    style={{ color: hoveredIdx === idx ? INK : isActive ? "#FFFFFF" : "rgba(255,255,255,0.8)" }}
-                  >
-                    {link.label}
-                    <span
-                      className="absolute left-1/2 -bottom-0.5 h-[2px] rounded-full transition-all duration-300 ease-out"
-                      style={{ backgroundColor: GREEN, width: isActive ? "60%" : "0%", transform: "translateX(-50%)" }}
-                    />
-                  </a>
-                );
-              })}
-            </div>
-
-            <div className="flex items-center gap-2">
+              {l.label}
+            </a>
+          ))}
+        </nav>
+        <div className="hidden items-center gap-4 lg:flex">
+          <a
+            href="/student/search"
+            aria-label="Search"
+            className="text-slate-600 hover:text-slate-900"
+          >
+            <Search className="h-5 w-5" />
+          </a>
+          <PrimaryBtn href="/join" className="h-10">
+            Apply for Cohort 2
+          </PrimaryBtn>
+        </div>
+        <button className="lg:hidden" aria-label="Toggle menu" onClick={() => setOpen((o) => !o)}>
+          {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+        </button>
+      </Container>
+      {open && (
+        <div className="border-t border-slate-100 bg-white lg:hidden">
+          <Container className="flex flex-col gap-1 py-4">
+            {NAV.map((l) => (
               <a
-                href="/login"
-                className="hidden sm:inline-flex items-center rounded-full px-4 py-2.5 text-sm font-semibold transition-colors duration-200 hover:bg-white/10"
-                style={{ color: "rgba(255,255,255,0.85)" }}
+                key={l.label}
+                href={l.href}
+                onClick={() => setOpen(false)}
+                className="rounded-md px-2 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
               >
-                Log in
+                {l.label}
               </a>
-              <a
-                href="/join"
-                className="hidden sm:inline-flex items-center rounded-full px-5 py-2.5 text-sm font-semibold text-white transition-all duration-200 ease-out hover:-translate-y-0.5"
-                style={{ backgroundColor: GREEN, boxShadow: "0 2px 10px rgba(239,65,54,0.3)" }}
-                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = GREEN_DARK)}
-                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = GREEN)}
-              >
-                Get Started
-              </a>
-              <button
-                type="button"
-                onClick={() => setMenuOpen((v) => !v)}
-                aria-label={menuOpen ? "Close menu" : "Open menu"}
-                aria-expanded={menuOpen}
-                className="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-full transition-transform duration-200 active:scale-90"
-                style={{ backgroundColor: PILL_BG, color: "#FFFFFF" }}
-              >
-                <span style={{ transform: menuOpen ? "rotate(90deg)" : "rotate(0deg)", display: "inline-flex", transition: "transform 0.3s" }}>
-                  {menuOpen ? <X size={18} /> : <Menu size={18} />}
-                </span>
-              </button>
-            </div>
-          </nav>
+            ))}
+            <PrimaryBtn href="/join" className="mt-2">
+              Apply for Cohort 2
+            </PrimaryBtn>
+          </Container>
+        </div>
+      )}
+    </header>
+  );
+}
 
-          {/* Pill mobile dropdown */}
-          <AnimatePresence>
-            {menuOpen && (
-              <motion.div
-                initial={{ opacity: 0, y: -10, scale: 0.97 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -10, scale: 0.97 }}
-                transition={{ duration: 0.25, ease: "easeOut" }}
-                className="absolute top-full left-4 right-4 sm:left-6 sm:right-6 mt-2 md:hidden"
-              >
-                <div className="mx-auto max-w-6xl rounded-3xl border p-3 shadow-lg" style={{ backgroundColor: CREAM, borderColor: "rgba(0,0,0,0.06)" }}>
-                  <div className="flex flex-col">
-                    {navLinks.map((link, idx) => (
-                      <motion.a
-                        key={link.href}
-                        href={link.href}
-                        initial={{ opacity: 0, y: -6 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: idx * 0.04 }}
-                        onClick={() => { setActiveHref(link.href); setMenuOpen(false); }}
-                        className="px-4 py-3 rounded-2xl text-sm font-medium transition-colors duration-200 hover:bg-white/10"
-                        style={{ color: activeHref === link.href ? "#FFFFFF" : "rgba(255,255,255,0.8)" }}
-                      >
-                        {link.label}
-                      </motion.a>
-                    ))}
-                    <a
-                      href="/login"
-                      onClick={() => setMenuOpen(false)}
-                      className="px-4 py-3 rounded-2xl text-sm font-medium transition-colors duration-200 hover:bg-white/10"
-                      style={{ color: "rgba(255,255,255,0.8)" }}
-                    >
-                      Log in
-                    </a>
-                    <a
-                      href="/join"
-                      onClick={() => setMenuOpen(false)}
-                      className="mt-2 text-center rounded-full px-5 py-3 text-sm font-semibold text-white"
-                      style={{ backgroundColor: GREEN }}
-                    >
-                      Get Started
-                    </a>
-                  </div>
+/* ---------- hero ---------- */
+
+function Hero() {
+  return (
+    <section className="relative overflow-hidden" style={{ backgroundColor: NAVY }}>
+      <img
+        src={IMG.hero}
+        alt="Student learning on a laptop"
+        className="absolute inset-0 h-full w-full object-cover object-right opacity-90"
+      />
+      <div
+        className="absolute inset-0"
+        style={{
+          background: `linear-gradient(90deg, ${NAVY} 0%, ${NAVY}ee 38%, ${NAVY}66 65%, transparent 100%)`,
+        }}
+      />
+      <Container className="relative grid min-h-[560px] items-center py-16 lg:grid-cols-2">
+        <div className="max-w-xl text-white">
+          <span
+            className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-bold uppercase tracking-wide"
+            style={{ backgroundColor: RED }}
+          >
+            Cohort 2 <ArrowRight className="h-3 w-3" /> Applications Open
+          </span>
+          <h1 className="mt-6 text-4xl font-extrabold leading-tight sm:text-5xl">
+            Build In-Demand Tech Skills for a Brighter Future
+          </h1>
+          <p className="mt-5 text-base text-white/85 sm:text-lg">
+            DarlTech Academy provides practical, hands-on tech education to help you gain real
+            skills, build projects, and unlock new opportunities in the digital economy.
+          </p>
+          <div className="mt-7 grid grid-cols-2 gap-4 text-xs text-white/90 sm:grid-cols-4">
+            {[
+              [Monitor, "100% Online Learning"],
+              [Laptop, "Practical Projects"],
+              [Users, "Expert Mentors"],
+              [Award, "Certificate of Completion"],
+            ].map(([Icon, label]) => {
+              const I = Icon as typeof Monitor;
+              return (
+                <div key={label as string} className="flex items-center gap-2">
+                  <I className="h-5 w-5 shrink-0" /> <span>{label as string}</span>
                 </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </motion.div>
+              );
+            })}
+          </div>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <PrimaryBtn href="/join">
+              Explore Cohort 2 <ArrowRight className="h-4 w-4" />
+            </PrimaryBtn>
+            <OutlineBtn href="#tracks" light>
+              View Our Courses
+            </OutlineBtn>
+          </div>
+        </div>
+        <Script className="absolute right-10 top-12 hidden text-4xl lg:block" />
+      </Container>
+    </section>
+  );
+}
+
+function TrustBar() {
+  const stats = [
+    { icon: GraduationCap, v: "1,500+", l: "Graduates & Counting" },
+    { icon: Star, v: "4.8/5", l: "Average Student Rating" },
+    { icon: Briefcase, v: "100%", l: "Project Based Learning" },
+    { icon: Users, v: "Multiple", l: "Career Opportunities" },
+  ];
+  return (
+    <Container className="relative z-10 -mt-8">
+      <div className="rounded-2xl border border-slate-100 bg-white p-6 shadow-lg">
+        <p className="text-sm font-bold" style={{ color: NAVY }}>
+          Trusted by Aspiring Tech Professionals
+        </p>
+        <div className="mt-4 grid grid-cols-2 gap-6 md:grid-cols-4">
+          {stats.map((s) => (
+            <div key={s.l} className="flex items-center gap-3">
+              <span
+                className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-slate-100"
+                style={{ color: NAVY }}
+              >
+                <s.icon className="h-5 w-5" />
+              </span>
+              <div>
+                <p className="text-lg font-extrabold" style={{ color: NAVY }}>
+                  {s.v}
+                </p>
+                <p className="text-xs text-slate-500">{s.l}</p>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
+    </Container>
+  );
+}
 
-    <div className="min-h-screen bg-surface">
-      {/* HERO — blueprint-ui style */}
-      <BlueprintHero />
+/* ---------- tracks ---------- */
 
-      {/* Trust / logo strip — auto-scrolling marquee */}
-      <section className="border-y border-border bg-card py-8">
-        <p data-animate="fade-up" className="text-center text-xs font-bold uppercase tracking-widest text-muted-foreground">Our graduates work at top companies across Nigeria</p>
-        <div className="mt-6">
-          <Marquee
-            items={["Google", "Microsoft", "Andela", "Paystack", "Flutterwave", "Kuda Bank", "Access Bank", "MTN Nigeria", "Jumia", "Sterling Bank"]}
-            direction="left"
-            speed={32}
-            renderItem={(n) => (
-              <span className="rounded-2xl border border-border bg-surface px-6 py-3 text-sm font-black tracking-tight text-forest shadow-soft">{n}</span>
-            )}
-          />
-        </div>
-      </section>
-
-      {/* FEATURES — blueprint-ui "Our features" panel */}
-      <FeaturesPanel />
-
-      {/* HOW IT WORKS — blueprint-ui "/ 02" rows with popping notifications */}
-      <HowItWorks />
-
-      {/* SCREENSHOTS */}
-      <section id="screenshots" className="mx-auto max-w-7xl px-6 py-24">
-        <div data-animate="stagger" className="mx-auto max-w-2xl text-center">
-          <p className="text-xs font-bold uppercase tracking-widest text-primary">Screenshots</p>
-          <h2 className="mt-3 text-4xl font-black tracking-tight text-forest md:text-5xl">A closer look at your student portal</h2>
-          <p className="mt-4 text-lg text-muted-foreground">Every screen is designed with clarity and ease of use in mind. Explore the full learning experience.</p>
-        </div>
-        <ScreenshotMarquee />
-        <div className="mt-10 text-center">
-          <a href="/student/explore" className="inline-flex items-center gap-2 rounded-2xl border-2 border-forest bg-card px-6 py-3 text-sm font-bold text-forest hover:bg-secondary">
-            Explore the Portal <ArrowRight className="h-4 w-4" />
+function Tracks() {
+  return (
+    <section id="tracks" className="scroll-mt-20 py-20">
+      <Container>
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <div>
+            <Eyebrow>Course Catalogue</Eyebrow>
+            <H2>Our Tech Tracks</H2>
+            <p className="mt-2 max-w-xl text-sm text-slate-600">
+              Choose from a range of in-demand tech skills and start your journey towards a
+              future-ready career.
+            </p>
+          </div>
+          <a
+            href="/student/explore"
+            className="inline-flex items-center gap-1 text-sm font-semibold"
+            style={{ color: NAVY }}
+          >
+            View all courses <ArrowRight className="h-4 w-4" />
           </a>
         </div>
-      </section>
-
-      {/* TESTIMONIALS */}
-      <section className="bg-primary-soft/40">
-        <div className="mx-auto max-w-7xl px-6 py-24">
-          <div data-animate="stagger" className="mx-auto max-w-2xl text-center">
-            <p className="text-xs font-bold uppercase tracking-widest text-primary">Testimonials</p>
-            <h2 className="mt-3 text-4xl font-black tracking-tight text-forest md:text-5xl">Loved by students across Nigeria</h2>
-          </div>
-          <div className="mt-12 grid gap-6 md:grid-cols-3">
-            {[
-              { name: "Adebayo Okafor", role: "Frontend Developer · Lagos", text: "DarlTech Academy completely changed my career. I went from zero coding knowledge to landing a frontend dev role in 8 months.", init: "AO", color: "#0E2A54" },
-              { name: "Fatima Aliyu", role: "Data Analyst · Abuja", text: "The Data Analysis course was incredibly well-structured. The instructors are knowledgeable and the dashboard made tracking my progress so easy.", init: "FA", color: "#EF4136" },
-              { name: "Chukwuemeka Nwosu", role: "UI/UX Designer · Port Harcourt", text: "I applied for the scholarship and got in. DarlTech believed in me when I couldn't afford the full fee. Now I'm working at a top design agency.", init: "CN", color: "#1a3d72" },
-            ].map((t, i) => (
-              <motion.div
-                key={t.name}
-                variants={fadeUp}
-                initial="hidden"
-                whileInView="show"
-                viewport={{ once: true, margin: "-60px" }}
-                transition={{ delay: i * 0.1 }}
-                whileHover={{ y: -4 }}
-                className="rounded-3xl border border-border bg-card p-6 shadow-soft transition hover:shadow-card"
+        <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {TRACKS.map((t) => (
+            <a
+              key={t.title}
+              href="/student/explore"
+              className="group rounded-xl border border-slate-200 bg-white p-5 transition hover:-translate-y-1 hover:shadow-lg"
+            >
+              <span
+                className="grid h-11 w-11 place-items-center rounded-lg bg-red-50"
+                style={{ color: RED }}
               >
-                <div className="flex items-center gap-1">
-                  {[1,2,3,4,5].map((i) => <Star key={i} className="h-4 w-4 fill-gold text-gold" />)}
-                </div>
-                <p className="mt-4 text-[15px] leading-relaxed text-foreground">"{t.text}"</p>
-                <div className="mt-6 flex items-center gap-3">
-                  <div className="grid h-11 w-11 place-items-center rounded-full text-sm font-black text-white" style={{ background: t.color }}>{t.init}</div>
-                  <div>
-                    <p className="text-sm font-bold text-forest">{t.name}</p>
-                    <p className="text-xs text-muted-foreground">{t.role}</p>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
+                <t.icon className="h-5 w-5" />
+              </span>
+              <h3 className="mt-4 font-bold" style={{ color: NAVY }}>
+                {t.title}
+              </h3>
+              <p className="mt-1 text-sm text-slate-600">{t.desc}</p>
+              <p className="mt-4 border-t border-slate-100 pt-3 text-xs text-slate-500">
+                {t.level} &nbsp;•&nbsp; {t.weeks} Weeks
+              </p>
+            </a>
+          ))}
         </div>
-      </section>
+      </Container>
+    </section>
+  );
+}
 
-      {/* PRICING · Choose how you want to learn, what’s included, popular with Plus, compare */}
-      <PricingPlans />
+/* ---------- why ---------- */
 
-      {/* FAQ */}
-      <section id="faq" className="bg-card">
-        <div className="mx-auto max-w-4xl px-6 py-24">
-          <div data-animate="stagger" className="text-center">
-            <p className="text-xs font-bold uppercase tracking-widest text-primary">FAQ</p>
-            <h2 className="mt-3 text-4xl font-black tracking-tight text-forest md:text-5xl">Frequently asked questions</h2>
-          </div>
-          <div className="mt-12 space-y-3">
-            {[
-              { q: "How do I enroll in a course?", a: "Browse our course catalog, select your preferred course, create an account, and complete payment to gain immediate access to your learning portal." },
-              { q: "What is the scholarship program?", a: "Our scholarship program provides financial aid for eligible students. You apply for a specific course, pay a ₦30,000 acceptance fee to confirm your application, and our admin team reviews and approves or declines your application." },
-              { q: "Is the ₦30,000 acceptance fee refundable?", a: "This is currently an open question being finalized by the DarlTech Academy team. Contact us for the latest policy." },
-              { q: "What certificate do I get?", a: "Upon completing a course, you receive an industry-recognized DarlTech Academy completion certificate that you can download and share on LinkedIn." },
-              { q: "Can I learn at my own pace?", a: "Yes — all course content is accessible 24/7 through your student portal. Progress through lessons, quizzes, and assignments at your own schedule." },
-              { q: "How is DarlTech different from other platforms?", a: "We're the only platform combining structured Nigerian tech education, scholarship access, a real student portal with progress tracking, and industry-recognized certificates — all in one place." },
-            ].map((f, i) => (
-              <div key={i} className="overflow-hidden rounded-2xl border border-border bg-surface">
-                <button onClick={() => setOpenFaq(openFaq === i ? null : i)} className="flex w-full items-center justify-between gap-4 p-5 text-left">
-                  <span className="font-bold text-foreground">{f.q}</span>
-                  <ChevronDown className={`h-5 w-5 shrink-0 text-primary transition ${openFaq === i ? "rotate-180" : ""}`} />
-                </button>
-                {openFaq === i && <div className="border-t border-border px-5 py-4 text-sm leading-relaxed text-muted-foreground">{f.a}</div>}
+function Why() {
+  return (
+    <section id="why" className="scroll-mt-20 bg-slate-50 py-20">
+      <Container className="grid items-center gap-10 lg:grid-cols-[1.4fr_1fr]">
+        <div>
+          <Eyebrow>The DarlTech Advantage</Eyebrow>
+          <H2>Why Learn With DarlTech?</H2>
+          <p className="mt-2 text-sm text-slate-600">
+            We provide the tools, support and structure you need to succeed in the tech industry.
+          </p>
+          <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {ADVANTAGES.map((a) => (
+              <div key={a.title}>
+                <span
+                  className="grid h-10 w-10 place-items-center rounded-lg bg-red-50"
+                  style={{ color: RED }}
+                >
+                  <a.icon className="h-5 w-5" />
+                </span>
+                <h3 className="mt-3 text-sm font-bold" style={{ color: NAVY }}>
+                  {a.title}
+                </h3>
+                <p className="mt-1 text-sm text-slate-600">{a.desc}</p>
               </div>
             ))}
           </div>
         </div>
-      </section>
+        <div className="relative overflow-hidden rounded-2xl">
+          <img
+            src={IMG.why}
+            alt="Student learning online with headphones"
+            className="h-[420px] w-full object-cover"
+            loading="lazy"
+          />
+          <div className="absolute bottom-5 left-5 right-5 flex items-center gap-3 rounded-xl bg-white p-4 shadow-lg sm:right-auto">
+            <span
+              className="grid h-10 w-10 shrink-0 place-items-center rounded-full"
+              style={{ backgroundColor: NAVY }}
+            >
+              <Play className="h-4 w-4 fill-white text-white" />
+            </span>
+            <div>
+              <p className="text-sm font-bold" style={{ color: NAVY }}>
+                Learn from anywhere
+              </p>
+              <p className="text-xs text-slate-500">
+                Flexible, accessible, and designed for your success.
+              </p>
+            </div>
+          </div>
+        </div>
+      </Container>
+    </section>
+  );
+}
 
-      {/* CONTACT + NEWSLETTER */}
-      <section id="contact" className="mx-auto max-w-7xl px-6 py-24">
-        <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
+/* ---------- scholarship ---------- */
+
+function Scholarship() {
+  const points = [
+    {
+      t: "Eligibility & Selection",
+      d: "Open to motivated individuals with a passion for tech. Selection is based on your application, attitude and potential.",
+    },
+    {
+      t: "What the Scholarship Covers",
+      d: "Covers your tuition for the selected track. Some additional costs may apply (e.g. certification, materials).",
+    },
+    {
+      t: "Commitment Fee Terms",
+      d: "₦50,000 is due upon acceptance. It is non-refundable and secures your slot in the programme.",
+    },
+  ];
+  return (
+    <section id="scholarship" className="scroll-mt-20 py-20">
+      <Container>
+        <div className="overflow-hidden rounded-3xl text-white" style={{ backgroundColor: NAVY }}>
+          <div className="grid items-center lg:grid-cols-2">
+            <div className="p-8 sm:p-12">
+              <span
+                className="inline-block rounded-full px-4 py-1.5 text-xs font-bold uppercase tracking-wide"
+                style={{ backgroundColor: RED }}
+              >
+                Scholarship Programme
+              </span>
+              <h2 className="mt-5 text-3xl font-extrabold leading-tight sm:text-4xl">
+                DarlTech Academy Cohort 2 Scholarship
+              </h2>
+              <p className="mt-4 text-white/80">
+                We're committed to empowering the next generation of tech talent. Our scholarship
+                programme helps deserving individuals access quality tech education and build
+                brighter futures.
+              </p>
+              <div className="mt-7 max-w-sm rounded-xl bg-white p-5 text-slate-900">
+                <p className="text-xs font-bold uppercase" style={{ color: RED }}>
+                  Commitment Fee
+                </p>
+                <p className="mt-1 text-4xl font-extrabold" style={{ color: RED }}>
+                  ₦50,000
+                </p>
+                <p className="mt-2 text-xs text-slate-500">
+                  Cohort 2 fee. Review the terms, eligibility criteria and payment instructions
+                  before applying.
+                </p>
+              </div>
+            </div>
+            <div className="relative h-72 lg:h-full lg:min-h-[460px]">
+              <img
+                src={IMG.scholarship}
+                alt="Smiling scholarship student"
+                className="absolute inset-0 h-full w-full object-cover"
+                loading="lazy"
+              />
+              <Script className="absolute right-8 top-8 text-3xl" />
+            </div>
+          </div>
+        </div>
+        <div className="mt-10 grid gap-8 lg:grid-cols-[1fr_1fr]">
           <div>
-            <p data-animate="fade-up" className="text-xs font-bold uppercase tracking-widest text-primary">Contact</p>
-            <h2 data-animate="fade-up" className="mt-3 text-4xl font-black tracking-tight text-forest md:text-5xl">Talk to our team</h2>
-            <p className="mt-4 text-lg text-muted-foreground">Questions about courses, scholarships, or enrollment? We'd love to hear from you.</p>
-            <div className="mt-8 space-y-4">
-              {[
-                { icon: <Phone className="h-5 w-5" />, label: "Call us", value: "+234 708 116 4457", href: "tel:+2347081164457" },
-                { icon: <Mail className="h-5 w-5" />, label: "Email", value: "darltechacademy@gmail.com", href: "mailto:darltechacademy@gmail.com" },
-                { icon: <MapPin className="h-5 w-5" />, label: "Head office", value: "DarlTech Academy, Lagos, Nigeria" },
-              ].map((c) => (
-                <div key={c.label} className="flex items-center gap-4">
-                  <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-primary-soft text-primary">{c.icon}</div>
+            <h3 className="text-lg font-bold" style={{ color: NAVY }}>
+              What You Should Know
+            </h3>
+            <div className="mt-5 space-y-5">
+              {points.map((p) => (
+                <div key={p.t} className="flex gap-3">
+                  <CheckCircle2 className="mt-0.5 h-6 w-6 shrink-0 fill-green-600 text-white" />
                   <div>
-                    <p className="text-xs uppercase tracking-wider text-muted-foreground">{c.label}</p>
-                    {c.href ? (
-                      <a href={c.href} className="text-sm font-bold text-forest hover:text-primary">{c.value}</a>
-                    ) : (
-                      <p className="text-sm font-bold text-forest">{c.value}</p>
-                    )}
+                    <p className="font-semibold" style={{ color: NAVY }}>
+                      {p.t}
+                    </p>
+                    <p className="text-sm text-slate-600">{p.d}</p>
                   </div>
                 </div>
               ))}
             </div>
           </div>
-          <form className="rounded-3xl border border-border bg-card p-8 shadow-card">
-            <h3 className="text-xl font-black text-forest">Send us a message</h3>
-            <div className="mt-6 space-y-4">
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-muted-foreground">First name</label>
-                  <input className="h-12 w-full rounded-2xl border-2 border-border bg-surface px-4 text-sm outline-none focus:border-primary" placeholder="Adekunle" />
-                </div>
-                <div>
-                  <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-muted-foreground">Last name</label>
-                  <input className="h-12 w-full rounded-2xl border-2 border-border bg-surface px-4 text-sm outline-none focus:border-primary" placeholder="Kolawole" />
-                </div>
-              </div>
-              <div>
-                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-muted-foreground">Email</label>
-                <input className="h-12 w-full rounded-2xl border-2 border-border bg-surface px-4 text-sm outline-none focus:border-primary" placeholder="you@example.com" />
-              </div>
-              <div>
-                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-muted-foreground">Message</label>
-                <textarea rows={4} className="w-full rounded-2xl border-2 border-border bg-surface p-4 text-sm outline-none focus:border-primary" placeholder="How can we help?" />
-              </div>
-              <a
-                href="/join"
-                className="flex h-13 min-h-[52px] w-full items-center justify-center rounded-2xl gradient-primary text-sm font-bold text-primary-foreground shadow-glow"
-              >
-                Send message
-              </a>
-            </div>
-          </form>
-        </div>
-
-        {/* Newsletter */}
-        <div id="download" data-animate="scale-in" className="mt-24 overflow-hidden rounded-[36px] gradient-primary p-6 sm:p-10 md:p-16 text-primary-foreground shadow-glow">
-          <div className="grid gap-8 md:gap-10 md:grid-cols-2 md:items-center">
+          <a
+            href="/join"
+            className="flex items-center gap-4 self-end rounded-xl border border-slate-200 bg-slate-50 p-5 transition hover:shadow-md"
+          >
+            <span
+              className="grid h-11 w-11 shrink-0 place-items-center rounded-lg bg-red-50"
+              style={{ color: RED }}
+            >
+              <FileText className="h-5 w-5" />
+            </span>
             <div>
-              <h2 className="text-2xl font-black tracking-tight sm:text-3xl md:text-4xl">Get started. Learn with DarlTech Academy.</h2>
-              <p className="mt-3 text-sm sm:text-base opacity-90">Enroll in a course today and join thousands of students building careers in tech across Nigeria.</p>
-              <div className="mt-6 flex flex-wrap gap-3">
-                <a href="/student/explore" className="inline-flex h-12 items-center gap-2 rounded-2xl border-2 border-white bg-white/10 px-6 text-sm font-bold text-white">Browse Courses <ArrowRight className="h-4 w-4" /></a>
-                <a href="/join/student" className="inline-flex h-12 items-center gap-2 rounded-2xl border-2 border-white bg-white/10 px-6 text-sm font-bold text-white">Apply for Scholarship</a>
-              </div>
+              <p className="text-sm font-bold" style={{ color: RED }}>
+                Read Full Scholarship Details <ArrowRight className="inline h-4 w-4" />
+              </p>
+              <p className="text-xs text-slate-500">
+                Get complete information on eligibility, selection process, terms and how to apply.
+              </p>
             </div>
-            <div className="rounded-3xl bg-white/10 p-4 sm:p-6 backdrop-blur-xl">
-              <p className="text-sm font-bold">Subscribe to our newsletter</p>
-              <p className="mt-1 text-xs opacity-80">Monthly updates on new courses, scholarship openings, and career tips for Nigerian tech professionals.</p>
-              <div className="mt-4 flex flex-col sm:flex-row gap-2">
-                <input className="h-12 flex-1 min-w-0 rounded-2xl bg-white/95 px-4 text-sm text-foreground outline-none" placeholder="your@email.com" />
-                <a href="/join" className="flex h-12 shrink-0 items-center justify-center rounded-2xl bg-gold px-5 text-sm font-bold text-gold-foreground">Subscribe</a>
-              </div>
-              <p className="mt-3 text-[11px] opacity-70">No spam. Unsubscribe anytime.</p>
-            </div>
-          </div>
+          </a>
         </div>
-      </section>
+      </Container>
+    </section>
+  );
+}
 
-      {/* FOOTER */}
-      <footer className="border-t border-border bg-forest text-forest-foreground">
-        <div className="mx-auto max-w-7xl px-6 py-16">
-          <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-5">
-            <div className="lg:col-span-2">
-              <div className="flex items-center gap-2.5">
-                <img src="/PHOTO-2026-07-02-04-10-58.jpg" alt="DarlTech Academy" className="h-14 w-auto rounded-lg object-contain" />
-              </div>
-              <p className="mt-4 max-w-sm text-sm opacity-70">Do Extraordinary Things. Nigeria's leading tech academy — expert instructors, structured courses, and industry-recognized certificates.</p>
-              <div className="mt-6 flex gap-3">
-                {[Facebook, Twitter, Instagram, Linkedin, Youtube].map((Icon, i) => (
-                  <a key={i} href="#" className="grid h-10 w-10 place-items-center rounded-xl bg-white/10 hover:bg-white/20">
-                    <Icon className="h-4 w-4" />
-                  </a>
-                ))}
-              </div>
-              <div className="mt-6 flex flex-wrap gap-3">
-                <a href="/student/explore" className="inline-flex h-10 items-center gap-2 rounded-xl border border-white/30 bg-white/10 px-4 text-xs font-bold text-white">Browse Courses</a>
-                <a href="/join" className="inline-flex h-10 items-center gap-2 rounded-xl bg-[#EF4136] px-4 text-xs font-bold text-white">Get Started</a>
-              </div>
+/* ---------- steps ---------- */
+
+function Steps() {
+  return (
+    <section className="bg-slate-50 py-20">
+      <Container>
+        <Eyebrow>How It Works</Eyebrow>
+        <H2>Your Path to Success</H2>
+        <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {STEPS.map((s, i) => (
+            <div key={s.title} className="rounded-xl border border-slate-200 bg-white p-6">
+              <span
+                className="grid h-10 w-10 place-items-center rounded-full text-sm font-bold text-white"
+                style={{ backgroundColor: NAVY }}
+              >
+                {i + 1}
+              </span>
+              <h3 className="mt-4 font-bold" style={{ color: NAVY }}>
+                {s.title}
+              </h3>
+              <p className="mt-1 text-sm text-slate-600">{s.desc}</p>
             </div>
-            {[
-              { title: "Courses", links: ["Data Analysis", "Cybersecurity", "AI Automation", "Frontend/Backend Dev", "Python Development"] },
-              { title: "Academy", links: [{ label: "About us" }, { label: "Scholarship", href: "/join/student" }, { label: "Contact", href: "#contact" }, { label: "Blog" }] },
-              { title: "Support", links: [{ label: "Help center" }, { label: "FAQ", href: "#faq" }, { label: "Sign Up", href: "/join" }, { label: "Log In", href: "/login" }] },
-            ].map((col) => (
-              <div key={col.title}>
-                <h4 className="text-sm font-black uppercase tracking-wider" style={{color:"#EF4136"}}>{col.title}</h4>
-                <ul className="mt-4 space-y-2">
-                  {col.links.map((l) => {
-                    const label = typeof l === "string" ? l : l.label;
-                    const href = typeof l === "string" ? "#" : (l.href ?? "#");
-                    const external = href.startsWith("http");
-                    return (
-                      <li key={label}>
-                        <a
-                          href={href}
-                          target={external ? "_blank" : undefined}
-                          rel={external ? "noopener noreferrer" : undefined}
-                          className="text-sm opacity-70 hover:opacity-100"
-                        >
-                          {label}
-                        </a>
-                      </li>
-                    );
-                  })}
-                </ul>
+          ))}
+        </div>
+        <div className="mt-10 text-center">
+          <PrimaryBtn href="/join" className="px-10">
+            Apply for Cohort 2 <ArrowRight className="h-4 w-4" />
+          </PrimaryBtn>
+        </div>
+      </Container>
+    </section>
+  );
+}
+
+/* ---------- testimonials ---------- */
+
+function Testimonials() {
+  const [page, setPage] = useState(0);
+  const perPage = 3;
+  const pages = Math.ceil(TESTIMONIALS.length / perPage);
+  const shown = TESTIMONIALS.slice(page * perPage, page * perPage + perPage);
+  return (
+    <section className="py-20">
+      <Container>
+        <Eyebrow>Student Stories</Eyebrow>
+        <H2>What Our Students Say</H2>
+        <div className="mt-10 grid gap-5 md:grid-cols-3">
+          {shown.map((t) => (
+            <figure
+              key={t.name}
+              className="flex flex-col rounded-xl border border-slate-200 bg-white p-6"
+            >
+              <span
+                className="grid h-14 w-14 place-items-center rounded-full text-lg font-bold text-white"
+                style={{ backgroundColor: NAVY }}
+              >
+                {t.name
+                  .split(" ")
+                  .map((n) => n[0])
+                  .join("")}
+              </span>
+              <blockquote className="mt-4 flex-1 text-sm text-slate-700">"{t.quote}"</blockquote>
+              <figcaption className="mt-5">
+                <p className="text-sm font-bold" style={{ color: NAVY }}>
+                  {t.name}
+                </p>
+                <p className="text-xs text-slate-500">{t.role}</p>
+                <div className="mt-2 flex gap-0.5">
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <Star key={i} className="h-4 w-4 fill-[#E1251B] text-[#E1251B]" />
+                  ))}
+                </div>
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+        {pages > 1 && (
+          <div className="mt-8 flex items-center justify-center gap-3">
+            <button
+              aria-label="Previous"
+              onClick={() => setPage((p) => (p - 1 + pages) % pages)}
+              className="text-slate-400 hover:text-slate-700"
+            >
+              <ChevronLeft className="h-5 w-5" />
+            </button>
+            {Array.from({ length: pages }).map((_, i) => (
+              <button
+                key={i}
+                aria-label={`Page ${i + 1}`}
+                onClick={() => setPage(i)}
+                className="h-2 w-2 rounded-full"
+                style={{ backgroundColor: i === page ? RED : "#CBD5E1" }}
+              />
+            ))}
+            <button
+              aria-label="Next"
+              onClick={() => setPage((p) => (p + 1) % pages)}
+              className="text-slate-400 hover:text-slate-700"
+            >
+              <ChevronRight className="h-5 w-5" />
+            </button>
+          </div>
+        )}
+      </Container>
+    </section>
+  );
+}
+
+/* ---------- cohort banner ---------- */
+
+function CohortBanner() {
+  return (
+    <section>
+      <Container>
+        <div className="relative overflow-hidden rounded-3xl" style={{ backgroundColor: NAVY }}>
+          <img
+            src={IMG.cohort}
+            alt="Students learning together"
+            className="absolute inset-0 h-full w-full object-cover opacity-50"
+            loading="lazy"
+          />
+          <div
+            className="absolute inset-0"
+            style={{
+              background: `linear-gradient(90deg, ${NAVY} 10%, ${NAVY}99 55%, transparent)`,
+            }}
+          />
+          <div className="relative max-w-lg p-8 text-white sm:p-12">
+            <span
+              className="inline-block rounded-full px-4 py-1.5 text-xs font-bold uppercase tracking-wide"
+              style={{ backgroundColor: RED }}
+            >
+              Join Cohort 2
+            </span>
+            <h2 className="mt-5 text-3xl font-extrabold leading-tight sm:text-4xl">
+              Turn Your Potential Into Real Skills
+            </h2>
+            <p className="mt-3 text-white/80">
+              Join DarlTech Academy and get started on your journey to becoming a skilled tech
+              professional.
+            </p>
+            <PrimaryBtn href="/join" className="mt-7">
+              Apply Now <ArrowRight className="h-4 w-4" />
+            </PrimaryBtn>
+          </div>
+          <Script className="absolute right-10 top-10 hidden text-4xl md:block" />
+        </div>
+      </Container>
+    </section>
+  );
+}
+
+/* ---------- faq ---------- */
+
+function Faq() {
+  const [open, setOpen] = useState<number | null>(null);
+  return (
+    <section id="faq" className="scroll-mt-20 py-20">
+      <Container className="grid gap-8 lg:grid-cols-[2fr_1fr]">
+        <div>
+          <Eyebrow>Frequently Asked Questions</Eyebrow>
+          <H2>Have Questions? We've Got Answers</H2>
+          <div className="mt-8 space-y-3">
+            {FAQS.map((f, i) => (
+              <div key={f.q} className="rounded-lg border border-slate-200 bg-white">
+                <button
+                  onClick={() => setOpen(open === i ? null : i)}
+                  className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left text-sm font-medium"
+                  style={{ color: NAVY }}
+                  aria-expanded={open === i}
+                >
+                  {f.q}
+                  <Plus
+                    className={`h-4 w-4 shrink-0 transition ${open === i ? "rotate-45" : ""}`}
+                  />
+                </button>
+                {open === i && <p className="px-5 pb-4 text-sm text-slate-600">{f.a}</p>}
               </div>
             ))}
           </div>
-          <div className="mt-12 flex flex-wrap items-center justify-between gap-4 border-t border-white/10 pt-6 text-xs opacity-70">
-            <p>© 2026 DarlTech Academy. All rights reserved. Made with ❤️ in Nigeria.</p>
-            <div className="flex flex-wrap gap-x-6 gap-y-2">
-              <a href="#" className="hover:opacity-100">Privacy Policy</a>
-              <a href="#" className="hover:opacity-100">Terms of Service</a>
-              <a href="#" className="hover:opacity-100">Cookie Policy</a>
-              <a href="#" className="hover:opacity-100">Sitemap</a>
+        </div>
+        <div id="contact" className="scroll-mt-20 self-end rounded-2xl bg-slate-50 p-8">
+          <MessageSquare className="h-8 w-8" style={{ color: NAVY }} />
+          <h3 className="mt-4 text-lg font-bold" style={{ color: NAVY }}>
+            Still have questions?
+          </h3>
+          <p className="mt-1 text-sm text-slate-600">
+            Our team is here to help you with any questions you may have.
+          </p>
+          <PrimaryBtn href="/help-center" className="mt-5">
+            Contact Us <ArrowRight className="h-4 w-4" />
+          </PrimaryBtn>
+          <a
+            href="https://wa.me/"
+            target="_blank"
+            rel="noreferrer"
+            className="mt-4 flex items-center gap-2 text-sm font-medium text-green-600"
+          >
+            <MessageCircle className="h-4 w-4" /> or WhatsApp Us
+          </a>
+        </div>
+      </Container>
+    </section>
+  );
+}
+
+/* ---------- final cta ---------- */
+
+function FinalCta() {
+  return (
+    <section className="pb-20">
+      <Container>
+        <div className="grid items-center gap-8 rounded-3xl bg-slate-50 p-8 sm:p-12 lg:grid-cols-[1.3fr_1fr]">
+          <div>
+            <Eyebrow>Your Future in Tech</Eyebrow>
+            <H2>Ready to Take the Next Step?</H2>
+            <p className="mt-2 text-sm text-slate-600">
+              Join DarlTech Academy Cohort 2 and gain the skills, support and opportunities to build
+              a successful career in tech.
+            </p>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <PrimaryBtn href="/join">
+                Apply for Cohort 2 <ArrowRight className="h-4 w-4" />
+              </PrimaryBtn>
+              <OutlineBtn href="#tracks">Browse All Courses</OutlineBtn>
             </div>
           </div>
+          <div className="relative flex justify-center">
+            <div
+              className="font-serif text-2xl italic leading-tight"
+              style={{ color: NAVY, fontFamily: "'Brush Script MT', 'Segoe Script', cursive" }}
+            >
+              Better
+              <br />
+              &nbsp;&nbsp;Skills
+              <br />
+              &nbsp;&nbsp;&nbsp;&nbsp;Bigger <span style={{ color: RED }}>Opportunities</span>
+            </div>
+            <Laptop className="ml-6 h-28 w-28" style={{ color: NAVY }} strokeWidth={1} />
+          </div>
         </div>
-      </footer>
-    </div>
-    </>
+      </Container>
+    </section>
+  );
+}
+
+/* ---------- footer ---------- */
+
+function Footer() {
+  return (
+    <footer className="text-white" style={{ backgroundColor: NAVY }}>
+      <Container className="flex flex-col gap-6 py-10 md:flex-row md:items-center md:justify-between">
+        <Logo light />
+        <nav className="flex flex-wrap gap-6 text-sm text-white/80">
+          {NAV.map((l) => (
+            <a key={l.label} href={l.href} className="hover:text-white">
+              {l.label}
+            </a>
+          ))}
+        </nav>
+        <div className="flex gap-4 text-white/80">
+          <a href="#" aria-label="LinkedIn" className="hover:text-white">
+            <Linkedin className="h-5 w-5" />
+          </a>
+          <a href="#" aria-label="X" className="hover:text-white">
+            <X className="h-5 w-5" />
+          </a>
+          <a href="#" aria-label="Instagram" className="hover:text-white">
+            <Instagram className="h-5 w-5" />
+          </a>
+          <a href="#" aria-label="WhatsApp" className="hover:text-white">
+            <MessageCircle className="h-5 w-5" />
+          </a>
+        </div>
+      </Container>
+      <div className="border-t border-white/10">
+        <Container className="flex flex-col gap-2 py-5 text-xs text-white/60 sm:flex-row sm:justify-between">
+          <p>© {new Date().getFullYear()} DarlTech Academy. All rights reserved.</p>
+          <p>Online technology education for learners across Nigeria.</p>
+        </Container>
+      </div>
+    </footer>
   );
 }
