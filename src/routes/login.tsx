@@ -16,15 +16,29 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const submit = (e: FormEvent) => {
+  const [busy, setBusy] = useState(false);
+  const submit = async (e: FormEvent) => {
     e.preventDefault();
     const err: Record<string, string> = {};
     if (!emailOk(email)) err.email = "Enter a valid email address.";
     if (!password) err.password = "Enter your password.";
     setErrors(err);
     if (Object.keys(err).length) return;
-    const role = logIn(email.trim());
-    navigate({ to: role === "tutor" ? "/tutor" : "/student" });
+    if (busy) return;
+    setBusy(true);
+    try {
+      const role = await logIn(email.trim(), password);
+      navigate({ to: role === "tutor" ? "/tutor" : "/student" });
+    } catch (x) {
+      const msg = x instanceof Error ? x.message : "";
+      setErrors({
+        password: /invalid login/i.test(msg)
+          ? "Wrong email or password."
+          : msg || "Couldn't log in. Try again.",
+      });
+    } finally {
+      setBusy(false);
+    }
   };
   return (
     <>

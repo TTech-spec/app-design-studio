@@ -1,3 +1,4 @@
+import { toast } from "sonner";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { Check } from "lucide-react";
 import { useState, type ChangeEvent, type FormEvent } from "react";
@@ -44,18 +45,36 @@ function StudentSignUp() {
     if (Object.keys(err).length === 0) setStep(2);
   };
 
-  const finish = () => {
-    signUp({
-      role: "student",
-      name: form.name.trim(),
-      email: form.email.trim(),
-      phone: `+234 ${form.phone.trim()}`,
-      interests,
-      level,
-      bio: "",
-      skills: [],
-    });
-    setStep(3);
+  const [busy, setBusy] = useState(false);
+  const finish = async () => {
+    if (busy) return;
+    setBusy(true);
+    try {
+      await signUp(
+        {
+          role: "student",
+          name: form.name.trim(),
+          email: form.email.trim(),
+          phone: `+234 ${form.phone.trim()}`,
+          interests,
+          level,
+          bio: "",
+          skills: [],
+        },
+        form.password,
+      );
+      setStep(3);
+    } catch (x) {
+      const msg = x instanceof Error ? x.message : "";
+      toast.error(
+        /registered/i.test(msg)
+          ? "That email already has an account. Log in instead."
+          : msg || "Couldn't create your account.",
+      );
+      if (/registered/i.test(msg)) setStep(1);
+    } finally {
+      setBusy(false);
+    }
   };
 
   if (step === 3) {

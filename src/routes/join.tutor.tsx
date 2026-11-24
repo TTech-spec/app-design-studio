@@ -1,3 +1,4 @@
+import { toast } from "sonner";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { Check, FileText, Upload } from "lucide-react";
 import { useState, type ChangeEvent, type FormEvent } from "react";
@@ -120,7 +121,8 @@ function TutorSignUp() {
     setErrors(err);
     if (!Object.keys(err).length) setStep(3);
   };
-  const submit = (e: FormEvent) => {
+  const [busy, setBusy] = useState(false);
+  const submit = async (e: FormEvent) => {
     e.preventDefault();
     const err: Record<string, string> = {};
     if (!cv) err.cv = "Upload your CV.";
@@ -128,22 +130,38 @@ function TutorSignUp() {
     if (!days.length) err.days = "Pick at least one day.";
     if (!agree) err.agree = "Please accept the tutor terms.";
     setErrors(err);
-    if (Object.keys(err).length) return;
-    signUp({
-      role: "tutor",
-      name: form.name.trim(),
-      email: form.email.trim(),
-      phone: `+234 ${form.phone.trim()}`,
-      interests: [],
-      level: "",
-      bio: form.bio.trim(),
-      skills,
-      experience: years,
-      link: form.link.trim(),
-      availability: days,
-      status: "pending",
-    });
-    setStep(4);
+    if (Object.keys(err).length || busy) return;
+    setBusy(true);
+    try {
+      await signUp(
+        {
+          role: "tutor",
+          name: form.name.trim(),
+          email: form.email.trim(),
+          phone: `+234 ${form.phone.trim()}`,
+          interests: [],
+          level: "",
+          bio: form.bio.trim(),
+          skills,
+          experience: years,
+          link: form.link.trim(),
+          availability: days,
+          status: "pending",
+        },
+        form.password,
+      );
+      setStep(4);
+    } catch (x) {
+      const msg = x instanceof Error ? x.message : "";
+      toast.error(
+        /registered/i.test(msg)
+          ? "That email already has an account. Log in instead."
+          : msg || "Couldn't create your account.",
+      );
+      if (/registered/i.test(msg)) setStep(1);
+    } finally {
+      setBusy(false);
+    }
   };
 
   if (step === 4)
