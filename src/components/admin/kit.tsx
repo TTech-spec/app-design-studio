@@ -30,6 +30,7 @@ import {
   X,
   type LucideIcon,
 } from "lucide-react";
+import { useQueryClient } from "@tanstack/react-query";
 import academyLogo from "@/assets/portal/darltech-academy-logo.png";
 import { supabase } from "@/lib/supabase";
 import { cn } from "@/lib/utils";
@@ -828,7 +829,7 @@ export function AdminShell({ children }: { children: ReactNode }) {
 /* ============ gate: login + admin check ============ */
 
 export function AdminGate({ children }: { children: ReactNode }) {
-  const { data, isLoading, error } = useAdminSession();
+  const { data, isLoading, error, refetch } = useAdminSession();
   if (!isConfigured)
     return (
       <GateCard
@@ -848,11 +849,14 @@ export function AdminGate({ children }: { children: ReactNode }) {
       <GateCard
         icon={AlertTriangle}
         title="Couldn't check admin access"
-        text={`${(error as Error).message || "Unknown error"}. Run supabase/darltech_full_setup.sql in the Supabase SQL editor, then reload.`}
+        text={adminCheckHelp((error as Error).message)}
         action={
-          <Btn variant="ghost" onClick={() => supabase.auth.signOut()}>
-            Sign out
-          </Btn>
+          <div className="flex justify-center gap-2">
+            <Btn onClick={() => refetch()}>Try again</Btn>
+            <Btn variant="ghost" onClick={() => supabase.auth.signOut()}>
+              Sign out
+            </Btn>
+          </div>
         }
       />
     );
@@ -925,6 +929,7 @@ function AdminLogin() {
       tl.kill();
     };
   }, []);
+  const qc = useQueryClient();
   const submit = async (e: FormEvent) => {
     e.preventDefault();
     setBusy(true);
@@ -940,6 +945,8 @@ function AdminLogin() {
               ? "Too many attempts. Wait a few minutes and try again."
               : error.message,
       );
+    // Check admin access right away so the screen moves on (or explains why not).
+    else await qc.refetchQueries({ queryKey: ["admin-session"] });
     setBusy(false);
   };
   return (
@@ -1420,4 +1427,16 @@ function toLocalInput(v: unknown) {
   if (Number.isNaN(d.getTime())) return "";
   const off = d.getTimezoneOffset() * 60000;
   return new Date(d.getTime() - off).toISOString().slice(0, 16);
+}
+
+/** Plain-language advice for a failed admin-access check. */
+function adminCheckHelp(msg: string) {
+  const m = msg || "Unknown error";
+  if (/HTTP 401|jwt|api key|apikey/i.test(m))
+    return `Supabase rejected the request: ${m}. The website's publishable key may be from a different project or out of date. Copy it again from Supabase → Project Settings → API Keys, update your hosting settings and redeploy. If you recently changed keys, sign out and sign in again.`;
+  if (/PGRST20[25]|42883|could not find|does not exist|schema cache/i.test(m))
+    return `The admin tables or functions are missing: ${m}. Run supabase/darltech_full_setup.sql in the Supabase SQL editor, then try again.`;
+  if (/42501|permission denied/i.test(m))
+    return `The database refused access: ${m}. Run the grant script (supabase/migrations/0014_api_grants.sql) in the Supabase SQL editor, then try again.`;
+  return `${m}. Try again, or sign out and back in.`;
 }

@@ -139,10 +139,24 @@ export function useAdminSession() {
       const { data } = await supabase.auth.getSession();
       const user = data.session?.user ?? null;
       if (!user) return { user: null, isAdmin: false };
-      const { data: ok, error } = await supabase.rpc("is_academy_admin");
-      if (error) throw error;
-      return { user, isAdmin: Boolean(ok) };
+      // Ask the database function first; if that call is refused, fall back to
+      // reading this user's own row from the admin list (allowed by its RLS policy).
+      const rpc = await supabase.rpc("is_academy_admin");
+      if (!rpc.error) return { user, isAdmin: Boolean(rpc.data) };
+      const row = await supabase
+        .from("academy_admins")
+        .select("user_id")
+        .eq("user_id", user.id)
+        .maybeSingle();
+      if (!row.error) return { user, isAdmin: Boolean(row.data) };
+      const e = rpc.error;
+      throw new Error(
+        `${e.message || "request refused"}${e.code ? ` (code ${e.code})` : ""}${
+          rpc.status ? ` [HTTP ${rpc.status}]` : ""
+        }`,
+      );
     },
+    retry: false,
     enabled: isConfigured,
     staleTime: 60_000,
   });
