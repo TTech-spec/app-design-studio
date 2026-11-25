@@ -63,15 +63,45 @@ export type Settings = {
   whatsapp_number: string | null;
 };
 
+export type Announcement = {
+  id: string;
+  title: string;
+  body: string;
+  pinned: boolean;
+  audience: "all" | "students" | "tutors";
+  created_at: string;
+};
+
+export type AcademyEvent = {
+  id: string;
+  title: string;
+  kind: "live_class" | "community" | "deadline";
+  starts_at: string;
+  ends_at: string | null;
+  link: string | null;
+  host: string | null;
+  status: "scheduled" | "cancelled";
+  created_at: string;
+};
+
 export type TableName =
-  "academy_members" | "academy_courses" | "academy_applications" | "academy_payments";
-type RowOf<T extends TableName> = T extends "academy_members"
-  ? Member
-  : T extends "academy_courses"
-    ? Course
-    : T extends "academy_applications"
-      ? Application
-      : Payment;
+  | "academy_members"
+  | "academy_courses"
+  | "academy_applications"
+  | "academy_payments"
+  | "academy_announcements"
+  | "academy_events";
+type RowOf<T extends TableName> = T extends "academy_announcements"
+  ? Announcement
+  : T extends "academy_events"
+    ? AcademyEvent
+    : T extends "academy_members"
+      ? Member
+      : T extends "academy_courses"
+        ? Course
+        : T extends "academy_applications"
+          ? Application
+          : Payment;
 
 export const TRACKS = [
   "Web Development",

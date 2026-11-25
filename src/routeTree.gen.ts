@@ -67,8 +67,10 @@ import { Route as VerificationStatusRouteImport } from './routes/verification-st
 import { Route as VerificationSubmittedRouteImport } from './routes/verification-submitted'
 import { Route as WelcomeRouteImport } from './routes/welcome'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as AdminAnnouncementsRouteImport } from './routes/admin.announcements'
 import { Route as AdminApplicationsRouteImport } from './routes/admin.applications'
 import { Route as AdminCoursesRouteImport } from './routes/admin.courses'
+import { Route as AdminEventsRouteImport } from './routes/admin.events'
 import { Route as AdminPaymentsRouteImport } from './routes/admin.payments'
 import { Route as AdminReportsRouteImport } from './routes/admin.reports'
 import { Route as AdminScholarshipsRouteImport } from './routes/admin.scholarships'
@@ -392,6 +394,11 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminAnnouncementsRoute = AdminAnnouncementsRouteImport.update({
+  id: '/announcements',
+  path: '/announcements',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminApplicationsRoute = AdminApplicationsRouteImport.update({
   id: '/applications',
   path: '/applications',
@@ -400,6 +407,11 @@ const AdminApplicationsRoute = AdminApplicationsRouteImport.update({
 const AdminCoursesRoute = AdminCoursesRouteImport.update({
   id: '/courses',
   path: '/courses',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminEventsRoute = AdminEventsRouteImport.update({
+  id: '/events',
+  path: '/events',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminPaymentsRoute = AdminPaymentsRouteImport.update({
@@ -621,8 +633,10 @@ export interface FileRoutesByFullPath {
   '/verification-status': typeof VerificationStatusRoute
   '/verification-submitted': typeof VerificationSubmittedRoute
   '/welcome': typeof WelcomeRoute
+  '/admin/announcements': typeof AdminAnnouncementsRoute
   '/admin/applications': typeof AdminApplicationsRoute
   '/admin/courses': typeof AdminCoursesRoute
+  '/admin/events': typeof AdminEventsRoute
   '/admin/payments': typeof AdminPaymentsRoute
   '/admin/reports': typeof AdminReportsRoute
   '/admin/scholarships': typeof AdminScholarshipsRoute
@@ -712,8 +726,10 @@ export interface FileRoutesByTo {
   '/verification-status': typeof VerificationStatusRoute
   '/verification-submitted': typeof VerificationSubmittedRoute
   '/welcome': typeof WelcomeRoute
+  '/admin/announcements': typeof AdminAnnouncementsRoute
   '/admin/applications': typeof AdminApplicationsRoute
   '/admin/courses': typeof AdminCoursesRoute
+  '/admin/events': typeof AdminEventsRoute
   '/admin/payments': typeof AdminPaymentsRoute
   '/admin/reports': typeof AdminReportsRoute
   '/admin/scholarships': typeof AdminScholarshipsRoute
@@ -807,8 +823,10 @@ export interface FileRoutesById {
   '/verification-status': typeof VerificationStatusRoute
   '/verification-submitted': typeof VerificationSubmittedRoute
   '/welcome': typeof WelcomeRoute
+  '/admin/announcements': typeof AdminAnnouncementsRoute
   '/admin/applications': typeof AdminApplicationsRoute
   '/admin/courses': typeof AdminCoursesRoute
+  '/admin/events': typeof AdminEventsRoute
   '/admin/payments': typeof AdminPaymentsRoute
   '/admin/reports': typeof AdminReportsRoute
   '/admin/scholarships': typeof AdminScholarshipsRoute
@@ -903,8 +921,10 @@ export interface FileRouteTypes {
     | '/verification-status'
     | '/verification-submitted'
     | '/welcome'
+    | '/admin/announcements'
     | '/admin/applications'
     | '/admin/courses'
+    | '/admin/events'
     | '/admin/payments'
     | '/admin/reports'
     | '/admin/scholarships'
@@ -994,8 +1014,10 @@ export interface FileRouteTypes {
     | '/verification-status'
     | '/verification-submitted'
     | '/welcome'
+    | '/admin/announcements'
     | '/admin/applications'
     | '/admin/courses'
+    | '/admin/events'
     | '/admin/payments'
     | '/admin/reports'
     | '/admin/scholarships'
@@ -1088,8 +1110,10 @@ export interface FileRouteTypes {
     | '/verification-status'
     | '/verification-submitted'
     | '/welcome'
+    | '/admin/announcements'
     | '/admin/applications'
     | '/admin/courses'
+    | '/admin/events'
     | '/admin/payments'
     | '/admin/reports'
     | '/admin/scholarships'
@@ -1601,6 +1625,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/announcements': {
+      id: '/admin/announcements'
+      path: '/announcements'
+      fullPath: '/admin/announcements'
+      preLoaderRoute: typeof AdminAnnouncementsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/applications': {
       id: '/admin/applications'
       path: '/applications'
@@ -1613,6 +1644,13 @@ declare module '@tanstack/react-router' {
       path: '/courses'
       fullPath: '/admin/courses'
       preLoaderRoute: typeof AdminCoursesRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/events': {
+      id: '/admin/events'
+      path: '/events'
+      fullPath: '/admin/events'
+      preLoaderRoute: typeof AdminEventsRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/payments': {
@@ -1843,8 +1881,10 @@ declare module '@tanstack/react-router' {
 }
 
 interface AdminRouteChildren {
+  AdminAnnouncementsRoute: typeof AdminAnnouncementsRoute
   AdminApplicationsRoute: typeof AdminApplicationsRoute
   AdminCoursesRoute: typeof AdminCoursesRoute
+  AdminEventsRoute: typeof AdminEventsRoute
   AdminPaymentsRoute: typeof AdminPaymentsRoute
   AdminReportsRoute: typeof AdminReportsRoute
   AdminScholarshipsRoute: typeof AdminScholarshipsRoute
@@ -1854,8 +1894,10 @@ interface AdminRouteChildren {
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminAnnouncementsRoute: AdminAnnouncementsRoute,
   AdminApplicationsRoute: AdminApplicationsRoute,
   AdminCoursesRoute: AdminCoursesRoute,
+  AdminEventsRoute: AdminEventsRoute,
   AdminPaymentsRoute: AdminPaymentsRoute,
   AdminReportsRoute: AdminReportsRoute,
   AdminScholarshipsRoute: AdminScholarshipsRoute,

@@ -3,6 +3,8 @@ import { AnimatePresence, motion, useReducedMotion, type Variants } from "framer
 import gsap from "gsap";
 import { useEffect, useMemo, useRef, useState, type FormEvent, type ReactNode } from "react";
 import {
+  CalendarDays,
+  Megaphone,
   AlertTriangle,
   ArrowDown,
   ArrowUp,
@@ -564,6 +566,8 @@ const NAV: { label: string; icon: LucideIcon; to: string }[] = [
   { label: "Applications", icon: FileText, to: "/admin/applications" },
   { label: "Payments", icon: CreditCard, to: "/admin/payments" },
   { label: "Scholarships", icon: GraduationCap, to: "/admin/scholarships" },
+  { label: "Announcements", icon: Megaphone, to: "/admin/announcements" },
+  { label: "Events", icon: CalendarDays, to: "/admin/events" },
   { label: "Reports", icon: BarChart3, to: "/admin/reports" },
   { label: "Settings", icon: Settings, to: "/admin/settings" },
 ];
@@ -1058,7 +1062,7 @@ export function Modal({
 export type Field = {
   key: string;
   label: string;
-  type?: "text" | "email" | "number" | "select" | "textarea" | "checkbox";
+  type?: "text" | "email" | "number" | "select" | "textarea" | "checkbox" | "datetime" | "url";
   options?: string[];
   required?: boolean;
 };
@@ -1313,7 +1317,12 @@ export function RecordForm({
       onSubmit={(e) => {
         e.preventDefault();
         const out: Record<string, unknown> = { ...v };
-        for (const f of fields) if (f.type === "number") out[f.key] = Number(out[f.key] ?? 0);
+        for (const f of fields) {
+          if (f.type === "number") out[f.key] = Number(out[f.key] ?? 0);
+          if (f.type === "datetime")
+            out[f.key] = out[f.key] ? new Date(String(out[f.key])).toISOString() : null;
+          if (out[f.key] === "" && !f.required) out[f.key] = null;
+        }
         onSubmit(out);
       }}
       className="space-y-4"
@@ -1366,9 +1375,9 @@ export function RecordForm({
             </>
           ) : (
             <input
-              type={f.type ?? "text"}
+              type={f.type === "datetime" ? "datetime-local" : (f.type ?? "text")}
               required={f.required}
-              value={String(v[f.key] ?? "")}
+              value={f.type === "datetime" ? toLocalInput(v[f.key]) : String(v[f.key] ?? "")}
               onChange={(e) => set(f.key, e.target.value)}
               className={input}
               min={f.type === "number" ? 0 : undefined}
@@ -1386,4 +1395,15 @@ export function RecordForm({
       </div>
     </form>
   );
+}
+
+/** ISO timestamp -> value for <input type="datetime-local"> in the viewer's timezone. */
+function toLocalInput(v: unknown) {
+  if (!v) return "";
+  const s = String(v);
+  if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(s)) return s;
+  const d = new Date(s);
+  if (Number.isNaN(d.getTime())) return "";
+  const off = d.getTimezoneOffset() * 60000;
+  return new Date(d.getTime() - off).toISOString().slice(0, 16);
 }

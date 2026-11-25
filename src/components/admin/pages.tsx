@@ -23,6 +23,8 @@ import {
   useSettings,
   useTable,
   weeklySeries,
+  type AcademyEvent,
+  type Announcement,
   type Application,
   type Course,
   type Member,
@@ -798,5 +800,153 @@ export function AdminSettings() {
         )}
       </Panel>
     </Page>
+  );
+}
+
+/* ======================= Announcements ======================= */
+
+export function AdminAnnouncements() {
+  return (
+    <CrudTable<Announcement>
+      table="academy_announcements"
+      title="Announcements"
+      subtitle="Shown on the community page. Pinned ones appear at the top for everyone."
+      statusKey="audience"
+      statuses={["all", "students", "tutors"].filter((s) => s !== "all")}
+      searchKeys={["title", "body"]}
+      defaults={{ pinned: false, audience: "all" }}
+      fields={[
+        { key: "title", label: "Title", required: true },
+        { key: "body", label: "Message", type: "textarea" },
+        {
+          key: "audience",
+          label: "Audience",
+          type: "select",
+          options: ["all", "students", "tutors"],
+          required: true,
+        },
+        { key: "pinned", label: "Pin to the top of the community page", type: "checkbox" },
+      ]}
+      columns={[
+        {
+          label: "Announcement",
+          render: (r) => (
+            <div>
+              <p className="font-semibold" style={{ color: NAVY }}>
+                {r.title}
+              </p>
+              <p className="line-clamp-1 max-w-md text-xs text-slate-500">{r.body}</p>
+            </div>
+          ),
+        },
+        {
+          label: "Audience",
+          render: (r) => <span className="capitalize text-slate-600">{r.audience}</span>,
+        },
+        {
+          label: "Pinned",
+          render: (r) =>
+            r.pinned ? <Pill value="published" /> : <span className="text-slate-400">—</span>,
+        },
+        {
+          label: "Posted",
+          render: (r) => <span className="text-slate-500">{timeAgo(r.created_at)}</span>,
+        },
+      ]}
+      rowActions={(r, save) => (
+        <button
+          onClick={() => save({ pinned: !r.pinned })}
+          className="rounded-lg px-2 py-1 text-xs font-semibold text-blue-700 hover:bg-blue-50"
+        >
+          {r.pinned ? "Unpin" : "Pin"}
+        </button>
+      )}
+    />
+  );
+}
+
+/* ======================= Events / live classes ======================= */
+
+export function AdminEvents() {
+  return (
+    <CrudTable<AcademyEvent>
+      table="academy_events"
+      title="Events & Live Classes"
+      subtitle="Appear on student and tutor dashboards and the community page."
+      statuses={["scheduled", "cancelled"]}
+      searchKeys={["title", "host"]}
+      defaults={{ kind: "live_class", status: "scheduled" }}
+      fields={[
+        { key: "title", label: "Title", required: true },
+        {
+          key: "kind",
+          label: "Type",
+          type: "select",
+          options: ["live_class", "community", "deadline"],
+          required: true,
+        },
+        { key: "starts_at", label: "Starts", type: "datetime", required: true },
+        { key: "ends_at", label: "Ends", type: "datetime" },
+        { key: "link", label: "Meeting link (Zoom, Meet…)", type: "url" },
+        { key: "host", label: "Host / tutor" },
+        {
+          key: "status",
+          label: "Status",
+          type: "select",
+          options: ["scheduled", "cancelled"],
+          required: true,
+        },
+      ]}
+      columns={[
+        {
+          label: "Event",
+          render: (r) => (
+            <div>
+              <p className="font-semibold" style={{ color: NAVY }}>
+                {r.title}
+              </p>
+              <p className="text-xs text-slate-500">{r.host ?? "—"}</p>
+            </div>
+          ),
+        },
+        {
+          label: "Type",
+          render: (r) => (
+            <span className="capitalize text-slate-600">{r.kind.replace("_", " ")}</span>
+          ),
+        },
+        {
+          label: "When",
+          render: (r) => (
+            <span className="text-slate-600">
+              {new Date(r.starts_at).toLocaleString("en-GB", {
+                dateStyle: "medium",
+                timeStyle: "short",
+              })}
+            </span>
+          ),
+        },
+        {
+          label: "Link",
+          render: (r) =>
+            r.link ? (
+              <a
+                href={r.link}
+                target="_blank"
+                rel="noreferrer"
+                className="text-xs font-semibold text-blue-600"
+              >
+                Open
+              </a>
+            ) : (
+              <span className="text-slate-400">—</span>
+            ),
+        },
+        {
+          label: "Status",
+          render: (r) => <Pill value={r.status === "scheduled" ? "active" : "rejected"} />,
+        },
+      ]}
+    />
   );
 }

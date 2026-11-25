@@ -36,13 +36,15 @@ export const Route = createFileRoute("/student/")({
 
 function Dashboard() {
   const { enrollments } = useAcademy();
+  // Ignore enrollments for courses that no longer exist in the catalogue.
+  const valid = enrollments.filter((e) => courseById(e.courseId));
   return (
     <>
       <div className="hidden lg:block">
         <StudentDash />
       </div>
       <div className="lg:hidden">
-        {enrollments.length ? <LearningDashboard /> : <NewDashboard />}
+        {valid.length ? <LearningDashboard /> : <NewDashboard />}
       </div>
     </>
   );
@@ -229,7 +231,7 @@ function NewDashboard() {
 
 function LearningDashboard() {
   const { user, enrollments, attempts, allQuizzes } = useAcademy();
-  const current = enrollments[enrollments.length - 1];
+  const current = [...enrollments].reverse().find((e) => courseById(e.courseId))!;
   const course = courseById(current.courseId)!;
   const tutor = tutorById(course.tutorId)!;
   const progress = current.progress;

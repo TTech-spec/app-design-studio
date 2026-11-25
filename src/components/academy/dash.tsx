@@ -1,7 +1,21 @@
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
-import { motion, useReducedMotion, type Variants } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion, type Variants } from "framer-motion";
 import gsap from "gsap";
-import { useEffect, useRef, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
+import { toast } from "sonner";
+import { courseById } from "@/lib/academy/data";
+import {
+  fmtEvent,
+  timeAgo,
+  useAnnouncements,
+  useCommunityStats,
+  useEvents,
+  useFeed,
+  useFeedActions,
+  usePublicSettings,
+  useTutorSubmissions,
+  type FeedItem,
+} from "@/lib/academy/live";
 import {
   ArrowRight,
   Award,
@@ -466,14 +480,103 @@ export function DashShell({
   );
 }
 
+/* ---------------- shared live bits ---------------- */
+
+function Skeleton({ className }: { className?: string }) {
+  return <div className={cn("animate-pulse rounded-xl bg-slate-100", className)} />;
+}
+
+function EmptyNote({
+  icon: Icon,
+  text,
+  action,
+}: {
+  icon: LucideIcon;
+  text: string;
+  action?: ReactNode;
+}) {
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      className="flex flex-col items-center gap-2 py-6 text-center"
+    >
+      <motion.span
+        animate={{ y: [0, -5, 0] }}
+        transition={{ repeat: Infinity, duration: 3 }}
+        className="grid h-11 w-11 place-items-center rounded-xl bg-slate-50 text-slate-400"
+      >
+        <Icon className="h-5 w-5" />
+      </motion.span>
+      <p className="text-sm text-slate-500">{text}</p>
+      {action}
+    </motion.div>
+  );
+}
+
+function CourseArt({ className }: { className?: string }) {
+  return (
+    <div
+      className={cn(
+        "grid shrink-0 place-items-center rounded-xl bg-gradient-to-br from-[#0B1F4D] to-[#1E3A8A] font-bold text-blue-200",
+        className,
+      )}
+    >
+      &lt;/&gt;
+    </div>
+  );
+}
+
 /* ---------------- student dashboard ---------------- */
 
 export function StudentDash() {
-  const { user, enrollments } = useAcademy();
-  const name = user ? firstName(user) : "Ada";
+  const { user, enrollments, attempts, allQuizzes } = useAcademy();
+  const name = user ? firstName(user) : "there";
+  const events = useEvents();
+  const feed = useFeed();
+  const settings = usePublicSettings();
+
+  const latest = [...enrollments].reverse().find((e) => courseById(e.courseId));
+  const course = latest ? courseById(latest.courseId) : undefined;
   const progress = enrollments.length
     ? Math.round(enrollments.reduce((s, e) => s + e.progress, 0) / enrollments.length)
-    : 72;
+    : 0;
+  const myCourses = new Set(enrollments.map((e) => e.courseId));
+  const done = new Set(attempts.map((a) => a.quizId));
+  const openQuizzes = allQuizzes.filter(
+    (q) => !done.has(q.id) && (q.openToAll || myCourses.has(q.courseId)),
+  );
+  const certificates = enrollments.filter((e) => e.progress >= 100).length;
+
+  const activities = [
+    ...(events.data ?? []).slice(0, 3).map((e) => ({
+      key: e.id,
+      icon: e.kind === "deadline" ? Calendar : Play,
+      t: e.title,
+      d: fmtEvent(e.starts_at),
+      tag: e.link ? (
+        <a href={e.link} target="_blank" rel="noreferrer">
+          <Pill tone="blue">Join</Pill>
+        </a>
+      ) : (
+        <Pill tone={e.kind === "deadline" ? "red" : "blue"}>
+          {e.kind === "deadline" ? "Due" : "Soon"}
+        </Pill>
+      ),
+    })),
+    ...openQuizzes.slice(0, 2).map((q) => ({
+      key: q.id,
+      icon: Trophy,
+      t: `Quiz: ${q.title}`,
+      d: q.due ? `Due ${q.due}` : `${q.minutes} min`,
+      tag: (
+        <Link to="/quiz/$quizId" params={{ quizId: q.id }}>
+          <Pill tone="blue">Start</Pill>
+        </Link>
+      ),
+    })),
+  ].slice(0, 4);
+
   return (
     <DashShell role="student">
       <Stagger className="flex flex-col gap-5">
@@ -482,9 +585,14 @@ export function StudentDash() {
             <h1 className="text-3xl font-extrabold" style={{ color: NAVY }}>
               Welcome back, {name}!
             </h1>
-            <p className="mt-2 text-slate-700">Keep learning. Keep growing. You're doing great!</p>
+            <p className="mt-2 text-slate-700">
+              {enrollments.length
+                ? "Keep learning. Keep growing. You're doing great!"
+                : "Pick your first course to get started."}
+            </p>
             <RedBtn to="/student/explore" className="mt-5">
-              Continue Learning <ArrowRight className="h-4 w-4" />
+              {enrollments.length ? "Continue Learning" : "Explore Courses"}{" "}
+              <ArrowRight className="h-4 w-4" />
             </RedBtn>
           </div>
           <motion.div
@@ -519,11 +627,11 @@ export function StudentDash() {
             <CountUp value={progress} suffix="%" />
             <Bar pct={progress} className="mt-2" />
           </StatCard>
-          <StatCard icon={Calendar} tint={RED} label="Assignments">
-            1 Pending
+          <StatCard icon={Calendar} tint={RED} label="Quizzes">
+            <CountUp value={openQuizzes.length} /> Available
           </StatCard>
           <StatCard icon={Trophy} tint="#D97706" label="Certificates">
-            0 Earned
+            <CountUp value={certificates} /> Earned
           </StatCard>
           <StatCard icon={Users} tint="#2563EB" label="Community">
             <Link
@@ -538,128 +646,146 @@ export function StudentDash() {
 
         <div className="grid gap-5 xl:grid-cols-[1.3fr_1fr_1fr]">
           <Card>
-            <SectionHead title="My Course" label="View Course" to="/student/explore" />
-            <div className="flex flex-col gap-5 sm:flex-row">
-              <div className="grid h-36 w-full shrink-0 place-items-center rounded-xl bg-gradient-to-br from-[#0B1F4D] to-[#1E3A8A] text-4xl font-bold text-blue-200 sm:w-48">
-                &lt;/&gt;
+            <SectionHead
+              title="My Course"
+              label={course ? "View Course" : "Browse"}
+              to={course ? `/student/courses/${course.id}` : "/student/explore"}
+            />
+            {course && latest ? (
+              <div className="flex flex-col gap-5 sm:flex-row">
+                <CourseArt className="h-36 w-full text-4xl sm:w-48" />
+                <div className="flex-1">
+                  <p className="text-lg font-bold" style={{ color: NAVY }}>
+                    {course.name}
+                  </p>
+                  <p className="mt-1 text-xs text-slate-500">
+                    {course.duration} ·{" "}
+                    {latest.plan === "scholarship" ? "Scholarship" : "Full plan"}
+                  </p>
+                  <p className="mt-2 text-sm text-slate-600">{latest.progress}% Complete</p>
+                  <Bar pct={latest.progress} className="mt-2" />
+                  <RedBtn to={`/student/courses/${course.id}`} className="mt-5 w-full">
+                    Continue Learning <ArrowRight className="h-4 w-4" />
+                  </RedBtn>
+                </div>
               </div>
-              <div className="flex-1">
-                <p className="text-lg font-bold" style={{ color: NAVY }}>
-                  Web Development Fundamentals
-                </p>
-                <p className="mt-2 text-sm text-slate-600">{progress}% Complete</p>
-                <Bar pct={progress} className="mt-2" />
-                <RedBtn to="/student/explore" className="mt-5 w-full">
-                  Continue Learning <ArrowRight className="h-4 w-4" />
-                </RedBtn>
-              </div>
-            </div>
+            ) : (
+              <EmptyNote
+                icon={BookOpen}
+                text="You haven't enrolled in a course yet."
+                action={<RedBtn to="/student/explore">Explore courses</RedBtn>}
+              />
+            )}
           </Card>
+
           <Card>
-            <SectionHead title="Upcoming Activities" />
-            <ul className="space-y-4">
-              {[
-                {
-                  icon: Calendar,
-                  t: "Assignment: Build a Portfolio Website",
-                  d: "Due: Oct 25, 2025",
-                  tag: <Pill tone="red">Urgent</Pill>,
-                },
-                {
-                  icon: Play,
-                  t: "Live Class: Modern Web Dev",
-                  d: "Oct 27, 2025 • 7:00 PM",
-                  tag: <Pill tone="blue">Join</Pill>,
-                },
-                {
-                  icon: Trophy,
-                  t: "Quiz: JavaScript Basics",
-                  d: "Oct 30, 2025",
-                  tag: <Pill tone="blue">Start</Pill>,
-                },
-              ].map((a) => (
-                <li key={a.t} className="flex items-center gap-3">
-                  <span
-                    className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-red-50"
-                    style={{ color: RED }}
+            <SectionHead title="Upcoming Activities" to="/student/quizzes" />
+            {events.isLoading ? (
+              <div className="space-y-3">
+                {[0, 1, 2].map((i) => (
+                  <Skeleton key={i} className="h-10" />
+                ))}
+              </div>
+            ) : activities.length ? (
+              <ul className="space-y-4">
+                {activities.map((a, i) => (
+                  <motion.li
+                    key={a.key}
+                    initial={{ opacity: 0, x: 12 }}
+                    animate={{ opacity: 1, x: 0, transition: { delay: 0.1 + i * 0.06 } }}
+                    className="flex items-center gap-3"
                   >
-                    <a.icon className="h-4 w-4" />
-                  </span>
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-semibold" style={{ color: NAVY }}>
-                      {a.t}
-                    </p>
-                    <p className="text-xs text-slate-500">{a.d}</p>
-                  </div>
-                  {a.tag}
-                </li>
-              ))}
-            </ul>
+                    <span
+                      className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-red-50"
+                      style={{ color: RED }}
+                    >
+                      <a.icon className="h-4 w-4" />
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-sm font-semibold" style={{ color: NAVY }}>
+                        {a.t}
+                      </p>
+                      <p className="text-xs text-slate-500">{a.d}</p>
+                    </div>
+                    {a.tag}
+                  </motion.li>
+                ))}
+              </ul>
+            ) : (
+              <EmptyNote icon={Calendar} text="Nothing scheduled right now." />
+            )}
           </Card>
+
           <Card>
             <SectionHead title="Community" to="/student/community" />
-            <div className="space-y-4">
-              {[
-                {
-                  n: "Emmanuel K.",
-                  ago: "2h ago",
-                  t: "Anyone has issues with the assignment submission?",
-                  l: 12,
-                  c: 8,
-                },
-                {
-                  n: "Grace Johnson",
-                  ago: "3h ago",
-                  t: "Great lesson! This is exactly what I needed.",
-                  l: 24,
-                  c: 5,
-                },
-              ].map((p) => (
-                <div key={p.n} className="flex gap-3">
-                  <Avatar name={p.n} size={36} />
-                  <div>
-                    <p className="text-sm font-semibold" style={{ color: NAVY }}>
-                      {p.n}
-                    </p>
-                    <p className="text-xs text-slate-400">{p.ago}</p>
-                    <p className="mt-1 text-sm text-slate-700">{p.t}</p>
-                    <p className="mt-1 flex gap-4 text-xs text-slate-500">
-                      <span className="inline-flex items-center gap-1">
-                        <ThumbsUp className="h-3.5 w-3.5" />
-                        {p.l}
-                      </span>
-                      <span className="inline-flex items-center gap-1">
-                        <MessageSquare className="h-3.5 w-3.5" />
-                        {p.c}
-                      </span>
-                    </p>
+            {feed.isLoading ? (
+              <div className="space-y-3">
+                {[0, 1].map((i) => (
+                  <Skeleton key={i} className="h-16" />
+                ))}
+              </div>
+            ) : feed.data?.length ? (
+              <div className="space-y-4">
+                {feed.data.slice(0, 2).map((p) => (
+                  <div key={p.id} className="flex gap-3">
+                    <Avatar name={p.author} size={36} />
+                    <div className="min-w-0">
+                      <p className="text-sm font-semibold" style={{ color: NAVY }}>
+                        {p.author}
+                      </p>
+                      <p className="text-xs text-slate-400">{timeAgo(p.created_at)}</p>
+                      <p className="mt-1 line-clamp-2 text-sm text-slate-700">{p.text}</p>
+                      <p className="mt-1 flex gap-4 text-xs text-slate-500">
+                        <span className="inline-flex items-center gap-1">
+                          <ThumbsUp className="h-3.5 w-3.5" />
+                          {p.likes}
+                        </span>
+                        <span className="inline-flex items-center gap-1">
+                          <MessageSquare className="h-3.5 w-3.5" />
+                          {p.comments}
+                        </span>
+                      </p>
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            ) : (
+              <EmptyNote
+                icon={Users}
+                text="No posts yet. Start the conversation!"
+                action={
+                  <Link to="/student/community" className="text-sm font-semibold text-blue-600">
+                    Go to community →
+                  </Link>
+                }
+              />
+            )}
           </Card>
         </div>
 
-        <motion.div
-          variants={item}
-          className="flex flex-wrap items-center gap-4 rounded-2xl bg-[#E8EEFB] px-6 py-4"
-        >
-          <Megaphone className="h-7 w-7 text-blue-600" />
-          <div className="flex-1">
-            <p className="font-bold" style={{ color: NAVY }}>
-              Scholarship Opportunity
-            </p>
-            <p className="text-sm text-slate-600">
-              Apply for the DarlTech Academy Scholarship Program – Cohort 2.{" "}
-              <a href="/#scholarship" className="font-semibold text-blue-600">
-                Learn more →
-              </a>
-            </p>
-          </div>
-          <RedBtn to="/apply">
-            Apply Now <ArrowRight className="h-4 w-4" />
-          </RedBtn>
-        </motion.div>
+        {settings.data?.applications_open !== false && (
+          <motion.div
+            variants={item}
+            className="flex flex-wrap items-center gap-4 rounded-2xl bg-[#E8EEFB] px-6 py-4"
+          >
+            <Megaphone className="h-7 w-7 text-blue-600" />
+            <div className="flex-1">
+              <p className="font-bold" style={{ color: NAVY }}>
+                Scholarship Opportunity
+              </p>
+              <p className="text-sm text-slate-600">
+                Apply for the DarlTech Academy Scholarship Program –{" "}
+                {settings.data?.cohort_name ?? "Cohort 2"}.{" "}
+                <a href="/#scholarship" className="font-semibold text-blue-600">
+                  Learn more →
+                </a>
+              </p>
+            </div>
+            <RedBtn to="/apply">
+              Apply Now <ArrowRight className="h-4 w-4" />
+            </RedBtn>
+          </motion.div>
+        )}
       </Stagger>
     </DashShell>
   );
@@ -668,124 +794,187 @@ export function StudentDash() {
 /* ---------------- tutor dashboard ---------------- */
 
 export function TutorDash() {
-  const { user } = useAcademy();
-  const name = user ? firstName(user) : "Michael";
+  const { user, quizzes } = useAcademy();
+  const name = user ? firstName(user) : "there";
+  const subs = useTutorSubmissions();
+  const events = useEvents();
+  const list = subs.data ?? [];
+  const students = new Set(list.map((s) => s.user_id)).size;
+  const avg = list.length ? Math.round(list.reduce((s, x) => s + x.score, 0) / list.length) : 0;
+  const weekAgo = Date.now() - 7 * 864e5;
+  const thisWeek = list.filter((s) => new Date(s.created_at).getTime() > weekAgo).length;
+  const next = (events.data ?? []).find((e) => e.kind === "live_class") ?? events.data?.[0];
+  const countFor = (id: string) => list.filter((s) => s.quiz_id === id).length;
+
   return (
     <DashShell role="tutor" searchPlaceholder="Search...">
       <Stagger className="flex flex-col gap-5">
         <motion.div variants={item} className="flex flex-wrap items-center justify-between gap-4">
           <div>
             <h1 className="text-2xl font-extrabold" style={{ color: NAVY }}>
-              Welcome, Dr. {name}!
+              Welcome, {name}!
             </h1>
-            <p className="text-sm text-slate-600">Manage your courses and students</p>
+            <p className="text-sm text-slate-600">Manage your quizzes and students</p>
           </div>
           <RedBtn to="/tutor/quizzes/new">
-            Create Course <Plus className="h-4 w-4" />
+            Create Quiz <Plus className="h-4 w-4" />
           </RedBtn>
         </motion.div>
+
+        {user?.status === "pending" && (
+          <motion.div
+            variants={item}
+            className="rounded-2xl border border-amber-200 bg-amber-50 px-5 py-3 text-sm text-amber-800"
+          >
+            <b>Your tutor account is under review.</b> You can create quizzes now; we'll notify you
+            when you're approved.
+          </motion.div>
+        )}
+
         <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
-          <StatCard icon={Users} tint="#2563EB" label="Total Students">
-            <CountUp value={342} />
+          <StatCard icon={Users} tint="#2563EB" label="Students Reached">
+            <CountUp value={students} />
           </StatCard>
-          <StatCard icon={BookOpen} tint="#7C3AED" label="My Courses">
-            <CountUp value={3} />
+          <StatCard icon={BookOpen} tint="#7C3AED" label="My Quizzes">
+            <CountUp value={quizzes.length} />
           </StatCard>
-          <StatCard icon={GraduationCap} tint="#059669" label="Pending Reviews">
-            <CountUp value={18} />
+          <StatCard icon={GraduationCap} tint="#059669" label="Submissions this week">
+            <CountUp value={thisWeek} />
           </StatCard>
-          <StatCard icon={Star} tint="#D97706" label="Your Rating">
-            <CountUp value={4.8} decimals={1} />
+          <StatCard icon={Star} tint="#D97706" label="Average Score">
+            <CountUp value={avg} suffix="%" />
           </StatCard>
         </div>
+
         <div className="grid gap-5 xl:grid-cols-2">
           <Card>
-            <SectionHead title="My Courses" to="/tutor/quizzes" />
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-              <div className="grid h-24 w-36 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-[#0B1F4D] to-[#1E3A8A] text-2xl font-bold text-blue-200">
-                &lt;/&gt;
-              </div>
-              <div className="flex-1">
-                <p className="font-bold" style={{ color: NAVY }}>
-                  Web Development Fundamentals
-                </p>
-                <p className="text-xs text-slate-500">342 Students • 12 Lessons</p>
-                <p className="mt-1 inline-flex items-center gap-1 text-xs text-green-600">
-                  <span className="h-2 w-2 rounded-full bg-green-500" />
-                  Active
-                </p>
-              </div>
-              <a
-                href="/tutor/quizzes"
-                className="inline-flex h-9 items-center gap-1 rounded-lg border border-slate-200 px-4 text-sm font-medium"
-                style={{ color: NAVY }}
-              >
-                Manage Course <ArrowRight className="h-4 w-4" />
-              </a>
-            </div>
+            <SectionHead title="My Quizzes" to="/tutor/quizzes" />
+            {quizzes.length ? (
+              <ul className="space-y-3">
+                {quizzes.slice(0, 3).map((q) => (
+                  <li key={q.id} className="flex items-center gap-4">
+                    <CourseArt className="h-14 w-20 text-lg" />
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate font-bold" style={{ color: NAVY }}>
+                        {q.title}
+                      </p>
+                      <p className="text-xs text-slate-500">
+                        {q.questions.length} questions · {countFor(q.id)} submissions
+                      </p>
+                      <p className="mt-0.5 inline-flex items-center gap-1 text-xs text-green-600">
+                        <span className="h-2 w-2 rounded-full bg-green-500" />
+                        {q.openToAll ? "Open to all" : `${q.cohorts.length} cohort(s)`}
+                      </p>
+                    </div>
+                    <Link
+                      to="/tutor/quizzes/$quizId"
+                      params={{ quizId: q.id }}
+                      className="inline-flex h-9 items-center gap-1 rounded-lg border border-slate-200 px-3 text-sm font-medium"
+                      style={{ color: NAVY }}
+                    >
+                      Manage <ArrowRight className="h-4 w-4" />
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <EmptyNote
+                icon={BookOpen}
+                text="You haven't created a quiz yet."
+                action={<RedBtn to="/tutor/quizzes/new">Create your first quiz</RedBtn>}
+              />
+            )}
           </Card>
+
           <Card>
             <SectionHead title="Recent Submissions" to="/tutor/quizzes" />
-            <ul className="space-y-3">
-              {[
-                { t: "React Project", by: "Ada Okafor", s: <Pill tone="amber">Pending</Pill> },
-                {
-                  t: "Data Analysis Report",
-                  by: "Chinedu Eze",
-                  s: <Pill tone="green">Graded</Pill>,
-                },
-                { t: "UI Design Task", by: "Blessing Ade", s: <Pill tone="green">Graded</Pill> },
-              ].map((r) => (
-                <li key={r.t} className="flex items-center gap-3">
-                  <Avatar name={r.by} size={34} />
-                  <div className="flex-1">
-                    <p className="text-sm font-semibold" style={{ color: NAVY }}>
-                      {r.t}
-                    </p>
-                    <p className="text-xs text-slate-500">by {r.by}</p>
-                  </div>
-                  {r.s}
-                </li>
-              ))}
-            </ul>
+            {subs.isLoading ? (
+              <div className="space-y-3">
+                {[0, 1, 2].map((i) => (
+                  <Skeleton key={i} className="h-10" />
+                ))}
+              </div>
+            ) : list.length ? (
+              <ul className="space-y-3">
+                {list.slice(0, 4).map((r, i) => (
+                  <motion.li
+                    key={r.id}
+                    initial={{ opacity: 0, x: 12 }}
+                    animate={{ opacity: 1, x: 0, transition: { delay: i * 0.05 } }}
+                    className="flex items-center gap-3"
+                  >
+                    <Avatar name={r.student_name} size={34} />
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-sm font-semibold" style={{ color: NAVY }}>
+                        {r.quiz_title ?? "Quiz"}
+                      </p>
+                      <p className="text-xs text-slate-500">
+                        by {r.student_name} · {timeAgo(r.created_at)}
+                      </p>
+                    </div>
+                    <Pill tone={r.score >= 50 ? "green" : "amber"}>{r.score}%</Pill>
+                  </motion.li>
+                ))}
+              </ul>
+            ) : (
+              <EmptyNote
+                icon={ClipboardList}
+                text="No submissions yet. Share a quiz with your students."
+              />
+            )}
           </Card>
+
           <Card>
             <h3 className="mb-4 font-bold" style={{ color: NAVY }}>
               Live Class Schedule
             </h3>
-            <div className="flex items-center gap-4 rounded-xl bg-slate-50 p-4">
-              <motion.span
-                animate={{ scale: [1, 1.4, 1] }}
-                transition={{ repeat: Infinity, duration: 1.6 }}
-                className="h-3 w-3 rounded-full"
-                style={{ backgroundColor: RED }}
-              />
-              <div className="flex-1">
-                <p className="font-semibold" style={{ color: NAVY }}>
-                  Advanced React Development
-                </p>
-                <p className="text-xs text-slate-500">Today, 4:00 PM – 5:00 PM</p>
+            {events.isLoading ? (
+              <Skeleton className="h-16" />
+            ) : next ? (
+              <div className="flex items-center gap-4 rounded-xl bg-slate-50 p-4">
+                <motion.span
+                  animate={{ scale: [1, 1.4, 1] }}
+                  transition={{ repeat: Infinity, duration: 1.6 }}
+                  className="h-3 w-3 rounded-full"
+                  style={{ backgroundColor: RED }}
+                />
+                <div className="min-w-0 flex-1">
+                  <p className="truncate font-semibold" style={{ color: NAVY }}>
+                    {next.title}
+                  </p>
+                  <p className="text-xs text-slate-500">{fmtEvent(next.starts_at, next.ends_at)}</p>
+                </div>
+                {next.link && (
+                  <a
+                    href={next.link}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex h-9 items-center rounded-lg bg-blue-600 px-4 text-sm font-semibold text-white hover:bg-blue-700"
+                  >
+                    Join Class
+                  </a>
+                )}
               </div>
-              <button className="h-9 rounded-lg bg-blue-600 px-4 text-sm font-semibold text-white hover:bg-blue-700">
-                Join Class
-              </button>
-            </div>
+            ) : (
+              <EmptyNote icon={Video} text="No live classes scheduled." />
+            )}
           </Card>
+
           <motion.div
             variants={item}
             className="flex items-center gap-4 rounded-2xl bg-[#E8EEFB] p-6"
           >
             <Lightbulb className="h-8 w-8 text-blue-600" />
             <p className="text-sm text-slate-700">
-              Tip: Upload more resources to enrich your learners.
+              Tip: Share quizzes to the tech feed so more learners can practise.
             </p>
             <div className="flex-1" />
-            <a
-              href="/tutor/feed"
+            <Link
+              to="/tutor/quizzes"
               className="inline-flex items-center gap-1 text-sm font-semibold text-blue-600"
             >
-              <Upload className="h-4 w-4" /> Upload
-            </a>
+              <Upload className="h-4 w-4" /> Share
+            </Link>
           </motion.div>
         </div>
       </Stagger>
@@ -795,41 +984,187 @@ export function TutorDash() {
 
 /* ---------------- community ---------------- */
 
-const POSTS = [
-  {
-    n: "Chinedu Eze",
-    cohort: "Web Development Cohort",
-    ago: "3 hours ago",
-    verified: true,
-    t: "Has anyone tried deploying a React project on Vercel? I'm getting this error: “Build failed: Could not find a suitable output directory.” Any help?",
-    likes: 12,
-    comments: 8,
-    reply: {
-      n: "Blessing Okeke",
-      ago: "2 hours ago",
-      t: "Make sure your build command is correctly set in vercel.json. It worked for me!",
-    },
-  },
-  {
-    n: "David Adebayo",
-    cohort: "Data Analytics Cohort",
-    ago: "5 hours ago",
-    t: "Can someone explain how to use pivot tables in Excel for data analysis?",
-    sub: "I'm stuck on this part of the course.",
-    likes: 7,
-    comments: 5,
-  },
-];
+type Tab = "all" | "course" | "announcements" | "tutors";
+
+function PostCard({ p, myName }: { p: FeedItem; myName: string }) {
+  const { like, comment, remove, uid } = useFeedActions();
+  const [open, setOpen] = useState(false);
+  const [reply, setReply] = useState("");
+  const last = p.commentList[p.commentList.length - 1];
+  const shown = open ? p.commentList : last ? [last] : [];
+  return (
+    <Card>
+      <div className="flex items-start gap-3">
+        <Avatar name={p.author} size={48} />
+        <div className="min-w-0 flex-1">
+          <p className="inline-flex items-center gap-1 font-bold" style={{ color: NAVY }}>
+            {p.author}
+            {p.role === "Tutor" && <BadgeCheck className="h-4 w-4 fill-blue-600 text-white" />}
+          </p>
+          <p className="text-sm text-slate-500">
+            {p.role}
+            {p.course ? ` • ${p.course}` : ""}
+          </p>
+        </div>
+        <span className="text-xs text-slate-500">{timeAgo(p.created_at)}</span>
+        {p.user_id === uid && (
+          <button
+            aria-label="Delete post"
+            onClick={() => remove.mutate(p.id)}
+            className="text-slate-400 hover:text-red-600"
+          >
+            <MoreVertical className="h-4 w-4" />
+          </button>
+        )}
+      </div>
+      <p className="mt-3 whitespace-pre-line text-lg font-medium" style={{ color: NAVY }}>
+        {p.text}
+      </p>
+      <div className="mt-3 flex gap-6 text-sm text-slate-600">
+        <motion.button
+          whileTap={{ scale: 1.3 }}
+          onClick={() => like.mutate({ postId: p.id, liked: p.likedByMe })}
+          className="inline-flex items-center gap-1.5"
+        >
+          <ThumbsUp className={cn("h-4 w-4", p.likedByMe && "fill-red-500 text-red-500")} />
+          {p.likes} Likes
+        </motion.button>
+        <button onClick={() => setOpen((o) => !o)} className="inline-flex items-center gap-1.5">
+          <MessageSquare className="h-4 w-4" />
+          {p.comments} Comments
+        </button>
+        <button
+          onClick={() => {
+            void navigator.clipboard?.writeText(`${window.location.origin}/student/community`);
+            toast.success("Link copied");
+          }}
+          className="inline-flex items-center gap-1.5"
+        >
+          <Share2 className="h-4 w-4" />
+          Share
+        </button>
+      </div>
+      <div className="mt-3 rounded-xl bg-[#EEF2FA] p-4">
+        {p.comments > 1 && (
+          <button
+            onClick={() => setOpen((o) => !o)}
+            className="mb-3 block w-full text-center text-xs font-semibold text-blue-600"
+          >
+            {open ? "Show less" : `View all ${p.comments} comments ⌄`}
+          </button>
+        )}
+        <AnimatePresence initial={false}>
+          {shown.map((c) => (
+            <motion.div
+              key={c.id}
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              className="mb-3 flex gap-3"
+            >
+              <Avatar name={c.author} size={36} />
+              <div>
+                <p className="text-sm">
+                  <b style={{ color: NAVY }}>{c.author}</b>{" "}
+                  <span className="text-xs text-slate-500">• {timeAgo(c.created_at)}</span>
+                </p>
+                <p className="text-sm text-slate-700">{c.text}</p>
+              </div>
+            </motion.div>
+          ))}
+        </AnimatePresence>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            if (!reply.trim()) return;
+            comment.mutate(
+              { postId: p.id, text: reply.trim(), author: myName },
+              {
+                onSuccess: () => {
+                  setReply("");
+                  setOpen(true);
+                },
+              },
+            );
+          }}
+          className="flex gap-2"
+        >
+          <input
+            value={reply}
+            onChange={(e) => setReply(e.target.value)}
+            placeholder="Write a reply…"
+            className="h-10 flex-1 rounded-lg border border-slate-200 bg-white px-3 text-sm outline-none ring-blue-200 focus:ring-2"
+          />
+          <button
+            type="submit"
+            disabled={!reply.trim() || comment.isPending}
+            className="h-10 rounded-lg px-4 text-sm font-semibold text-white disabled:opacity-50"
+            style={{ backgroundColor: NAVY }}
+          >
+            Reply
+          </button>
+        </form>
+      </div>
+    </Card>
+  );
+}
 
 export function CommunityPage() {
+  const { user, enrollments } = useAcademy();
+  const feed = useFeed();
+  const ann = useAnnouncements();
+  const events = useEvents();
+  const stats = useCommunityStats();
+  const { post } = useFeedActions();
+  const [tab, setTab] = useState<Tab>("all");
+  const [draft, setDraft] = useState("");
+  const myName = user?.name || "Member";
+  const myCourse = [...enrollments]
+    .reverse()
+    .map((e) => courseById(e.courseId))
+    .find(Boolean);
+  const pinned = (ann.data ?? []).find((a) => a.pinned) ?? ann.data?.[0];
+
+  const posts = (feed.data ?? []).filter((p) =>
+    tab === "course"
+      ? Boolean(myCourse) && p.course === myCourse?.name
+      : tab === "tutors"
+        ? p.role === "Tutor"
+        : true,
+  );
+
   const tabs = [
-    [Users, "For You"],
-    [GraduationCap, "My Course Group"],
-    [Megaphone, "Announcements"],
-    [HelpCircle, "Ask a Tutor"],
+    ["all", Users, "For You"],
+    ["course", GraduationCap, "My Course Group"],
+    ["announcements", Megaphone, "Announcements"],
+    ["tutors", HelpCircle, "Ask a Tutor"],
   ] as const;
+
+  const submit = () => {
+    if (!draft.trim()) return;
+    post.mutate(
+      {
+        author: myName,
+        initials: myName
+          .split(" ")
+          .map((n) => n[0])
+          .slice(0, 2)
+          .join(""),
+        color: NAVY,
+        role: user?.role === "tutor" ? "Tutor" : "Student",
+        topic: "Jobs",
+        text: draft.trim(),
+        course: myCourse?.name,
+      },
+      { onSuccess: () => setDraft("") },
+    );
+  };
+
   return (
-    <DashShell role="student" searchPlaceholder="Search community...">
+    <DashShell
+      role={user?.role === "tutor" ? "tutor" : "student"}
+      searchPlaceholder="Search community..."
+    >
       <Stagger className="flex flex-col gap-5">
         <motion.div variants={item}>
           <h1 className="text-4xl font-extrabold" style={{ color: NAVY }}>
@@ -842,120 +1177,161 @@ export function CommunityPage() {
         <div className="grid gap-5 xl:grid-cols-[1fr_320px]">
           <div className="flex min-w-0 flex-col gap-5">
             <motion.div variants={item} className="flex flex-wrap gap-3">
-              {tabs.map(([I, l], i) => (
+              {tabs.map(([key, I, l]) => (
                 <motion.button
-                  key={l}
+                  key={key}
+                  onClick={() => setTab(key)}
                   whileHover={{ y: -2 }}
                   whileTap={{ scale: 0.96 }}
                   className={cn(
-                    "inline-flex h-11 items-center gap-2 rounded-xl px-5 text-sm font-semibold shadow-sm",
-                    i === 0 ? "text-white" : "bg-white",
+                    "relative inline-flex h-11 items-center gap-2 rounded-xl px-5 text-sm font-semibold shadow-sm",
+                    tab !== key && "bg-white",
                   )}
-                  style={i === 0 ? { backgroundColor: RED } : { color: NAVY }}
+                  style={{ color: tab === key ? "white" : NAVY }}
                 >
-                  <I className="h-4 w-4" />
-                  {l}
+                  {tab === key && (
+                    <motion.span
+                      layoutId="community-tab"
+                      className="absolute inset-0 rounded-xl"
+                      style={{ backgroundColor: RED }}
+                      transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                    />
+                  )}
+                  <I className="relative h-4 w-4" />
+                  <span className="relative">{l}</span>
                 </motion.button>
               ))}
             </motion.div>
-            <Card className="flex gap-4 border-blue-100 bg-[#EEF2FA]">
-              <span
-                className="grid h-16 w-16 shrink-0 place-items-center rounded-xl text-white"
-                style={{ backgroundColor: NAVY }}
-              >
-                <Megaphone className="h-7 w-7" />
-              </span>
-              <div className="flex-1">
-                <div className="flex items-start justify-between gap-2">
-                  <p className="inline-flex items-center gap-1 text-sm" style={{ color: RED }}>
-                    <Pin className="h-4 w-4" /> Pinned Announcement
-                  </p>
-                  <div className="text-right">
-                    <p className="text-xs text-slate-500">2 days ago</p>
-                    <span className="mt-1 inline-block">
-                      <Pill tone="blue">Academy-wide</Pill>
+
+            {tab === "announcements" ? (
+              ann.isLoading ? (
+                <Skeleton className="h-32" />
+              ) : ann.data?.length ? (
+                ann.data.map((a) => (
+                  <Card key={a.id} className="flex gap-4 border-blue-100 bg-[#EEF2FA]">
+                    <span
+                      className="grid h-14 w-14 shrink-0 place-items-center rounded-xl text-white"
+                      style={{ backgroundColor: NAVY }}
+                    >
+                      <Megaphone className="h-6 w-6" />
                     </span>
-                  </div>
-                </div>
-                <p className="text-lg font-bold" style={{ color: NAVY }}>
-                  Welcome to DarlTech Academy Community!
-                </p>
-                <p className="text-sm text-slate-600">
-                  This is your space to ask questions, share ideas, and connect with fellow learners
-                  and tutors.
-                </p>
-                <a
-                  href="#"
-                  className="mt-1 inline-flex items-center gap-1 text-sm font-semibold text-blue-600"
-                >
-                  Read more <ArrowRight className="h-4 w-4" />
-                </a>
-              </div>
-            </Card>
-            {POSTS.map((p) => (
-              <Card key={p.n}>
-                <div className="flex items-start gap-3">
-                  <Avatar name={p.n} size={48} />
-                  <div className="flex-1">
-                    <p className="inline-flex items-center gap-1 font-bold" style={{ color: NAVY }}>
-                      {p.n}
-                      {p.verified && <BadgeCheck className="h-4 w-4 fill-blue-600 text-white" />}
-                    </p>
-                    <p className="text-sm text-slate-500">Student • {p.cohort}</p>
-                  </div>
-                  <span className="text-xs text-slate-500">{p.ago}</span>
-                  <MoreVertical className="h-4 w-4 text-slate-500" />
-                </div>
-                <p className="mt-3 text-lg font-medium" style={{ color: NAVY }}>
-                  {p.t}
-                </p>
-                {p.sub && <p className="text-slate-600">{p.sub}</p>}
-                <div className="mt-3 flex gap-6 text-sm text-slate-600">
-                  <motion.button
-                    whileTap={{ scale: 1.3 }}
-                    className="inline-flex items-center gap-1.5"
-                  >
-                    <ThumbsUp className="h-4 w-4 fill-red-500 text-red-500" />
-                    {p.likes} Likes
-                  </motion.button>
-                  <span className="inline-flex items-center gap-1.5">
-                    <MessageSquare className="h-4 w-4" />
-                    {p.comments} Comments
-                  </span>
-                  <span className="inline-flex items-center gap-1.5">
-                    <Share2 className="h-4 w-4" />
-                    Share
-                  </span>
-                </div>
-                {p.reply && (
-                  <div className="mt-3 rounded-xl bg-[#EEF2FA] p-4">
-                    <p className="mb-3 text-center text-xs font-semibold text-blue-600">
-                      View all {p.comments} comments ⌄
-                    </p>
-                    <div className="flex gap-3">
-                      <Avatar name={p.reply.n} size={40} />
-                      <div>
-                        <p className="text-sm">
-                          <b style={{ color: NAVY }}>{p.reply.n}</b>{" "}
-                          <span className="text-xs text-slate-500">• {p.reply.ago}</span>
-                        </p>
-                        <p className="text-sm text-slate-700">{p.reply.t}</p>
-                        <p className="mt-1 flex gap-4 text-xs text-slate-500">
-                          <span className="inline-flex items-center gap-1">
-                            <ThumbsUp className="h-3.5 w-3.5" />
-                            Like
-                          </span>
-                          <span className="inline-flex items-center gap-1">
-                            <MessageSquare className="h-3.5 w-3.5" />
-                            Reply
-                          </span>
-                        </p>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-start justify-between gap-2">
+                        {a.pinned ? (
+                          <p
+                            className="inline-flex items-center gap-1 text-sm"
+                            style={{ color: RED }}
+                          >
+                            <Pin className="h-4 w-4" /> Pinned
+                          </p>
+                        ) : (
+                          <span />
+                        )}
+                        <p className="text-xs text-slate-500">{timeAgo(a.created_at)}</p>
                       </div>
+                      <p className="text-lg font-bold" style={{ color: NAVY }}>
+                        {a.title}
+                      </p>
+                      <p className="whitespace-pre-line text-sm text-slate-600">{a.body}</p>
                     </div>
-                  </div>
+                  </Card>
+                ))
+              ) : (
+                <Card>
+                  <EmptyNote icon={Megaphone} text="No announcements yet." />
+                </Card>
+              )
+            ) : (
+              <>
+                {pinned && (
+                  <Card className="flex gap-4 border-blue-100 bg-[#EEF2FA]">
+                    <span
+                      className="grid h-16 w-16 shrink-0 place-items-center rounded-xl text-white"
+                      style={{ backgroundColor: NAVY }}
+                    >
+                      <Megaphone className="h-7 w-7" />
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-start justify-between gap-2">
+                        <p
+                          className="inline-flex items-center gap-1 text-sm"
+                          style={{ color: RED }}
+                        >
+                          <Pin className="h-4 w-4" /> Pinned Announcement
+                        </p>
+                        <div className="text-right">
+                          <p className="text-xs text-slate-500">{timeAgo(pinned.created_at)}</p>
+                          <span className="mt-1 inline-block">
+                            <Pill tone="blue">Academy-wide</Pill>
+                          </span>
+                        </div>
+                      </div>
+                      <p className="text-lg font-bold" style={{ color: NAVY }}>
+                        {pinned.title}
+                      </p>
+                      <p className="line-clamp-2 text-sm text-slate-600">{pinned.body}</p>
+                      <button
+                        onClick={() => setTab("announcements")}
+                        className="mt-1 inline-flex items-center gap-1 text-sm font-semibold text-blue-600"
+                      >
+                        Read more <ArrowRight className="h-4 w-4" />
+                      </button>
+                    </div>
+                  </Card>
                 )}
-              </Card>
-            ))}
+
+                <Card>
+                  <div className="flex gap-3">
+                    <Avatar name={myName} size={44} />
+                    <textarea
+                      value={draft}
+                      onChange={(e) => setDraft(e.target.value)}
+                      rows={2}
+                      placeholder={
+                        tab === "tutors"
+                          ? "Ask the tutors a question…"
+                          : "Share something or ask a question…"
+                      }
+                      className="flex-1 resize-none rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none ring-blue-200 focus:ring-2"
+                    />
+                  </div>
+                  <div className="mt-3 flex justify-end">
+                    <RedBtn onClick={submit}>
+                      {post.isPending ? "Posting…" : "Post"} <ArrowRight className="h-4 w-4" />
+                    </RedBtn>
+                  </div>
+                </Card>
+
+                {feed.isLoading ? (
+                  [0, 1].map((i) => <Skeleton key={i} className="h-48" />)
+                ) : posts.length ? (
+                  <AnimatePresence initial={false}>
+                    {posts.map((p) => (
+                      <motion.div
+                        key={p.id}
+                        layout
+                        initial={{ opacity: 0, y: 16 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, scale: 0.97 }}
+                      >
+                        <PostCard p={p} myName={myName} />
+                      </motion.div>
+                    ))}
+                  </AnimatePresence>
+                ) : (
+                  <Card>
+                    <EmptyNote
+                      icon={MessageSquare}
+                      text={
+                        tab === "course" && !myCourse
+                          ? "Enroll in a course to join its group."
+                          : "No posts here yet. Be the first!"
+                      }
+                    />
+                  </Card>
+                )}
+              </>
+            )}
           </div>
 
           <div className="flex flex-col gap-5">
@@ -967,22 +1343,20 @@ export function CommunityPage() {
               <p className="flex items-center gap-2 text-lg font-bold">
                 <Users className="h-6 w-6" /> My Learning Community
               </p>
-              <a
-                href="#"
-                className="mt-4 flex items-center gap-3 rounded-xl bg-white/10 p-4 hover:bg-white/15"
+              <button
+                onClick={() => setTab(myCourse ? "course" : "all")}
+                className="mt-4 flex w-full items-center gap-3 rounded-xl bg-white/10 p-4 text-left hover:bg-white/15"
               >
                 <GraduationCap className="h-7 w-7" />
                 <span className="flex-1 font-semibold">
-                  Web Development
-                  <br />
-                  Cohort 2
+                  {myCourse ? myCourse.name : "DarlTech Academy"}
                 </span>
                 <ChevronRight className="h-5 w-5" />
-              </a>
+              </button>
               <div className="mt-4 flex justify-between text-sm">
                 <span className="inline-flex items-center gap-2">
                   <Users className="h-4 w-4" />
-                  <CountUp value={184} /> Members
+                  <CountUp value={stats.data?.members ?? 0} /> Members
                 </span>
                 <span className="inline-flex items-center gap-2">
                   <motion.span
@@ -990,38 +1364,56 @@ export function CommunityPage() {
                     transition={{ repeat: Infinity, duration: 1.8 }}
                     className="h-2.5 w-2.5 rounded-full bg-green-500"
                   />
-                  Online: 27
+                  Active this week: {stats.data?.activeWeek ?? 0}
                 </span>
               </div>
             </motion.div>
             <Card>
               <SectionHead title="Upcoming Community Events" />
-              {[
-                ["OCT", "25", "Live Q&A with Tutor", "6:00 PM – 7:00 PM (WAT)"],
-                ["OCT", "28", "Project Review Session", "6:00 PM – 7:30 PM (WAT)"],
-              ].map(([m, d, t, time]) => (
-                <div
-                  key={t}
-                  className="flex items-center gap-3 border-t border-slate-100 py-3 first:border-0"
-                >
-                  <div
-                    className="grid w-12 place-items-center rounded-lg bg-red-50 py-1 leading-none"
-                    style={{ color: RED }}
-                  >
-                    <span className="text-xs font-bold">{m}</span>
-                    <span className="text-xl font-extrabold">{d}</span>
-                  </div>
-                  <div className="flex-1">
-                    <p className="text-sm font-semibold" style={{ color: NAVY }}>
-                      {t}
-                    </p>
-                    <p className="text-xs text-slate-500">{time}</p>
-                  </div>
-                  <span className="grid h-8 w-8 place-items-center rounded-lg bg-blue-50 text-blue-600">
-                    <Video className="h-4 w-4" />
-                  </span>
-                </div>
-              ))}
+              {events.isLoading ? (
+                <Skeleton className="h-24" />
+              ) : events.data?.length ? (
+                events.data.slice(0, 3).map((e) => {
+                  const d = new Date(e.starts_at);
+                  return (
+                    <div
+                      key={e.id}
+                      className="flex items-center gap-3 border-t border-slate-100 py-3 first:border-0"
+                    >
+                      <div
+                        className="grid w-12 place-items-center rounded-lg bg-red-50 py-1 leading-none"
+                        style={{ color: RED }}
+                      >
+                        <span className="text-xs font-bold uppercase">
+                          {d.toLocaleDateString("en-GB", { month: "short" })}
+                        </span>
+                        <span className="text-xl font-extrabold">{d.getDate()}</span>
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="truncate text-sm font-semibold" style={{ color: NAVY }}>
+                          {e.title}
+                        </p>
+                        <p className="text-xs text-slate-500">
+                          {fmtEvent(e.starts_at, e.ends_at).split(" • ")[1]}
+                        </p>
+                      </div>
+                      {e.link ? (
+                        <a
+                          href={e.link}
+                          target="_blank"
+                          rel="noreferrer"
+                          aria-label="Join"
+                          className="grid h-8 w-8 place-items-center rounded-lg bg-blue-50 text-blue-600"
+                        >
+                          <Video className="h-4 w-4" />
+                        </a>
+                      ) : null}
+                    </div>
+                  );
+                })
+              ) : (
+                <EmptyNote icon={Calendar} text="No upcoming events." />
+              )}
             </Card>
             <Card>
               <p className="mb-3 flex items-center gap-2 text-lg font-bold" style={{ color: NAVY }}>
@@ -1041,12 +1433,6 @@ export function CommunityPage() {
                   </li>
                 ))}
               </ul>
-              <a
-                href="#"
-                className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-blue-600"
-              >
-                Read Full Guidelines <ArrowRight className="h-4 w-4" />
-              </a>
             </Card>
           </div>
         </div>
