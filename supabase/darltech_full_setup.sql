@@ -486,6 +486,32 @@ begin
   end loop;
 end $$;
 
+-- PART 2c: no email confirmation (auto-confirm every new account)
+
+create or replace function public.academy_auto_confirm_email()
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  if new.email_confirmed_at is null then
+    new.email_confirmed_at := now();
+  end if;
+  return new;
+end;
+$$;
+
+drop trigger if exists academy_auto_confirm_email on auth.users;
+create trigger academy_auto_confirm_email
+  before insert on auth.users
+  for each row execute function public.academy_auto_confirm_email();
+
+-- Confirm everyone who already signed up but never confirmed.
+update auth.users
+set email_confirmed_at = now()
+where email_confirmed_at is null;
+
 -- PART 3: make your account an admin (no confirmation email needed)
 -- First create your login in Authentication > Users > Add user.
 update auth.users
@@ -496,5 +522,3 @@ insert into public.academy_admins (user_id)
 select id from auth.users where email = 'your@email.com'
 on conflict do nothing;
 
--- Optional: confirm every existing account that never confirmed its email
--- update auth.users set email_confirmed_at = now() where email_confirmed_at is null;
