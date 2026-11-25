@@ -4,7 +4,7 @@ import { Check } from "lucide-react";
 import { useState, type ChangeEvent, type FormEvent } from "react";
 import { cn } from "@/lib/utils";
 import { COURSES } from "@/lib/academy/data";
-import { useAcademy } from "@/lib/academy/store";
+import { authMessage, useAcademy } from "@/lib/academy/store";
 import {
   AuthLayout,
   emailOk,
@@ -65,13 +65,9 @@ function StudentSignUp() {
       );
       setStep(3);
     } catch (x) {
-      const msg = x instanceof Error ? x.message : "";
-      toast.error(
-        /registered/i.test(msg)
-          ? "That email already has an account. Log in instead."
-          : msg || "Couldn't create your account.",
-      );
-      if (/registered/i.test(msg)) setStep(1);
+      const msg = authMessage(x);
+      toast.error(msg);
+      if (/already has an account/.test(msg)) setStep(1);
     } finally {
       setBusy(false);
     }

@@ -272,8 +272,23 @@ function useLandingAnimations(root: React.RefObject<HTMLDivElement | null>) {
       // Hero entrance
       gsap
         .timeline({ defaults: { ease: "power3.out" } })
-        .from("[data-hero-img]", { scale: 1.15, opacity: 0, duration: 1.6 })
-        .from("[data-hero] > *", { y: 40, opacity: 0, duration: 0.8, stagger: 0.12 }, 0.2);
+        .fromTo(
+          "[data-hero-img]",
+          { scale: 1.15, opacity: 0 },
+          { scale: 1, opacity: 0.9, duration: 1.6 },
+        )
+        .fromTo(
+          "[data-hero] > *",
+          { y: 40, autoAlpha: 0 },
+          {
+            y: 0,
+            autoAlpha: 1,
+            duration: 0.8,
+            stagger: 0.12,
+            clearProps: "transform,opacity,visibility",
+          },
+          0.2,
+        );
       // Slow parallax on the hero photo
       gsap.to("[data-hero-img]", {
         yPercent: 12,
@@ -287,16 +302,30 @@ function useLandingAnimations(root: React.RefObject<HTMLDivElement | null>) {
       });
       // Section headings and grids reveal on scroll
       gsap.utils.toArray<HTMLElement>("main section").forEach((sec) => {
-        const kids = sec.querySelectorAll(".grid > *, h2, [data-reveal]");
+        // Top-level grid items only (not icons nested inside cards), plus headings.
+        const grids = Array.from(sec.querySelectorAll<HTMLElement>(".grid")).filter(
+          (g) => !g.parentElement?.closest(".grid"),
+        );
+        const kids = [
+          ...grids.flatMap((g) => Array.from(g.children)),
+          ...Array.from(sec.querySelectorAll("h2, [data-reveal]")),
+        ];
         if (!kids.length || sec.querySelector("[data-hero]")) return;
-        gsap.from(kids, {
-          y: 36,
-          opacity: 0,
-          duration: 0.7,
-          stagger: 0.06,
-          ease: "power2.out",
-          scrollTrigger: { trigger: sec, start: "top 80%", once: true },
-        });
+        // fromTo with explicit end values so items always finish fully visible,
+        // even when the effect runs twice or a CSS transition is mid-way.
+        gsap.fromTo(
+          kids,
+          { y: 36, autoAlpha: 0 },
+          {
+            y: 0,
+            autoAlpha: 1,
+            duration: 0.7,
+            stagger: 0.06,
+            ease: "power2.out",
+            clearProps: "transform,opacity,visibility",
+            scrollTrigger: { trigger: sec, start: "top 85%", once: true },
+          },
+        );
       });
       // Big money figure counts up
       const fee = el.querySelector<HTMLElement>("[data-count]");
@@ -473,7 +502,7 @@ function Header() {
     >
       <Container className="flex h-16 items-center justify-between gap-4">
         <Logo />
-        <nav className="hidden items-center gap-7 lg:flex">
+        <nav className="hidden items-center gap-6 xl:flex">
           {NAV.map((l, i) => (
             <a
               key={l.label}
@@ -484,7 +513,7 @@ function Header() {
             </a>
           ))}
         </nav>
-        <div className="hidden items-center gap-4 lg:flex">
+        <div className="hidden items-center gap-4 xl:flex">
           <a
             href="/student/search"
             aria-label="Search"
@@ -492,16 +521,20 @@ function Header() {
           >
             <Search className="h-5 w-5" />
           </a>
+          <a href="/login" className="text-sm font-semibold text-slate-700 hover:text-[#E1251B]">
+            Log in
+          </a>
+          <OutlineBtn href="/join">Create account</OutlineBtn>
           <PrimaryBtn href="/apply" className="h-10">
             Apply for Cohort 2
           </PrimaryBtn>
         </div>
-        <button className="lg:hidden" aria-label="Toggle menu" onClick={() => setOpen((o) => !o)}>
+        <button className="xl:hidden" aria-label="Toggle menu" onClick={() => setOpen((o) => !o)}>
           {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
         </button>
       </Container>
       {open && (
-        <div className="border-t border-slate-100 bg-white lg:hidden">
+        <div className="border-t border-slate-100 bg-white xl:hidden">
           <Container className="flex flex-col gap-1 py-4">
             {NAV.map((l) => (
               <a
@@ -513,6 +546,10 @@ function Header() {
                 {l.label}
               </a>
             ))}
+            <div className="mt-2 grid grid-cols-2 gap-2">
+              <OutlineBtn href="/login">Log in</OutlineBtn>
+              <OutlineBtn href="/join">Create account</OutlineBtn>
+            </div>
             <PrimaryBtn href="/apply" className="mt-2">
               Apply for Cohort 2
             </PrimaryBtn>

@@ -9,7 +9,7 @@ import {
   type ReactNode,
 } from "react";
 import { toast } from "sonner";
-import { supabase } from "@/lib/supabase";
+import { supabase, supabaseConfigured } from "@/lib/supabase";
 import { QUIZZES, type ChatMessage, type Post, type Quiz } from "./data";
 
 /*
@@ -349,6 +349,7 @@ export function AcademyProvider({ children }: { children: ReactNode }) {
   const actions = useMemo<Actions>(
     () => ({
       signUp: async (u, password) => {
+        if (!supabaseConfigured) throw new Error("not configured");
         const { data, error } = await supabase.auth.signUp({
           email: u.email,
           password,
@@ -371,6 +372,7 @@ export function AcademyProvider({ children }: { children: ReactNode }) {
         setReady(true);
       },
       logIn: async (email, password) => {
+        if (!supabaseConfigured) throw new Error("not configured");
         const { data, error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
         const id = data.user.id;
@@ -517,6 +519,31 @@ export function useAcademy() {
   const ctx = useContext(AcademyContext);
   if (!ctx) throw new Error("useAcademy must be used inside <AcademyProvider>");
   return ctx;
+}
+
+/** Turns Supabase auth errors into plain messages for sign-up and log-in screens. */
+export function authMessage(x: unknown) {
+  const m = x instanceof Error ? x.message : String(x ?? "");
+  if (!supabaseConfigured)
+    return "Accounts aren't connected yet: the site is missing its Supabase settings.";
+  if (/already registered|already exists/i.test(m))
+    return "That email already has an account. Log in instead.";
+  if (/invalid login/i.test(m)) return "Wrong email or password.";
+  if (/email not confirmed|confirm your account/i.test(m))
+    return "Please confirm your email first (check your inbox), then log in.";
+  if (/signups? not allowed|signup is disabled/i.test(m))
+    return "New sign-ups are switched off right now.";
+  if (/password/i.test(m) && /least|short|weak/i.test(m))
+    return "Please choose a longer, stronger password.";
+  if (/rate limit|too many/i.test(m))
+    return "Too many attempts. Please wait a minute and try again.";
+  if (/failed to fetch|network/i.test(m))
+    return "Couldn't reach the server. Check your connection and try again.";
+  if (/academy_profiles|relation .* does not exist|schema cache/i.test(m))
+    return "Your account was created but the database isn't set up yet. Please contact support.";
+  if (/database error saving new user/i.test(m))
+    return "The database rejected the new account. Please contact support.";
+  return m || "Something went wrong. Please try again.";
 }
 
 export const firstName = (u: AcademyUser | null, fallback = "there") =>

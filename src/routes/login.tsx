@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState, type FormEvent } from "react";
-import { useAcademy } from "@/lib/academy/store";
+import { authMessage, useAcademy } from "@/lib/academy/store";
 import { AuthLayout, emailOk, Field, StepHeader } from "@/components/academy/auth";
 import { PortalLogin } from "@/components/academy/portal-login";
 import { btn } from "@/components/academy/ui";
@@ -30,12 +30,7 @@ function Login() {
       const role = await logIn(email.trim(), password);
       navigate({ to: role === "tutor" ? "/tutor" : "/student" });
     } catch (x) {
-      const msg = x instanceof Error ? x.message : "";
-      setErrors({
-        password: /invalid login/i.test(msg)
-          ? "Wrong email or password."
-          : msg || "Couldn't log in. Try again.",
-      });
+      setErrors({ password: authMessage(x) });
     } finally {
       setBusy(false);
     }

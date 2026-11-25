@@ -126,6 +126,13 @@ export function PortalLogin({
                 </button>
               </div>
 
+              <p className="mt-4 text-center text-sm text-slate-600">
+                New to DarlTech?{" "}
+                <a href="/join" className="font-bold text-[#D7372C] hover:underline">
+                  Create a free account
+                </a>
+              </p>
+
               {message ? (
                 <p className="academy-login__message" role="status">
                   {message}
