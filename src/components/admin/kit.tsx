@@ -847,8 +847,13 @@ export function AdminGate({ children }: { children: ReactNode }) {
     return (
       <GateCard
         icon={AlertTriangle}
-        title="Admin tables are missing"
-        text="Run supabase/migrations/0010_academy_admin.sql in the Supabase SQL editor, then reload."
+        title="Couldn't check admin access"
+        text={`${(error as Error).message || "Unknown error"}. Run supabase/darltech_full_setup.sql in the Supabase SQL editor, then reload.`}
+        action={
+          <Btn variant="ghost" onClick={() => supabase.auth.signOut()}>
+            Sign out
+          </Btn>
+        }
       />
     );
   if (!data?.user) return <AdminLogin />;
@@ -925,7 +930,16 @@ function AdminLogin() {
     setBusy(true);
     setErr("");
     const { error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) setErr(error.message);
+    if (error)
+      setErr(
+        /invalid login/i.test(error.message)
+          ? "Wrong email or password. Check the account exists in Supabase → Authentication → Users."
+          : /not confirmed/i.test(error.message)
+            ? "This account's email isn't confirmed. Run the admin SQL again (it confirms the email)."
+            : /rate limit|too many/i.test(error.message)
+              ? "Too many attempts. Wait a few minutes and try again."
+              : error.message,
+      );
     setBusy(false);
   };
   return (
