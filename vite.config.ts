@@ -7,6 +7,9 @@
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
 export default defineConfig({
+  // Also expose NEXT_PUBLIC_* variables (public by design) so Supabase/Vercel
+  // integration names like NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY work.
+  vite: { envPrefix: ["VITE_", "NEXT_PUBLIC_"] },
   tanstackStart: {
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
     // nitro/vite builds from this

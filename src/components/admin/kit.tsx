@@ -830,7 +830,7 @@ export function AdminGate({ children }: { children: ReactNode }) {
       <GateCard
         icon={AlertTriangle}
         title="Supabase is not connected"
-        text="Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY for this project, then reload."
+        text="Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY (or the VITE_ versions) for this project, then redeploy."
       />
     );
   if (isLoading)

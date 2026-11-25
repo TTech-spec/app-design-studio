@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { supabase } from "@/lib/supabase";
+import { supabase, supabaseConfigured } from "@/lib/supabase";
 
 /* ---------------- types (mirror supabase/migrations/0010_academy_admin.sql) ---------------- */
 
@@ -88,9 +88,7 @@ export const TRACKS = [
   "Robotics Engineering",
 ];
 
-export const isConfigured = Boolean(
-  import.meta.env.VITE_SUPABASE_URL && import.meta.env.VITE_SUPABASE_ANON_KEY,
-);
+export const isConfigured = supabaseConfigured;
 
 export const naira = (n: number) =>
   `₦${Number(n || 0).toLocaleString("en-NG", { maximumFractionDigits: 0 })}`;
