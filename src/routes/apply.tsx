@@ -138,7 +138,8 @@ function ApplyPage() {
     });
     setBusy(false);
     if (err) {
-      setError("We couldn't submit your application. Please check your connection and try again.");
+      console.error("[apply] insert failed", err);
+      setError(applyErrorMessage(err));
       return;
     }
     setDone(true);
@@ -570,4 +571,26 @@ function Closed({ cohort }: { cohort: string }) {
       </Link>
     </div>
   );
+}
+
+/** Explains why Supabase refused an application, so the cause is visible on screen. */
+function applyErrorMessage(err: {
+  message?: string;
+  code?: string;
+  details?: string;
+  hint?: string;
+}) {
+  const m = `${err.code ?? ""} ${err.message ?? ""} ${err.details ?? ""}`;
+  const ref = err.code ? ` (code ${err.code})` : "";
+  if (/PGRST205|42P01|could not find the table|does not exist|schema cache/i.test(m))
+    return `Applications aren't set up in the database yet. The admin needs to run the setup SQL${ref}.`;
+  if (/42501|permission denied|row-level security|violates row-level/i.test(m))
+    return `The database blocked this application (permissions). The admin needs to run the latest setup SQL${ref}.`;
+  if (/invalid api key|jwt|401|apikey/i.test(m))
+    return `The website's Supabase key is wrong or missing. The admin needs to check the publishable key${ref}.`;
+  if (/23514|check constraint/i.test(m))
+    return `Some details weren't accepted. Please check the form and try again${ref}.`;
+  if (/failed to fetch|network|load failed/i.test(m))
+    return "We couldn't reach the server. Please check your connection and try again.";
+  return `We couldn't submit your application: ${err.message ?? "unknown error"}${ref}`;
 }
