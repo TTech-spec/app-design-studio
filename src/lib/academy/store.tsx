@@ -289,6 +289,7 @@ export function AcademyProvider({ children }: { children: ReactNode }) {
   const [ready, setReady] = useState(false);
   const userId = useRef<string | null>(null);
   const synced = useRef(false);
+  const savedKey = useRef("");
 
   const patch = useCallback(
     (fn: (s: State) => Partial<State>) => setState((s) => ({ ...s, ...fn(s) })),
@@ -308,7 +309,11 @@ export function AcademyProvider({ children }: { children: ReactNode }) {
       }
       try {
         const data = await loadEverything(id, email);
-        if (alive && userId.current === id) setState({ ...EMPTY, ...data });
+        if (alive && userId.current === id) {
+          const next = { ...EMPTY, ...data };
+          savedKey.current = JSON.stringify(toRow(id, next));
+          setState(next);
+        }
       } catch {
         /* offline or tables missing: keep going in memory */
       }
@@ -336,8 +341,9 @@ export function AcademyProvider({ children }: { children: ReactNode }) {
   const row = userId.current ? toRow(userId.current, state) : null;
   const rowKey = row ? JSON.stringify(row) : "";
   useEffect(() => {
-    if (!rowKey || !synced.current) return;
+    if (!rowKey || !synced.current || rowKey === savedKey.current) return;
     const t = window.setTimeout(() => {
+      savedKey.current = rowKey;
       supabase
         .from("academy_profiles")
         .upsert(JSON.parse(rowKey))
@@ -367,6 +373,7 @@ export function AcademyProvider({ children }: { children: ReactNode }) {
         const next: State = { ...EMPTY, user: u };
         const { error: pErr } = await supabase.from("academy_profiles").upsert(toRow(id, next)!);
         if (pErr) throw pErr;
+        savedKey.current = JSON.stringify(toRow(id, next));
         setState(next);
         synced.current = true;
         setReady(true);
@@ -379,7 +386,9 @@ export function AcademyProvider({ children }: { children: ReactNode }) {
         userId.current = id;
         synced.current = false;
         const loaded = await loadEverything(id, data.user.email ?? email);
-        setState({ ...EMPTY, ...loaded });
+        const next = { ...EMPTY, ...loaded };
+        savedKey.current = JSON.stringify(toRow(id, next));
+        setState(next);
         synced.current = true;
         setReady(true);
         return loaded.user?.role ?? "student";
